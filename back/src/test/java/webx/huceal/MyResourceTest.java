@@ -1,4 +1,4 @@
-package webx-huceal;
+package webx.huceal;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
