@@ -1,24 +1,23 @@
 package webx.huceal.controllers;
 
-import webx.huceal.dao.FilmDAO;
-import webx.huceal.domains.Film;
+import webx.huceal.services.FilmService;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
+import javax.ws.rs.core.Response;
 
 @Path("/films")
 public class FilmController {
 
-	FilmDAO dao = new FilmDAO();
+	private FilmService filmService = new FilmService();
 
 	@GET @Path("/{titre}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public List<Film> findByTitle(@PathParam("titre") String titre) {
-		return dao.findByTitle(titre);
+	public Response findByTitle(@PathParam("titre") String titre) {
+		return filmService.findByTitle(titre);
 	}
 
 }

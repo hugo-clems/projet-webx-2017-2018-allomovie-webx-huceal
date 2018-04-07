@@ -18,6 +18,13 @@ public class Film {
 		super();
 	}
 
+	public Film(String filmId, String titre, String anneeSortie, String image) {
+		this.filmId = filmId;
+		this.titre = titre;
+		this.anneeSortie = anneeSortie;
+		this.image = image;
+	}
+
 	public Film(String filmId, String titre, String anneeSortie, String duree,
 				String genre, String studio, String producteur,
 				String scenariste, String acteurs, String description,
