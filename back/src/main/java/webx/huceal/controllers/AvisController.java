@@ -1,5 +1,6 @@
 package webx.huceal.controllers;
 
+import webx.huceal.domains.Avis;
 import webx.huceal.services.AvisService;
 
 import javax.ws.rs.*;
@@ -21,8 +22,9 @@ public class AvisController {
 	@POST
 	@Path("/add")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response addAvis(@QueryParam("id") String filmID, @QueryParam("note") int note, @QueryParam("commentaire") String commentaire) {
-		return Response.ok().build();
+	@Consumes({ MediaType.APPLICATION_JSON })
+	public Response addAvis(Avis avis) {
+		return service.addAvis(avis.getFilmID(), avis.getNote(), avis.getCommentaire());
 	}
 
 }

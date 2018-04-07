@@ -7,7 +7,7 @@ import java.sql.Statement;
 public class DataSource {
 
     private static final String DB_DRIVER = "org.h2.Driver";
-    private static final String DB_CONNECTION = "jdbc:h2:~/allomovie";
+    private static final String DB_CONNECTION = "jdbc:h2:~/allomovieDB";
     private static final String DB_USER = "";
     private static final String DB_PASSWORD = "";
     private static DataSource dataSource;
@@ -19,7 +19,7 @@ public class DataSource {
     private static void initTableAvis() {
         Connection con = null;
         Statement stmt = null;
-        String tableCreateQuery = "CREATE TABLE IF NOT EXISTS Avis (FilmID VARCHAR(10) PRIMARY KEY, Note INTEGER(1), Commentaire VARCHAR(500))";
+        String tableCreateQuery = "CREATE TABLE IF NOT EXISTS Avis (ID INTEGER AUTO_INCREMENT PRIMARY KEY, FilmID VARCHAR(10), Note INTEGER(1), Commentaire VARCHAR(500))";
         try {
             con = getDBConnection();
             stmt = con.createStatement();

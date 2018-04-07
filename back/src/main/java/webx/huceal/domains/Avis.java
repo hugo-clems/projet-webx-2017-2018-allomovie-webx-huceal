@@ -3,14 +3,14 @@ package webx.huceal.domains;
 public class Avis {
 
     private String filmID;
-    private int note;
+    private String note;
     private String commentaire;
 
     public Avis() {
         super();
     }
 
-    public Avis(String filmID, int note, String commentaire) {
+    public Avis(String filmID, String note, String commentaire) {
         this.filmID = filmID;
         this.note = note;
         this.commentaire = commentaire;
@@ -24,11 +24,11 @@ public class Avis {
         this.filmID = filmID;
     }
 
-    public int getNote() {
+    public String getNote() {
         return note;
     }
 
-    public void setNote(int note) {
+    public void setNote(String note) {
         this.note = note;
     }
 

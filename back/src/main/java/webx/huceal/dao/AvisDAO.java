@@ -23,7 +23,7 @@ public class AvisDAO {
 	public void addAvis(String filmID, int note, String commentaire) {
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String tableCreateQuery = "INSERT INTO Avis VALUES(?, ?, ?)";
+		String tableCreateQuery = "INSERT INTO Avis(FilmID, Note, Commentaire) VALUES(?, ?, ?)";
 		try {
 			con = DataSource.getDBConnection();
 			stmt = con.prepareStatement(tableCreateQuery);
