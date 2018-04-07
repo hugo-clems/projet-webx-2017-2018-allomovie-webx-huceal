@@ -16,7 +16,7 @@ public class DataSource {
 
     }
 
-    public void initDatabase() throws SQLException {
+    private static void initTableAvis() {
         Connection con = null;
         Statement stmt = null;
         String tableCreateQuery = "CREATE TABLE IF NOT EXISTS Avis (FilmID VARCHAR(10) PRIMARY KEY, Note INTEGER(1), Commentaire VARCHAR(500))";
@@ -28,13 +28,21 @@ public class DataSource {
             System.out.println("Exception Message " + e.getLocalizedMessage());
         } finally {
             if (con != null && stmt != null) {
-                con.close();
-                stmt.close();
+                try {
+                    con.close();
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
-    private static Connection getDBConnection() {
+    public static Connection getDBConnection() {
+        if (dataSource == null) {
+            dataSource = new DataSource();
+            initTableAvis();
+        }
         Connection dbConnection = null;
         try {
             Class.forName(DB_DRIVER);
