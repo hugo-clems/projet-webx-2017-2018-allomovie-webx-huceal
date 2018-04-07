@@ -24,4 +24,16 @@ public class FilmService {
 		return Response.status(status).entity(body).build();
 	}
 
+	/**
+	 * Récupère le film correspondant à l'identifiant
+	 * @param id identifiant du film recherché
+	 * @return Response Json
+	 */
+	public Response findById(String id) {
+		Response.Status status = Response.Status.OK;
+		Object body = dao.findById(id);
+		// TODO if id is not valid
+		return Response.status(status).entity(body).build();
+	}
+
 }

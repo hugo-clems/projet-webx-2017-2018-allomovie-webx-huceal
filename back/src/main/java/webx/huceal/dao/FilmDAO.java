@@ -22,7 +22,16 @@ public class FilmDAO {
 	 * @return liste des films en Json
 	 */
 	public JsonArray findByTitle(String titre) {
-		return executeRequest("&s=" + titre);
+		return executeRequest("&s=" + titre).getJsonArray("Search");
+	}
+
+	/**
+	 * Récupère le film correspondant à l'identifiant
+	 * @param id identifiant du film recherché
+	 * @return le film en Json
+	 */
+	public JsonObject findById(String id) {
+		return executeRequest("&i=" + id);
 	}
 
 	/**
@@ -30,12 +39,11 @@ public class FilmDAO {
 	 * @param url la requête
 	 * @return résultat de la requête en Json
 	 */
-	private JsonArray executeRequest(String url) {
+	private JsonObject executeRequest(String url) {
 		return ClientBuilder.newClient()
 				.target(BASE_URL + url)
 				.request()
-				.get(JsonObject.class)
-				.getJsonArray("Search");
+				.get(JsonObject.class);
 	}
 
 }
