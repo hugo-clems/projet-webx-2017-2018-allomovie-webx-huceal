@@ -1,15 +1,29 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import Accueil from '@/components/Accueil'
+import Film from '@/components/Film'
+import Avis from '@/components/Avis'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
+      //rechercher d'un film
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'Accueil',
+      component: Accueil
+
+    },
+    {
+      path: '/film',
+      name: 'Film',
+      component: Film
+    },
+    {
+      path: '/avis',
+      name: 'Avis',
+      component: Avis
     }
   ]
 })
