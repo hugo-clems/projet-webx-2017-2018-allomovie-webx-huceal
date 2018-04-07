@@ -1,7 +1,7 @@
-package webx.huceal.controller;
+package webx.huceal.controllers;
 
 import webx.huceal.dao.FilmDAO;
-import webx.huceal.domain.Film;
+import webx.huceal.domains.Film;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

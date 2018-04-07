@@ -1,8 +1,7 @@
 package webx.huceal.dao;
 
-import webx.huceal.domain.Film;
+import webx.huceal.domains.Film;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FilmDAO {

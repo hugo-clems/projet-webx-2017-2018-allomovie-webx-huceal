@@ -1,4 +1,4 @@
-package webx.huceal.domain;
+package webx.huceal.domains;
 
 public class Avis {
 
