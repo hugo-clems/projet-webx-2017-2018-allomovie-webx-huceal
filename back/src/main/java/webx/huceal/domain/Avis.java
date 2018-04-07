@@ -1,10 +1,14 @@
-package webx.huceal;
+package webx.huceal.domain;
 
 public class Avis {
 
     private String filmID;
     private int note;
     private String commentaire;
+
+    public Avis() {
+        super();
+    }
 
     public Avis(String filmID, int note, String commentaire) {
         this.filmID = filmID;
