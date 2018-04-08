@@ -1,5 +1,6 @@
 package webx.huceal.services;
 
+import webx.huceal.ErrorMessage;
 import webx.huceal.dao.FilmDAO;
 import webx.huceal.domains.Film;
 
@@ -18,13 +19,14 @@ public class FilmService {
 	 */
 	public Response findById(String id) {
 		Response.Status status = Response.Status.OK;
-		Film result = dao.findById(id);
+		Object body = dao.findById(id);
 
-		if (result == null) {
+		if (body == null) {
 			status = Response.Status.BAD_REQUEST;
+			body = new ErrorMessage("Identifiant invalide !");
 		}
 
-		return Response.status(status).type(MediaType.APPLICATION_JSON).entity(result).build();
+		return Response.status(status).type(MediaType.APPLICATION_JSON).entity(body).build();
 	}
 
 	/**
