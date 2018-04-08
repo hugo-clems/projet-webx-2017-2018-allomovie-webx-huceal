@@ -3,6 +3,7 @@ package webx.huceal.services;
 import webx.huceal.dao.FilmDAO;
 import webx.huceal.domains.Film;
 
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -21,10 +22,9 @@ public class FilmService {
 
 		if (result == null) {
 			status = Response.Status.BAD_REQUEST;
-			// TODO message d'erreur
 		}
 
-		return Response.status(status).type("application/json").entity(result).build();
+		return Response.status(status).type(MediaType.APPLICATION_JSON).entity(result).build();
 	}
 
 	/**

@@ -129,4 +129,25 @@ public class Film {
 	public void setImage(String image) {
 		this.image = image;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Film)) return false;
+
+		Film film = (Film) o;
+
+		if (filmId != null ? !filmId.equals(film.filmId) : film.filmId != null) return false;
+		if (titre != null ? !titre.equals(film.titre) : film.titre != null) return false;
+		if (anneeSortie != null ? !anneeSortie.equals(film.anneeSortie) : film.anneeSortie != null) return false;
+		if (duree != null ? !duree.equals(film.duree) : film.duree != null) return false;
+		if (genre != null ? !genre.equals(film.genre) : film.genre != null) return false;
+		if (studio != null ? !studio.equals(film.studio) : film.studio != null) return false;
+		if (producteur != null ? !producteur.equals(film.producteur) : film.producteur != null) return false;
+		if (scenariste != null ? !scenariste.equals(film.scenariste) : film.scenariste != null) return false;
+		if (acteurs != null ? !acteurs.equals(film.acteurs) : film.acteurs != null) return false;
+		if (description != null ? !description.equals(film.description) : film.description != null) return false;
+		return image != null ? image.equals(film.image) : film.image == null;
+	}
+
 }
