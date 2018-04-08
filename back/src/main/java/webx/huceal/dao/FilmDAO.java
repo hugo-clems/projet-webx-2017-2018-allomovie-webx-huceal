@@ -1,28 +1,32 @@
 package webx.huceal.dao;
 
-import webx.huceal.domains.Film;
-
-import javax.json.JsonArray;
 import javax.json.JsonObject;
-import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FilmDAO {
 
 	/**
 	 * Lien d'accès à l'API OMDB
 	 */
-	private final String BASE_URL = "http://www.omdbapi.com/?apikey=5a0f558e";
+	private final String BASE_URL = "http://www.omdbapi.com/?apikey=5a0f558e&type=movie";
 
 	/**
 	 * Récupère la liste des films correpondant au titre renseigné
 	 * @param titre titre du film recherché
 	 * @return liste des films en Json
 	 */
-	public JsonArray findByTitle(String titre) {
-		return executeRequest("&s=" + titre).getJsonArray("Search");
+	public JsonObject findByTitle(String titre) {
+		return executeRequest("&s=" + titre);
+	}
+
+	/**
+	 * Récupère la liste des films correpondant au titre et à l'année renseigné
+	 * @param titre titre du film recherché
+	 * @param annee année du film recherché
+	 * @return liste des films en Json
+	 */
+	public JsonObject findByTitleAndYear(String titre, String annee) {
+		return executeRequest("&s=" + titre + "&y=" + annee);
 	}
 
 	/**

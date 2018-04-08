@@ -13,15 +13,15 @@ public class FilmController {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response getFilm(@QueryParam("id") String id) {
+	public Response findById(@QueryParam("id") String id) {
 		return filmService.findById(id);
 	}
 
 	@GET @Path("/list")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response getListFilm(@QueryParam("titre") String titre) {
+	public Response findFilms(@QueryParam("titre") String titre, @QueryParam("annee") String annee) {
 		titre = titre.replaceAll("\\s", "+");
-		return filmService.findByTitle(titre);
+		return filmService.findFilms(titre, annee);
 	}
 
 }
