@@ -50,7 +50,8 @@ public class AvisDAO {
 			stmt = con.createStatement();
 			ResultSet res = stmt.executeQuery(query);
 			while (res.next()) {
-				liste.add(new Avis(res.getString("FilmID"), res.getInt("Note"), res.getString("Commentaire")));
+				liste.add(new Avis(res.getLong("id"), res.getString("FilmID"),
+						res.getInt("Note"), res.getString("Commentaire")));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

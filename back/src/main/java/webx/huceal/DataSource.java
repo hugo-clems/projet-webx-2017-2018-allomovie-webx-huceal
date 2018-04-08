@@ -1,6 +1,4 @@
 package webx.huceal;
-import org.h2.tools.Server;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -9,7 +7,7 @@ import java.sql.Statement;
 public class DataSource {
 
     private static final String DB_DRIVER = "org.h2.Driver";
-    private static final String DB_CONNECTION = "jdbc:h2:tcp://localhost/~/allomovieDB";
+    private static final String DB_CONNECTION = "jdbc:h2:~/allomovieDB";
     private static final String DB_USER = "";
     private static final String DB_PASSWORD = "";
     private static DataSource dataSource;
@@ -52,7 +50,6 @@ public class DataSource {
             System.out.println(e.getMessage());
         }
         try {
-            Server embeddedServer = Server.createTcpServer(new String[] { "-tcpAllowOthers", "-web" }).start();
             dbConnection = DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
             return dbConnection;
         } catch (SQLException e) {
