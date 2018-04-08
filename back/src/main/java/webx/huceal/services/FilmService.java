@@ -33,7 +33,7 @@ public class FilmService {
 	 * @param annee année du film recherché
 	 * @return Response Json
 	 */
-	public Response findFilms(String titre, String annee) {
+	public Response findByTitleAndOrYear(String titre, String annee) {
 		Response.Status status = Response.Status.BAD_REQUEST;
 		Object body = null;
 
@@ -51,6 +51,26 @@ public class FilmService {
 			}
 		} else {
 			body = new ErrorMessage("Titre invalide !");
+		}
+
+		return Response.status(status).type(MediaType.APPLICATION_JSON).entity(body).build();
+	}
+
+	/**
+	 * Récupère la liste des films correspondant aux critères de recherche
+	 * @param note note minimal des films recherchés
+	 * @param commentaire mot contenu dans les commentaires des films recherchés
+	 * @return Response Json
+	 */
+	public Response findByNoteAndComment(String note, String commentaire) {
+		Response.Status status = Response.Status.BAD_REQUEST;
+		Object body = null;
+
+		if (noteIsValid(note)) {
+			body = dao.findByNoteAndComment(note, commentaire);
+			status = Response.Status.OK;
+		} else {
+			body = new ErrorMessage("Note invalide !");
 		}
 
 		return Response.status(status).type(MediaType.APPLICATION_JSON).entity(body).build();
@@ -79,6 +99,21 @@ public class FilmService {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Vérifie si la note est valide
+	 * (Est un entier entre 0 et 5)
+	 * @param note la note à vérifier
+	 * @return boolean
+	 */
+	private boolean noteIsValid(String note) {
+		try {
+			int i = Integer.parseInt(note);
+			return i >= 0 && i <= 5;
+		} catch (NumberFormatException err) {
+			return false;
+		}
 	}
 
 }

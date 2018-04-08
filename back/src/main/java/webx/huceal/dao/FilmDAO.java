@@ -1,10 +1,15 @@
 package webx.huceal.dao;
 
+import webx.huceal.DataSource;
 import webx.huceal.domains.Film;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.ws.rs.client.ClientBuilder;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +63,42 @@ public class FilmDAO {
 	 */
 	public List<Film> findByTitleAndYear(String titre, String annee) {
 		return createListFilms(executeRequest("&s=" + titre + "&y=" + annee));
+	}
+
+	/**
+	 * Récupère la liste des films correpondant à la note et/ou un mot dans le commentaire
+	 * @param note note minimal des films recherchés
+	 * @param commentaire mot contenu dans les commentaires des films recherchés
+	 * @return liste des films
+	 */
+	public List<Film> findByNoteAndComment(String note, String commentaire) {
+		List<Film> listFilm = new ArrayList<>();
+		List<String> listId = new ArrayList<>();
+		Connection con = null;
+		Statement stmt = null;
+		String query = "SELECT FilmID FROM Avis WHERE Note >= " + note
+				+ "AND LOWER(Commentaire) LIKE '%" + commentaire.toLowerCase() + "%'";
+
+		// On récupère la liste des ID des films ayant une note supérieur à @param
+		try {
+			con = DataSource.getDBConnection();
+			stmt = con.createStatement();
+			ResultSet res = stmt.executeQuery(query);
+			while (res.next()) {
+				listId.add(res.getString("FilmID"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSource.closeConAndStmt(con, stmt);
+		}
+
+		// On récupère l'objet film pour chaque film présent dans la liste d'ID
+		for (int i = 0; i < listId.size(); i++) {
+			listFilm.add(findById(listId.get(i)));
+		}
+
+		return listFilm;
 	}
 
 	/**
