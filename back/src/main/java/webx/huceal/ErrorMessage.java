@@ -20,4 +20,14 @@ public class ErrorMessage {
 		this.message = message;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof ErrorMessage)) return false;
+
+		ErrorMessage that = (ErrorMessage) o;
+
+		return getMessage() != null ? getMessage().equals(that.getMessage()) : that.getMessage() == null;
+	}
+
 }

@@ -2,11 +2,9 @@ package webx.huceal.services;
 
 import webx.huceal.ErrorMessage;
 import webx.huceal.dao.FilmDAO;
-import webx.huceal.domains.Film;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 
 public class FilmService {
 
@@ -37,25 +35,25 @@ public class FilmService {
 	 */
 	public Response findFilms(String titre, String annee) {
 		Response.Status status = Response.Status.BAD_REQUEST;
-		List<Film> result = null;
+		Object body = null;
 
 		if (titleIsValid(titre)) {
-			if (annee != null) {
+			if (annee != null && annee != "") {
 				if (yearIsValid(annee)) {
-					result = dao.findByTitleAndYear(titre, annee);
+					body = dao.findByTitleAndYear(titre, annee);
 					status = Response.Status.OK;
 				} else {
-					// TODO message d'erreur
+					body = new ErrorMessage("Année invalide !");
 				}
 			} else {
-				result = dao.findByTitle(titre);
+				body = dao.findByTitle(titre);
 				status = Response.Status.OK;
 			}
 		} else {
-			// TODO message d'erreur
+			body = new ErrorMessage("Titre invalide !");
 		}
 
-		return Response.status(status).entity(result).build();
+		return Response.status(status).type(MediaType.APPLICATION_JSON).entity(body).build();
 	}
 
 	/**
