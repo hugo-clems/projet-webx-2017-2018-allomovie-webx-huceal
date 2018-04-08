@@ -16,23 +16,15 @@ public class FilmService {
 	 * @return Response Json
 	 */
 	public Response findById(String id) {
-		Response.Status status = Response.Status.BAD_REQUEST;
-		JsonObject result = dao.findById(id);
-		Object body = null;
+		Response.Status status = Response.Status.OK;
+		Film result = dao.findById(id);
 
-		if (checkRequest(result)) {
-			// Si le résultat de la requête est valide
-			// On créer un objet film
-			body = new Film(result.getString("imdbID"), result.getString("Title"),
-					result.getString("Year"), result.getString("Poster"));
-
-			// Et on change le status de la réponse
-			status = Response.Status.OK;
-		} else {
+		if (result == null) {
+			status = Response.Status.BAD_REQUEST;
 			// TODO message d'erreur
 		}
 
-		return Response.status(status).type("application/json").entity(body).build();
+		return Response.status(status).type("application/json").entity(result).build();
 	}
 
 	/**
