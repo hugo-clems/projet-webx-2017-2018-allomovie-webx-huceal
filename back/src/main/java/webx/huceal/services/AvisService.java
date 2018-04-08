@@ -66,16 +66,16 @@ public class AvisService {
                 .build();
     }
 
-    public Response findAvisByID(String avisID) {
+    public Response findAvisByID(long avisID) {
         Response.Status status = Response.Status.OK;
-        Object avis = avisDAO.findAvisByID(avisID);
-        if (avis == null) {
+        Object entity = avisDAO.findAvisByID(avisID);
+        if (entity == null) {
             status = Response.Status.NOT_FOUND;
-            avis = new ErrorMessage("L'id de l'avis demandé n'existe pas.");
+            entity = new ErrorMessage("L'id de l'avis demandé n'existe pas.");
         }
         return Response.status(status)
                 .type(MediaType.APPLICATION_JSON)
-                .entity(avis)
+                .entity(entity)
                 .build();
     }
 
@@ -84,7 +84,7 @@ public class AvisService {
         ErrorMessage erreur = new ErrorMessage();
         Object entity = erreur;
         int affectedRows;
-        if (key.isEmpty()) {
+        if (key == null || key.isEmpty()) {
             status = Response.Status.BAD_REQUEST;
             erreur.setMessage("Le mot-clé ne doit pas être vide.");
         } else {

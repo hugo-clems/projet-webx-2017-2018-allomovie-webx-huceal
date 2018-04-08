@@ -22,7 +22,7 @@ public class AvisController {
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response findAvisByID(@PathParam("id") String id) {
+	public Response findAvisByID(@PathParam("id") long id) {
 		return service.findAvisByID(id);
 	}
 

@@ -54,7 +54,7 @@ public class AvisDAO {
 		return liste;
 	}
 
-	public Avis findAvisByID(String avisID) {
+	public Avis findAvisByID(long avisID) {
 		Avis avis = null;
 		Connection con = null;
 		Statement stmt = null;
