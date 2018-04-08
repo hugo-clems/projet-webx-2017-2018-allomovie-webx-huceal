@@ -3,9 +3,9 @@
 </template>
 
 <script>
-    export default {
-        name: "avi"
-    }
+export default {
+  name: "Avis"
+}
 </script>
 
 <style scoped>
