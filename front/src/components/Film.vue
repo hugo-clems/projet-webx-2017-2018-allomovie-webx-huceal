@@ -15,7 +15,7 @@ export default {
     }
   },
   created () {
-    var id= this.$route.params.id;
+    var id = this.$route.params.id
     var api = 'http://www.omdbapi.com/?apikey=5a0f558e&'
     var requete = 'i=' + id
     axios.get(api + requete)
