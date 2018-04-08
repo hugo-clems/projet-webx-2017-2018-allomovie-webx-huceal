@@ -13,10 +13,9 @@ public class AvisService {
 
     private AvisDAO avisDAO = new AvisDAO();
     private FilmDAO filmDAO = new FilmDAO();
-    private final int FILM_ID_LENGTH = 9;
-    private final int COMMENTAIRE_MAX_LENGTH = 500;
 
     public Response addAvis(String filmID, int note, String commentaire) {
+        final int COMMENTAIRE_MAX_LENGTH = 500;
         Response.Status status = Response.Status.CREATED;
         ErrorMessage erreur = new ErrorMessage();
         if (!verifyFilmID(filmID)) {
@@ -89,6 +88,7 @@ public class AvisService {
     }
 
     private boolean verifyFilmID(String filmID) {
+        final int FILM_ID_LENGTH = 9;
         boolean ok = true;
         if (filmID == null) {
             ok = false;

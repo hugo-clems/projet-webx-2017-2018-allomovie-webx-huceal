@@ -27,14 +27,7 @@ public class DataSource {
         } catch (SQLException e) {
             System.out.println("Exception Message " + e.getLocalizedMessage());
         } finally {
-            if (con != null && stmt != null) {
-                try {
-                    con.close();
-                    stmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            closeConAndStmt(con, stmt);
         }
     }
 
@@ -43,18 +36,28 @@ public class DataSource {
             dataSource = new DataSource();
             initTableAvis();
         }
-        Connection dbConnection = null;
         try {
             Class.forName(DB_DRIVER);
         } catch (ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
         try {
-            dbConnection = DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
-            return dbConnection;
+            return DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return dbConnection;
+        return null;
     }
+
+    public static void closeConAndStmt(Connection con, Statement stmt) {
+        if (con != null && stmt != null) {
+            try {
+                con.close();
+                stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

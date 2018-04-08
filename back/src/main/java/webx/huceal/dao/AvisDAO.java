@@ -28,14 +28,7 @@ public class AvisDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			if (con != null && stmt != null) {
-				try {
-					con.close();
-					stmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+			DataSource.closeConAndStmt(con, stmt);
 		}
 		return id;
 	}
@@ -56,14 +49,7 @@ public class AvisDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			if (con != null && stmt != null) {
-				try {
-					con.close();
-					stmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+			DataSource.closeConAndStmt(con, stmt);
 		}
 		return liste;
 	}
@@ -84,14 +70,7 @@ public class AvisDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			if (con != null && stmt != null) {
-				try {
-					con.close();
-					stmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+			DataSource.closeConAndStmt(con, stmt);
 		}
 		return avis;
 	}
