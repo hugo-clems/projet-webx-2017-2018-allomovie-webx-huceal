@@ -34,4 +34,11 @@ public class AvisController {
 		return service.addAvis(avis.getFilmID(), avis.getNote(), avis.getCommentaire());
 	}
 
+	@DELETE
+	@Path("/delete")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response deleteAvisByKey(@QueryParam("key") String key) {
+		return service.deleteAvisByKey(key);
+	}
+
 }

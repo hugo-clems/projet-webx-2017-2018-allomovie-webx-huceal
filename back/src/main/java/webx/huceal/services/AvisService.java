@@ -79,6 +79,29 @@ public class AvisService {
                 .build();
     }
 
+    public Response deleteAvisByKey(String key) {
+        Response.Status status = Response.Status.OK;
+        ErrorMessage erreur = new ErrorMessage();
+        Object entity = erreur;
+        int affectedRows;
+        if (key.isEmpty()) {
+            status = Response.Status.BAD_REQUEST;
+            erreur.setMessage("Le mot-clé ne doit pas être vide.");
+        } else {
+            affectedRows = avisDAO.deleteAvisByKey(key);
+            if (affectedRows == 0) {
+                status = Response.Status.NOT_FOUND;
+                erreur.setMessage("Aucun commentaire à supprimer n'a été trouvé.");
+            } else {
+                entity = "{\"affectedRows\":\"" + affectedRows + "\"}";
+            }
+        }
+        return Response.status(status)
+                .type(MediaType.APPLICATION_JSON)
+                .entity(entity)
+                .build();
+    }
+
     private boolean verifyNote(int note) {
         boolean ok = true;
         if (note < -1 || note > 5) {

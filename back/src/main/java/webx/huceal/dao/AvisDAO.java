@@ -75,4 +75,22 @@ public class AvisDAO {
 		return avis;
 	}
 
+	public int deleteAvisByKey(String key) {
+		int affectedRows = 0;
+		Connection con = null;
+		Statement stmt = null;
+		key = key.toLowerCase();
+		String query = "DELETE FROM Avis WHERE lower(Commentaire) LIKE '%" + key + "%'";
+		try {
+			con = DataSource.getDBConnection();
+			stmt = con.createStatement();
+			affectedRows = stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSource.closeConAndStmt(con, stmt);
+		}
+		return affectedRows;
+	}
+
 }
