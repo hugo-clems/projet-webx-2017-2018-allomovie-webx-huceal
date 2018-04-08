@@ -3,36 +3,30 @@ package webx.huceal.dao;
 import webx.huceal.DataSource;
 import webx.huceal.domains.Avis;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AvisDAO {
 
-	/**
-	 * Renvoie la liste des avis d'un film.
-	 * @param id - Identifiant du film
-	 * @return la liste des avis du film
-	 */
-	public List<Avis> findAllAvisByFilmId(String id) {
-		// TODO
-		return null;
-	}
-
-	public void addAvis(String filmID, int note, String commentaire) {
+	public long addAvis(String filmID, int note, String commentaire) {
+		long id = -1;
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String tableCreateQuery = "INSERT INTO Avis(FilmID, Note, Commentaire) VALUES(?, ?, ?)";
+		String query = "INSERT INTO Avis(FilmID, Note, Commentaire) VALUES(?, ?, ?)";
 		try {
 			con = DataSource.getDBConnection();
-			stmt = con.prepareStatement(tableCreateQuery);
+			stmt = con.prepareStatement(query);
 			stmt.setString(1, filmID);
 			stmt.setInt(2, note);
 			stmt.setString(3, commentaire);
 			stmt.executeUpdate();
+			ResultSet generatedKeys = stmt.getGeneratedKeys();
+			if (generatedKeys.next()) {
+				id = generatedKeys.getLong(1);
+			}
 		} catch (SQLException e) {
-			System.out.println("Exception Message " + e.getLocalizedMessage());
+			e.printStackTrace();
 		} finally {
 			if (con != null && stmt != null) {
 				try {
@@ -43,6 +37,34 @@ public class AvisDAO {
 				}
 			}
 		}
+		return id;
+	}
+
+	public List<Avis> findAllAvisByFilmID(String filmID) {
+		List<Avis> liste = new ArrayList<>();
+		Connection con = null;
+		Statement stmt = null;
+		String query = "SELECT * FROM Avis WHERE FilmID = '" + filmID + "'";
+		try {
+			con = DataSource.getDBConnection();
+			stmt = con.createStatement();
+			ResultSet res = stmt.executeQuery(query);
+			while (res.next()) {
+				liste.add(new Avis(res.getString("FilmID"), res.getInt("Note"), res.getString("Commentaire")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (con != null && stmt != null) {
+				try {
+					con.close();
+					stmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return liste;
 	}
 
 }

@@ -12,12 +12,12 @@ public class AvisController {
 
 	private AvisService service = new AvisService();
 
-	/*@GET
-	@Path("/{id}")
+	@GET
+	@Path("/film/{id}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public List<Avis> findAllAvisByFilmId(@PathParam("id") String id) {
-		return dao.findAllAvisByFilmId(id);
-	}*/
+	public Response findAllAvisByFilmID(@PathParam("id") String id) {
+		return service.findAllAvisByFilmID(id);
+	}
 
 	@POST
 	@Path("/add")
