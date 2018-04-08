@@ -3,8 +3,8 @@ package webx.huceal.services;
 import webx.huceal.dao.FilmDAO;
 import webx.huceal.domains.Film;
 
-import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 public class FilmService {
 
@@ -35,8 +35,7 @@ public class FilmService {
 	 */
 	public Response findFilms(String titre, String annee) {
 		Response.Status status = Response.Status.BAD_REQUEST;
-		JsonObject result = null;
-		Object body = null;
+		List<Film> result = null;
 
 		if (titleIsValid(titre)) {
 			if (annee != null) {
@@ -53,9 +52,8 @@ public class FilmService {
 		} else {
 			// TODO message d'erreur
 		}
-		body = result;
 
-		return Response.status(status).entity(body).build();
+		return Response.status(status).entity(result).build();
 	}
 
 	/**
@@ -81,15 +79,6 @@ public class FilmService {
 			return false;
 		}
 		return true;
-	}
-
-	/**
-	 * Vérifie la requête
-	 * @param response le JsonObject à vérifier
-	 * @return true si la réponse est valide, false sinon
-	 */
-	private boolean checkRequest(JsonObject response) {
-		return response.getString("Response").equals("True");
 	}
 
 }

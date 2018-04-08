@@ -2,8 +2,11 @@ package webx.huceal.dao;
 
 import webx.huceal.domains.Film;
 
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.ws.rs.client.ClientBuilder;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FilmDAO {
 
@@ -13,28 +16,9 @@ public class FilmDAO {
 	private final String BASE_URL = "http://www.omdbapi.com/?apikey=5a0f558e&type=movie";
 
 	/**
-	 * Récupère la liste des films correpondant au titre renseigné
-	 * @param titre titre du film recherché
-	 * @return liste des films en Json
-	 */
-	public JsonObject findByTitle(String titre) {
-		return executeRequest("&s=" + titre);
-	}
-
-	/**
-	 * Récupère la liste des films correpondant au titre et à l'année renseigné
-	 * @param titre titre du film recherché
-	 * @param annee année du film recherché
-	 * @return liste des films en Json
-	 */
-	public JsonObject findByTitleAndYear(String titre, String annee) {
-		return executeRequest("&s=" + titre + "&y=" + annee);
-	}
-
-	/**
 	 * Récupère le film correspondant à l'identifiant
 	 * @param id identifiant du film recherché
-	 * @return le film en Json
+	 * @return le film
 	 */
 	public Film findById(String id) {
 		JsonObject result = executeRequest("&i=" + id);
@@ -58,6 +42,25 @@ public class FilmDAO {
 	}
 
 	/**
+	 * Récupère la liste des films correpondant au titre renseigné
+	 * @param titre titre du film recherché
+	 * @return liste des films
+	 */
+	public List<Film> findByTitle(String titre) {
+		return createListFilms(executeRequest("&s=" + titre));
+	}
+
+	/**
+	 * Récupère la liste des films correpondant au titre et à l'année renseigné
+	 * @param titre titre du film recherché
+	 * @param annee année du film recherché
+	 * @return liste des films
+	 */
+	public List<Film> findByTitleAndYear(String titre, String annee) {
+		return createListFilms(executeRequest("&s=" + titre + "&y=" + annee));
+	}
+
+	/**
 	 * Exécute la requête passé en pramètre
 	 * @param url la requête
 	 * @return résultat de la requête en Json
@@ -76,6 +79,26 @@ public class FilmDAO {
 	 */
 	private boolean checkRequest(JsonObject response) {
 		return response.getString("Response").equals("True");
+	}
+
+	/**
+	 * Créer une liste de films à partir du résultat de la requête
+	 * @param result résultat de la requête
+	 * @return liste des films
+	 */
+	private List<Film> createListFilms(JsonObject result) {
+		ArrayList<Film> lesFilms = new ArrayList<>();
+		if (checkRequest(result)) {
+			JsonArray listJson = result.getJsonArray("Search");
+			for (int i = 0; i < listJson.size(); i++) {
+				JsonObject elt = listJson.getJsonObject(i);
+				lesFilms.add(new Film(elt.getString("imdbID"),
+						elt.getString("Title"),
+						elt.getString("Year"),
+						elt.getString("Poster")));
+			}
+		}
+		return lesFilms;
 	}
 
 }
