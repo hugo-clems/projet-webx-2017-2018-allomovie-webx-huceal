@@ -68,4 +68,32 @@ public class AvisDAO {
 		return liste;
 	}
 
+	public Avis findAvisByID(String avisID) {
+		Avis avis = null;
+		Connection con = null;
+		Statement stmt = null;
+		String query = "SELECT * FROM Avis WHERE id = '" + avisID + "'";
+		try {
+			con = DataSource.getDBConnection();
+			stmt = con.createStatement();
+			ResultSet res = stmt.executeQuery(query);
+			if (res.next()) {
+				avis = new Avis(res.getLong("id"), res.getString("FilmID"),
+						res.getInt("Note"), res.getString("Commentaire"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (con != null && stmt != null) {
+				try {
+					con.close();
+					stmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return avis;
+	}
+
 }

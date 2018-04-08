@@ -2,7 +2,7 @@ package webx.huceal;
 
 public class ErrorMessage {
 
-	String message;
+	private String message;
 
 	public ErrorMessage() {
 		super();

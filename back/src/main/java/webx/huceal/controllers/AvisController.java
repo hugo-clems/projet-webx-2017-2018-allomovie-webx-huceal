@@ -19,6 +19,13 @@ public class AvisController {
 		return service.findAllAvisByFilmID(id);
 	}
 
+	@GET
+	@Path("/{id}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response findAvisByID(@PathParam("id") String id) {
+		return service.findAvisByID(id);
+	}
+
 	@POST
 	@Path("/add")
 	@Produces({ MediaType.APPLICATION_JSON })
