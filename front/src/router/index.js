@@ -9,14 +9,14 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      //rechercher d'un film
+//rechercher d'un film
       path: '/',
       name: 'Accueil',
       component: Accueil
 
     },
     {
-      path: '/film',
+      path: '/film/:id',
       name: 'Film',
       component: Film
     },
