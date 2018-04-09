@@ -8,11 +8,13 @@ import java.io.IOException;
 import java.net.URI;
 
 /**
- * Main class.
- *
+ * Class de lancement de l'application.
  */
 public class Main {
 
+    /**
+     * URI de base de l'application.
+     */
     public static final String BASE_URI = "http://localhost:8080/allomovie";
 
     /**
@@ -25,16 +27,16 @@ public class Main {
     }
 
     /**
-     * Main method.
-     * @param args
-     * @throws IOException
+     * Méthode de lancement de l'application.
+     * @param args non utilisé
+     * @throws IOException if an I/O exception of some sort has occurred
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(final String[] args) throws IOException {
         final HttpServer server = startServer();
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
         System.in.read();
         server.stop();
     }
-}
 
+}

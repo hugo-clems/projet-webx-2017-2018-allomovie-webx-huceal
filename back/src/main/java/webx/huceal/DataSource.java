@@ -1,21 +1,50 @@
 package webx.huceal;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class DataSource {
+/**
+ * Class DataSource.
+ */
+public final class DataSource {
 
+    /**
+     * Le driver de connection à la BD.
+     */
     private static final String DB_DRIVER = "org.h2.Driver";
+
+    /**
+     * La connection à la BD.
+     */
     private static final String DB_CONNECTION = "jdbc:h2:~/allomovieDB";
+
+    /**
+     * L'utilisateur de connection à la BD.
+     */
     private static final String DB_USER = "";
+
+    /**
+     * Le mot de passe de connection à la BD.
+     */
     private static final String DB_PASSWORD = "";
+
+    /**
+     * La dataSource.
+     */
     private static DataSource dataSource;
 
+    /**
+     * Constructeur par défaut.
+     */
     private DataSource() {
-
+        // Empty
     }
 
+    /**
+     * Initialise la table Avis dans la BD.
+     */
     private static void initTableAvis() {
         Connection con = null;
         Statement stmt = null;
@@ -31,6 +60,10 @@ public class DataSource {
         }
     }
 
+    /**
+     * Getter connection.
+     * @return la connection à la BD
+     */
     public static Connection getDBConnection() {
         if (dataSource == null) {
             dataSource = new DataSource();
@@ -49,7 +82,12 @@ public class DataSource {
         return null;
     }
 
-    public static void closeConAndStmt(Connection con, Statement stmt) {
+    /**
+     * Ferme la connection et le statement.
+     * @param con la connection à fermer
+     * @param stmt le statement à fermer
+     */
+    public static void closeConAndStmt(final Connection con, final Statement stmt) {
         if (con != null && stmt != null) {
             try {
                 con.close();
