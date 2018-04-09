@@ -13,19 +13,22 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * La DAO du Film.
+ */
 public class FilmDAO {
 
 	/**
-	 * Lien d'accès à l'API OMDB
+	 * Lien d'accès à l'API OMDB.
 	 */
-	private final String BASE_URL = "http://www.omdbapi.com/?apikey=5a0f558e&type=movie";
+	private static final String BASE_URL = "http://www.omdbapi.com/?apikey=5a0f558e&type=movie";
 
 	/**
-	 * Récupère le film correspondant à l'identifiant
+	 * Récupère le film correspondant à l'identifiant.
 	 * @param id identifiant du film recherché
 	 * @return le film
 	 */
-	public Film findById(String id) {
+	public final Film findById(final String id) {
 		JsonObject result = executeRequest("&i=" + id);
 		Film leFilm = null;
 
@@ -47,31 +50,31 @@ public class FilmDAO {
 	}
 
 	/**
-	 * Récupère la liste des films correpondant au titre renseigné
+	 * Récupère la liste des films correpondant au titre renseigné.
 	 * @param titre titre du film recherché
 	 * @return liste des films
 	 */
-	public List<Film> findByTitle(String titre) {
+	public final List<Film> findByTitle(final String titre) {
 		return createListFilms(executeRequest("&s=" + titre));
 	}
 
 	/**
-	 * Récupère la liste des films correpondant au titre et à l'année renseigné
+	 * Récupère la liste des films correpondant au titre et à l'année renseigné.
 	 * @param titre titre du film recherché
 	 * @param annee année du film recherché
 	 * @return liste des films
 	 */
-	public List<Film> findByTitleAndYear(String titre, String annee) {
+	public final List<Film> findByTitleAndYear(final String titre, final String annee) {
 		return createListFilms(executeRequest("&s=" + titre + "&y=" + annee));
 	}
 
 	/**
-	 * Récupère la liste des films correpondant à la note et/ou un mot dans le commentaire
+	 * Récupère la liste des films correpondant à la note et/ou un mot dans le commentaire.
 	 * @param note note minimal des films recherchés
 	 * @param commentaire mot contenu dans les commentaires des films recherchés
 	 * @return liste des films
 	 */
-	public List<Film> findByNoteAndComment(String note, String commentaire) {
+	public final List<Film> findByAvis(final String note, final String commentaire) {
 		List<Film> listFilm = new ArrayList<>();
 		List<String> listId = new ArrayList<>();
 		Connection con = null;
@@ -102,11 +105,11 @@ public class FilmDAO {
 	}
 
 	/**
-	 * Exécute la requête passé en pramètre
+	 * Exécute la requête passé en paramètre.
 	 * @param url la requête
 	 * @return résultat de la requête en Json
 	 */
-	private JsonObject executeRequest(String url) {
+	private JsonObject executeRequest(final String url) {
 		return ClientBuilder.newClient()
 				.target(BASE_URL + url)
 				.request()
@@ -114,20 +117,20 @@ public class FilmDAO {
 	}
 
 	/**
-	 * Vérifie la requête
+	 * Vérifie la requête.
 	 * @param response le JsonObject à vérifier
 	 * @return true si la réponse est valide, false sinon
 	 */
-	private boolean checkRequest(JsonObject response) {
+	private boolean checkRequest(final JsonObject response) {
 		return response.getString("Response").equals("True");
 	}
 
 	/**
-	 * Créer une liste de films à partir du résultat de la requête
+	 * Créer une liste de films à partir du résultat de la requête.
 	 * @param result résultat de la requête
 	 * @return liste des films
 	 */
-	private List<Film> createListFilms(JsonObject result) {
+	private List<Film> createListFilms(final JsonObject result) {
 		ArrayList<Film> lesFilms = new ArrayList<>();
 		if (checkRequest(result)) {
 			JsonArray listJson = result.getJsonArray("Search");

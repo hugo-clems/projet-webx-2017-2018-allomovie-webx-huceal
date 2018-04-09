@@ -94,13 +94,13 @@ public class FilmServiceTest {
 	@Test
 	public void findFilms() throws Exception {
 		// Rechercher par titre
-		Response response = filmService.findByTitleAndOrYear("star+wars", "");
+		Response response = filmService.findList("star+wars", "");
 		assertEquals(response.getStatus(), responseAllSW.getStatus());
 		assertEquals(response.getHeaders(), responseAllSW.getHeaders());
 		assertEquals(response.getEntity(), responseAllSW.getEntity());
 
 		// Recherche par titre et année
-		response = filmService.findByTitleAndOrYear("star+wars", "2005");
+		response = filmService.findList("star+wars", "2005");
 		assertEquals(response.getStatus(), responseAllSWIn2005.getStatus());
 		assertEquals(response.getHeaders(), responseAllSWIn2005.getHeaders());
 		assertEquals(response.getEntity(), responseAllSWIn2005.getEntity());
@@ -116,7 +116,7 @@ public class FilmServiceTest {
 
 	@Test
 	public void findFilmsWithBadTitle() throws Exception {
-		Response response = filmService.findByTitleAndOrYear("s", "");
+		Response response = filmService.findList("s", "");
 		assertEquals(response.getStatus(), badTitle.getStatus());
 		assertEquals(response.getHeaders(), badTitle.getHeaders());
 		assertEquals(response.getEntity(), badTitle.getEntity());
@@ -124,7 +124,7 @@ public class FilmServiceTest {
 
 	@Test
 	public void findFilmsWithBadYear() throws Exception {
-		Response response = filmService.findByTitleAndOrYear("star+wars", "20x5");
+		Response response = filmService.findList("star+wars", "20x5");
 		assertEquals(response.getStatus(), badYear.getStatus());
 		assertEquals(response.getHeaders(), badYear.getHeaders());
 		assertEquals(response.getEntity(), badYear.getEntity());
