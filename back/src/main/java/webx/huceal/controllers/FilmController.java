@@ -45,9 +45,12 @@ public class FilmController {
 	 * @return le film sous forme de Response Json
 	 */
 	@GET @Path("/list")
-	public final Response findList(@DefaultValue("") @QueryParam("titre") final String titre,
-								   @DefaultValue("") @QueryParam("annee") final String annee) {
-		return filmService.findList(titre.replaceAll("\\s", "+"), annee);
+	public final Response findList(@DefaultValue("") @QueryParam("titre")
+								   final String titre,
+								   @DefaultValue("") @QueryParam("annee")
+								   final String annee) {
+		return filmService.findList(titre.replaceAll("\\s",
+				"+"), annee);
 	}
 
 	/**
@@ -58,8 +61,10 @@ public class FilmController {
 	 * @return le film sous forme de Response Json
 	 */
 	@GET @Path("/avis")
-	public final Response findByAvis(@DefaultValue("0") @QueryParam("note") final String note,
-									 @DefaultValue("") @QueryParam("commentaire") final String commentaire) {
+	public final Response findByAvis(@DefaultValue("0") @QueryParam("note")
+									 final String note,
+									 @DefaultValue("") @QueryParam("commentaire")
+									 final String commentaire) {
 		return filmService.findByAvis(note, commentaire);
 	}
 

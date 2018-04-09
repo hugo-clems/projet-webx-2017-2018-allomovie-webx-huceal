@@ -9,30 +9,47 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+/**
+ * Le service des Avis.
+ */
 public class AvisService {
 
+    /**
+     * La DAO d'Avis.
+     */
     private AvisDAO avisDAO = new AvisDAO();
+    /**
+     * La DAO de Film.
+     */
     private FilmDAO filmDAO = new FilmDAO();
 
-    public Response addAvis(String filmID, int note, String commentaire) {
+    /**
+     * Appelle la DAO pour ajouter un avis valide.
+     * @param filmID l'id du film pour quel est émis l'avis
+     * @param note la note donnée, -1 si elle n'est pas renseignée
+     * @param commentaire le commentaire donné, peut être vide si note existe
+     * @return Response Json avec la localisation de la ressource
+     */
+    public final Response addAvis(final String filmID,
+                                  final int note, final String commentaire) {
         final int COMMENTAIRE_MAX_LENGTH = 500;
-        Response.Status status = Response.Status.CREATED;
+        Response.Status status = Response.Status.BAD_REQUEST;
         ErrorMessage erreur = new ErrorMessage();
         if (!verifyFilmID(filmID)) {
-            status = Response.Status.BAD_REQUEST;
             erreur.setMessage("L'id du film n'est pas valide.");
         } else if (!verifyNote(note)) {
-            status = Response.Status.BAD_REQUEST;
             erreur.setMessage("La note donnée n'est pas valide.");
         } else if (commentaire.length() > COMMENTAIRE_MAX_LENGTH) {
-            status = Response.Status.BAD_REQUEST;
             erreur.setMessage("Le commentaire est trop long.");
+        } else if (note == -1 && commentaire.isEmpty()) {
+            erreur.setMessage("Il faut au moins une note ou un commentaire pour déposer un avis.");
         } else {
             long id = avisDAO.addAvis(filmID, note, commentaire);
             if (id == -1) {
                 status = Response.Status.INTERNAL_SERVER_ERROR;
                 erreur.setMessage("Problème de connexion avec la base de données.");
             } else {
+                status = Response.Status.CREATED;
                 return Response.status(status)
                         .header("Location", "/avis/" + id)
                         .build();
@@ -43,7 +60,12 @@ public class AvisService {
                 .build();
     }
 
-    public Response findAllAvisByFilmID(String filmID) {
+    /**
+     * Appelle la DAO pour trouver tous les avis d'un film identifié par son id.
+     * @param filmID l'id du film donné
+     * @return ResponseJson avec la liste des avis du film trouvés
+     */
+    public final Response findAllAvisByFilmID(final String filmID) {
         Response.Status status = Response.Status.OK;
         List<Avis> liste;
         ErrorMessage erreur = new ErrorMessage();
@@ -66,7 +88,12 @@ public class AvisService {
                 .build();
     }
 
-    public Response findAvisByID(long avisID) {
+    /**
+     * Appelle la DAO pour trouver un avis via son identifiant.
+     * @param avisID l'id de l'avis
+     * @return Response Json avec l'avis demandé s'il existe
+     */
+    public final Response findAvisByID(final long avisID) {
         Response.Status status = Response.Status.OK;
         Object entity = avisDAO.findAvisByID(avisID);
         if (entity == null) {
@@ -79,7 +106,12 @@ public class AvisService {
                 .build();
     }
 
-    public Response deleteAvisByKey(String key) {
+    /**
+     * Appelle la DAO pour supprimer tous les avis contenant le mot-clé donné dans leur commentaire.
+     * @param key le mot-clé
+     * @return Response Json avec le nombre de commentaires supprimés
+     */
+    public final Response deleteAvisByKey(final String key) {
         Response.Status status = Response.Status.OK;
         ErrorMessage erreur = new ErrorMessage();
         Object entity = erreur;
@@ -102,7 +134,12 @@ public class AvisService {
                 .build();
     }
 
-    private boolean verifyNote(int note) {
+    /**
+     * Vérifie que la note donnée est valide.
+     * @param note la note reçue
+     * @return Boolean à true si la note est valide, false sinon
+     */
+    private final boolean verifyNote(final int note) {
         boolean ok = true;
         if (note < -1 || note > 5) {
             ok = false;
@@ -110,12 +147,17 @@ public class AvisService {
         return ok;
     }
 
-    private boolean verifyFilmID(String filmID) {
-        final int FILM_ID_LENGTH = 9;
+    /**
+     * Vérifie que l'id du film donné est valide.
+     * @param filmID l'id du film reçu
+     * @return Boolean à true si l'id est valide, false sinon
+     */
+    private final boolean verifyFilmID(final String filmID) {
+        final int filmIDLength = 9;
         boolean ok = true;
         if (filmID == null) {
             ok = false;
-        } else if (filmID.length() != FILM_ID_LENGTH || filmDAO.findById(filmID) == null) {
+        } else if (filmID.length() != filmIDLength || filmDAO.findById(filmID) == null) {
             ok = false;
         }
         return ok;

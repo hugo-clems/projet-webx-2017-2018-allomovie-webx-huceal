@@ -21,16 +21,6 @@ public final class DataSource {
     private static final String DB_CONNECTION = "jdbc:h2:~/allomovieDB";
 
     /**
-     * L'utilisateur de connection à la BD.
-     */
-    private static final String DB_USER = "";
-
-    /**
-     * Le mot de passe de connection à la BD.
-     */
-    private static final String DB_PASSWORD = "";
-
-    /**
      * La dataSource.
      */
     private static DataSource dataSource;
@@ -48,7 +38,9 @@ public final class DataSource {
     private static void initTableAvis() {
         Connection con = null;
         Statement stmt = null;
-        String tableCreateQuery = "CREATE TABLE IF NOT EXISTS Avis (ID INTEGER AUTO_INCREMENT PRIMARY KEY, FilmID VARCHAR(10), Note INTEGER(1), Commentaire VARCHAR(500))";
+        String tableCreateQuery = "CREATE TABLE IF NOT EXISTS Avis "
+                + "(ID INTEGER AUTO_INCREMENT PRIMARY KEY, FilmID VARCHAR(10),"
+                + " Note INTEGER(1), Commentaire VARCHAR(500))";
         try {
             con = getDBConnection();
             stmt = con.createStatement();
@@ -75,7 +67,7 @@ public final class DataSource {
             System.out.println(e.getMessage());
         }
         try {
-            return DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
+            return DriverManager.getConnection(DB_CONNECTION);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -87,7 +79,8 @@ public final class DataSource {
      * @param con la connection à fermer
      * @param stmt le statement à fermer
      */
-    public static void closeConAndStmt(final Connection con, final Statement stmt) {
+    public static void closeConAndStmt(final Connection con,
+                                       final Statement stmt) {
         if (con != null && stmt != null) {
             try {
                 con.close();

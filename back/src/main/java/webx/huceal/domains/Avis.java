@@ -1,5 +1,8 @@
 package webx.huceal.domains;
 
+/**
+ * Classe des Avis.
+ */
 public class Avis {
 
     /**
@@ -28,61 +31,81 @@ public class Avis {
     }
 
     /**
-     * Constructeur d'un avis que l'on va ajouter à la base de données (sans id donc).
-     * @param filmID l'id du film auquel l'avis est lié (String)
-     * @param note la note donnée (int)
-     * @param commentaire le commentaire donné (String)
+     * Constructeur d'un avis déjà ajouté à la base de données.
+     * @param i l'id de l'avis dans la base de données
+     * @param f l'id du film auquel l'avis est lié (String)
+     * @param n la note donnée (int)
+     * @param c le commentaire donné (String)
      */
-    public Avis(String filmID, int note, String commentaire) {
-        this.filmID = filmID;
-        this.note = note;
-        this.commentaire = commentaire;
+    public Avis(final long i, final String f, final int n, final String c) {
+        this.id = i;
+        this.filmID = f;
+        this.note = n;
+        this.commentaire = c;
     }
 
     /**
-     * Constructeur d'un avis déjà ajouté à la base de données.
-     * @param id l'id de l'avis dans la base de données
-     * @param filmID l'id du film auquel l'avis est lié (String)
-     * @param note la note donnée (int)
-     * @param commentaire le commentaire donné (String)
+     * Getter de la variable filmID.
+     * @return String représentant l'id du film
      */
-    public Avis(long id, String filmID, int note, String commentaire) {
-        this.id = id;
-        this.filmID = filmID;
-        this.note = note;
-        this.commentaire = commentaire;
-    }
-
-    public String getFilmID() {
+    public final String getFilmID() {
         return filmID;
     }
 
-    public void setFilmID(String filmID) {
-        this.filmID = filmID;
+    /**
+     * Setter de la variable filmID.
+     * @param f String de l'id du film
+     */
+    public final void setFilmID(final String f) {
+        this.filmID = f;
     }
 
-    public int getNote() {
+    /**
+     * Getter de la variable note.
+     * @return int représentant la note attribuée
+     */
+    public final int getNote() {
         return note;
     }
 
-    public void setNote(int note) {
-        this.note = note;
+    /**
+     * Setter de la variable note.
+     * @param n une note donnée
+     */
+    public final void setNote(final int n) {
+        this.note = n;
     }
 
-    public String getCommentaire() {
+    /**
+     * Getter de la variable commentaire.
+     * @return String du commentaire
+     */
+    public final String getCommentaire() {
         return commentaire;
     }
 
-    public void setCommentaire(String commentaire) {
-        this.commentaire = commentaire;
+    /**
+     * Setter de la variable commentaire.
+     * @param c String du commentaire donné
+     */
+    public final void setCommentaire(final String c) {
+        this.commentaire = c;
     }
 
-    public long getId() {
+    /**
+     * Getter de la variable id.
+     * @return L'id de l'avis au sein de la base de données
+     */
+    public final long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    /**
+     * Setter de la variable id.
+     * @param i long identifiant de l'avis dans la base de données
+     */
+    public final void setId(final long i) {
+        this.id = i;
     }
 
 }
