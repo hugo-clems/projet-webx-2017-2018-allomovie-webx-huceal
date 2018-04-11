@@ -39,8 +39,7 @@ public class AvisController {
      */
     @GET
     @Path("/film/{id}")
-    public final Response findAvisByFilm(@PathParam("id")
-                                         final String id) {
+    public final Response findAvisByFilm(@PathParam("id") final String id) {
         return service.findAllAvisByFilmID(id);
     }
 
@@ -61,7 +60,6 @@ public class AvisController {
      * @return Response Json avec la location de la ressource
      */
     @POST
-    @Path("/add")
     @Consumes({ MediaType.APPLICATION_JSON })
     public final Response addAvis(final Avis avis) {
         return service.addAvis(avis.getFilmID(), avis.getNote(),
@@ -74,9 +72,8 @@ public class AvisController {
      * @return Response Json
      */
     @DELETE
-    @Path("/delete")
-    public final Response deleteAvis(@QueryParam("key")
-                                     final String key) {
+    @Path("/{key}")
+    public final Response deleteAvis(@PathParam("key") final String key) {
         return service.deleteAvisByKey(key);
     }
 

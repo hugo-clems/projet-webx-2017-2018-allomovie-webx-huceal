@@ -30,8 +30,7 @@ public class AvisService {
      * @param commentaire le commentaire donné, peut être vide si note existe
      * @return Response Json avec la localisation de la ressource
      */
-    public final Response addAvis(final String filmID,
-                                  final int note, final String commentaire) {
+    public final Response addAvis(final String filmID, final int note, final String commentaire) {
         final int COMMENTAIRE_MAX_LENGTH = 500;
         Response.Status status = Response.Status.BAD_REQUEST;
         ErrorMessage erreur = new ErrorMessage();

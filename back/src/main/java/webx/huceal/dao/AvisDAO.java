@@ -24,8 +24,7 @@ public class AvisDAO {
      * @param commentaire le commentaire donné, peut être vide si note existe
      * @return L'id de l'avis créé
      */
-    public final long addAvis(final String filmID, final int note,
-                               final String commentaire) {
+    public final long addAvis(final String filmID, final int note, final String commentaire) {
         long id = -1;
         final int filmIDIndex = 1;
         final int noteIndex = 2;
