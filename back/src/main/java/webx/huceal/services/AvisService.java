@@ -147,7 +147,7 @@ public class AvisService {
      * @param note la note reçue
      * @return Boolean à true si la note est valide, false sinon
      */
-    private final boolean verifyNote(final int note) {
+    private boolean verifyNote(final int note) {
         boolean ok = true;
         if (note < -1 || note > 5) {
             ok = false;
@@ -160,7 +160,7 @@ public class AvisService {
      * @param filmID l'id du film reçu
      * @return Boolean à true si l'id est valide, false sinon
      */
-    private final boolean verifyFilmID(final String filmID) {
+    private boolean verifyFilmID(final String filmID) {
         final int filmIDLength = 9;
         boolean ok = true;
         if (filmID == null) {
