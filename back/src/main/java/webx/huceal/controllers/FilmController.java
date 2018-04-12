@@ -41,14 +41,13 @@ public class FilmController {
 	/**
 	 * Récupère une liste de film selon le titre et/ou l'année de sortie.
 	 * @param titre titre du film recherché
-	 * @param annee année du film recherché
+	 * @param annee année du film recherché (facultatif)
 	 * @return le film sous forme de Response Json
 	 */
-	@GET @Path("/list")
-	public final Response findList(@DefaultValue("") @QueryParam("titre") final String titre,
-								   @DefaultValue("") @QueryParam("annee") final String annee) {
-		return filmService.findList(titre.replaceAll("\\s",
-				"+"), annee);
+	@GET @Path("/liste/{titre}/{annee: .*}")
+	public final Response findList(@PathParam("titre") final String titre,
+								   @PathParam("annee") final String annee) {
+		return filmService.findList(titre.replaceAll("\\s", "+"), annee);
 	}
 
 	/**
