@@ -8,24 +8,28 @@ import javax.ws.rs.POST;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 /**
  * Contrôle l'accès aux Avis.
  *
- * /{id} - Récupère un avis via son identifiant
- * /film/{id} - Récupère tous les avis d'un film via son identifiant
- * /add - Ajoute un commentaire à la base de données (note, commentaire)
- * /delete - Supprime les commentaires qui contiennent le mot-clé donné
+ * GET /{id} - Récupère un avis via son identifiant
+ * GET /film/{id} - Récupère tous les avis d'un film via son identifiant
+ * POST / - Ajoute un commentaire à la base de données (note, commentaire)
+ * DELETE /{key} - Supprime les commentaires qui contiennent le mot-clé donné
  *
  */
 @Path("/avis")
 @Produces({ MediaType.APPLICATION_JSON })
 public class AvisController {
+
+    @Context
+    private UriInfo uriInfo;
 
     /**
      * Service des Avis.
@@ -62,8 +66,7 @@ public class AvisController {
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     public final Response addAvis(final Avis avis) {
-        return service.addAvis(avis.getFilmID(), avis.getNote(),
-               avis.getCommentaire());
+        return service.addAvis(avis.getFilmID(), avis.getNote(), avis.getCommentaire(), uriInfo);
     }
 
     /**

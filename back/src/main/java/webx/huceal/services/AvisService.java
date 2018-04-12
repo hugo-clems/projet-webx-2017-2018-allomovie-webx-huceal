@@ -1,12 +1,18 @@
 package webx.huceal.services;
 
 import webx.huceal.ErrorMessage;
+import webx.huceal.controllers.AvisController;
 import webx.huceal.dao.AvisDAO;
 import webx.huceal.dao.FilmDAO;
 import webx.huceal.domains.Avis;
 
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 import java.util.List;
 
 /**
@@ -30,7 +36,7 @@ public class AvisService {
      * @param commentaire le commentaire donné, peut être vide si note existe
      * @return Response Json avec la localisation de la ressource
      */
-    public final Response addAvis(final String filmID, final int note, final String commentaire) {
+    public final Response addAvis(final String filmID, final int note, final String commentaire, UriInfo uriInfo) {
         final int COMMENTAIRE_MAX_LENGTH = 500;
         Response.Status status = Response.Status.BAD_REQUEST;
         ErrorMessage erreur = new ErrorMessage();
@@ -48,9 +54,13 @@ public class AvisService {
                 status = Response.Status.INTERNAL_SERVER_ERROR;
                 erreur.setMessage("Problème de connexion avec la base de données.");
             } else {
+                UriBuilder ub = uriInfo.getBaseUriBuilder();
+                URI uri = ub.path(AvisController.class)
+                        .path(String.valueOf(id))
+                        .build();
                 status = Response.Status.CREATED;
                 return Response.status(status)
-                        .header("Location", "/avis/" + id)
+                        .header("Location", uri)
                         .build();
             }
         }
@@ -115,16 +125,17 @@ public class AvisService {
         ErrorMessage erreur = new ErrorMessage();
         Object entity = erreur;
         int affectedRows;
-        if (key == null || key.isEmpty()) {
+        if (key == null || key.isEmpty() || key.contains(" ")) {
             status = Response.Status.BAD_REQUEST;
-            erreur.setMessage("Le mot-clé ne doit pas être vide.");
+            erreur.setMessage("Le mot-clé ne doit pas être vide ou contenir d'espace.");
         } else {
             affectedRows = avisDAO.deleteAvisByKey(key);
             if (affectedRows == 0) {
                 status = Response.Status.NOT_FOUND;
                 erreur.setMessage("Aucun commentaire à supprimer n'a été trouvé.");
             } else {
-                entity = "{\"affectedRows\":\"" + affectedRows + "\"}";
+                JsonObjectBuilder json = Json.createObjectBuilder();
+                entity = json.add("affectedRows", affectedRows).build();
             }
         }
         return Response.status(status)
