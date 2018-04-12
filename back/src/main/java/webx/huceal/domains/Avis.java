@@ -45,6 +45,18 @@ public class Avis {
     }
 
     /**
+     * Constructeur d'un avis pour les tests (pas encore dans la base de données).
+     * @param f l'id du film auquel l'avis est lié (String)
+     * @param n la note donnée (int)
+     * @param c le commentaire donné (String)
+     */
+    public Avis(final String f, final int n, final String c) {
+        this.filmID = f;
+        this.note = n;
+        this.commentaire = c;
+    }
+
+    /**
      * Getter de la variable filmID.
      * @return String représentant l'id du film
      */

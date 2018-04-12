@@ -20,7 +20,7 @@ import javax.ws.rs.core.UriInfo;
  *
  * GET /{id} - Récupère un avis via son identifiant
  * GET /film/{id} - Récupère tous les avis d'un film via son identifiant
- * POST / - Ajoute un commentaire à la base de données (note, commentaire)
+ * POST - Ajoute un commentaire à la base de données (note, commentaire)
  * DELETE /{key} - Supprime les commentaires qui contiennent le mot-clé donné
  *
  */

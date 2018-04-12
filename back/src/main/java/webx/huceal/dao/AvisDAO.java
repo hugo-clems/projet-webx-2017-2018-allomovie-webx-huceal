@@ -140,4 +140,25 @@ public class AvisDAO {
         return affectedRows;
     }
 
+    /**
+     * Supprime l'avis correspondant à l'id donné.
+     * @param avisID l'id d'un avis
+     */
+    public final void deleteAvisByID(final long avisID) {
+        Connection con = null;
+        Statement stmt = null;
+        String query = "DELETE FROM Avis WHERE id = '" + avisID + "'";
+        try {
+            con = DataSource.getDBConnection();
+            if (con != null) {
+                stmt = con.createStatement();
+                stmt.executeUpdate(query);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DataSource.closeConAndStmt(con, stmt);
+        }
+    }
+
 }
