@@ -25,6 +25,7 @@ public class FilmServiceTest {
 	private Response badId;
 	private Response badTitle;
 	private Response badYear;
+	private Response noMovie;
 
 	@Before
 	public void setUp() throws Exception {
@@ -81,6 +82,10 @@ public class FilmServiceTest {
 		badYear = Response.status(Response.Status.BAD_REQUEST)
 				.type(MediaType.APPLICATION_JSON)
 				.entity(new ErrorMessage("Année invalide !")).build();
+
+		noMovie = Response.status(Response.Status.BAD_REQUEST)
+				.type(MediaType.APPLICATION_JSON)
+				.entity(new ErrorMessage("Aucun film trouvé !")).build();
 	}
 
 	@Test
@@ -137,6 +142,15 @@ public class FilmServiceTest {
 		assertEquals(badYear.getStatus(), response.getStatus());
 		assertEquals(badYear.getHeaders(), response.getHeaders());
 		assertEquals(badYear.getEntity(), response.getEntity());
+	}
+
+	@Test
+	public void findByTitleAndYearWithNoMovie() throws Exception {
+		Response response =
+				filmService.findByTitleAndYear("sqdlksjdqsdlsqjdlkqsdjqsldkqsd", "2005");
+		assertEquals(noMovie.getStatus(), response.getStatus());
+		assertEquals(noMovie.getHeaders(), response.getHeaders());
+		assertEquals(noMovie.getEntity(), response.getEntity());
 	}
 
 }
