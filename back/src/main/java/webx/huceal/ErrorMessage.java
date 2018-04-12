@@ -78,9 +78,9 @@ public class ErrorMessage {
     }
 
     @Override
-    public String toString() {
-        return "ErrorMessage{" +
-                "message='" + message + '\'' +
-                '}';
+    public final String toString() {
+        return "ErrorMessage{"
+                + "message='"
+                + message + '\'' + '}';
     }
 }

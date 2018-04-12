@@ -22,22 +22,22 @@ public class FilmService {
 	/**
 	 * Note minimale.
 	 */
-	private final int noteMin = 0;
+	private static final int NOTE_MIN = 0;
 
 	/**
 	 * Note maximale.
 	 */
-	private final int noteMax = 5;
+	private static final int NOTE_MAX = 5;
 
 	/**
 	 * Taille d'un titre.
 	 */
-	private final int tailleTitre = 4;
+	private static final int TAILLE_TITRE = 4;
 
 	/**
 	 * Taille d'un String d'une année.
 	 */
-	private final int tailleAnnee = 4;
+	private static final int TAILLE_ANNEE = 4;
 
 	/**
 	 * Récupère le film correspondant à l'identifiant.
@@ -136,7 +136,7 @@ public class FilmService {
 	 * @return boolean
 	 */
 	private boolean titleIsValid(final String titre) {
-		return titre.length() >= tailleTitre;
+		return titre.length() >= TAILLE_TITRE;
 	}
 
 	/**
@@ -148,7 +148,7 @@ public class FilmService {
 	private boolean yearIsValid(final String annee) {
 		try {
 			Integer.parseInt(annee);
-			return annee.length() == tailleAnnee;
+			return annee.length() == TAILLE_ANNEE;
 		} catch (NumberFormatException err) {
 			return false;
 		}
@@ -163,7 +163,7 @@ public class FilmService {
 	private boolean noteIsValid(final String note) {
 		try {
 			int i = Integer.parseInt(note);
-			return i >= noteMin && i <= noteMax;
+			return i >= NOTE_MIN && i <= NOTE_MAX;
 		} catch (NumberFormatException err) {
 			return false;
 		}
