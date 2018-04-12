@@ -21,12 +21,12 @@ public class FilmDAOTest {
 		starWarsV = new Film("tt0080684", "Star Wars: Episode V - The Empire Strikes Back",
 				"1980", "124 min", "Action, Adventure, Fantasy", "Twentieth Century Fox", "Irvin Kershner",
 				"Leigh Brackett (screenplay by), Lawrence Kasdan (screenplay by), George Lucas (story by)",
-				"Mark Hamill, Harrison Ford, Carrie Fisher, Billy Dee Williams", "After the rebels are overpowered by the Empire on the ice planet Hoth, Luke Skywalker begins Jedi training with Yoda. His friends accept shelter from a questionable ally as Darth Vader hunts them in a plan to capture Luke.",
-				"https://images-na.ssl-images-amazon.com/images/M/MV5BYmU1NDRjNDgtMzhiMi00NjZmLTg5NGItZDNiZjU5NTU4OTE0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg");
+				"Mark Hamill, Harrison Ford, Carrie Fisher, Billy Dee Williams", "After the rebels are brutally overpowered by the Empire on the ice planet Hoth, Luke Skywalker begins Jedi training with Yoda, while his friends are pursued by Darth Vader.",
+				"https://ia.media-imdb.com/images/M/MV5BYmU1NDRjNDgtMzhiMi00NjZmLTg5NGItZDNiZjU5NTU4OTE0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg");
 
 		allStarWars = new ArrayList<>();
 		allStarWars.add(new Film("tt0076759", "Star Wars: Episode IV - A New Hope", "1977", "https://ia.media-imdb.com/images/M/MV5BNzVlY2MwMjktM2E4OS00Y2Y3LWE3ZjctYzhkZGM3YzA1ZWM2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg"));
-		allStarWars.add(new Film("tt0080684", "Star Wars: Episode V - The Empire Strikes Back", "1980", "https://images-na.ssl-images-amazon.com/images/M/MV5BYmU1NDRjNDgtMzhiMi00NjZmLTg5NGItZDNiZjU5NTU4OTE0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg"));
+		allStarWars.add(new Film("tt0080684", "Star Wars: Episode V - The Empire Strikes Back", "1980", "https://ia.media-imdb.com/images/M/MV5BYmU1NDRjNDgtMzhiMi00NjZmLTg5NGItZDNiZjU5NTU4OTE0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg"));
 		allStarWars.add(new Film("tt0086190", "Star Wars: Episode VI - Return of the Jedi", "1983", "https://images-na.ssl-images-amazon.com/images/M/MV5BOWZlMjFiYzgtMTUzNC00Y2IzLTk1NTMtZmNhMTczNTk0ODk1XkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_SX300.jpg"));
 		allStarWars.add(new Film("tt2488496", "Star Wars: The Force Awakens", "2015", "https://ia.media-imdb.com/images/M/MV5BOTAzODEzNDAzMl5BMl5BanBnXkFtZTgwMDU1MTgzNzE@._V1_SX300.jpg"));
 		allStarWars.add(new Film("tt0120915", "Star Wars: Episode I - The Phantom Menace", "1999", "https://ia.media-imdb.com/images/M/MV5BYTRhNjcwNWQtMGJmMi00NmQyLWE2YzItODVmMTdjNWI0ZDA2XkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_SX300.jpg"));
@@ -52,49 +52,49 @@ public class FilmDAOTest {
 	@Test
 	public void findById() throws Exception {
 		Film result = dao.findById("tt0080684");
-		assertEquals(result, starWarsV);
+		assertEquals(starWarsV, result);
 	}
 
 	@Test
 	public void findByTitle() throws Exception {
 		List<Film> result = dao.findByTitle("star+wars");
-		assertEquals(result, allStarWars);
+		assertEquals(allStarWars, result);
 	}
 
 	@Test
 	public void findByTitleAndYear() throws Exception {
 		List<Film> result = dao.findByTitleAndYear("star+wars", "2005");
-		assertEquals(result, allStarWarsIn2005);
+		assertEquals(allStarWarsIn2005, result);
 	}
 
 	@Test
 	public void findByIdWithBadID() throws Exception {
 		Film result = dao.findById("tt008068");
-		assertEquals(result, null);
+		assertEquals(null, result);
 	}
 
 	@Test
 	public void findByTitleWithBadTitle() throws Exception {
 		List<Film> result = dao.findByTitle("s");
-		assertEquals(result, new ArrayList<>());
+		assertEquals(new ArrayList<>(), result);
 	}
 
 	@Test
 	public void findByTitleAndYearWithBadTitle() throws Exception {
 		List<Film> result = dao.findByTitleAndYear("s", "2005");
-		assertEquals(result, new ArrayList<>());
+		assertEquals(new ArrayList<>(), result);
 	}
 
 	@Test
 	public void findByTitleAndYearWithBadYear() throws Exception {
 		List<Film> result = dao.findByTitleAndYear("star+wars", "20x5");
-		assertEquals(result, allStarWars);
+		assertEquals(allStarWars, result);
 	}
 
 	@Test
 	public void findByTitleAndYearWithBadTitleAndYear() throws Exception {
 		List<Film> result = dao.findByTitleAndYear("s", "20x5");
-		assertEquals(result, new ArrayList<>());
+		assertEquals(new ArrayList<>(), result);
 	}
 
 }

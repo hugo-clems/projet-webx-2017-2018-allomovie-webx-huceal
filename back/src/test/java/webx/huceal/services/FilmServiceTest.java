@@ -31,12 +31,12 @@ public class FilmServiceTest {
 		starWarsV = new Film("tt0080684", "Star Wars: Episode V - The Empire Strikes Back",
 				"1980", "124 min", "Action, Adventure, Fantasy", "Twentieth Century Fox", "Irvin Kershner",
 				"Leigh Brackett (screenplay by), Lawrence Kasdan (screenplay by), George Lucas (story by)",
-				"Mark Hamill, Harrison Ford, Carrie Fisher, Billy Dee Williams", "After the rebels are overpowered by the Empire on the ice planet Hoth, Luke Skywalker begins Jedi training with Yoda. His friends accept shelter from a questionable ally as Darth Vader hunts them in a plan to capture Luke.",
-				"https://images-na.ssl-images-amazon.com/images/M/MV5BYmU1NDRjNDgtMzhiMi00NjZmLTg5NGItZDNiZjU5NTU4OTE0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg");
+				"Mark Hamill, Harrison Ford, Carrie Fisher, Billy Dee Williams", "After the rebels are brutally overpowered by the Empire on the ice planet Hoth, Luke Skywalker begins Jedi training with Yoda, while his friends are pursued by Darth Vader.",
+				"https://ia.media-imdb.com/images/M/MV5BYmU1NDRjNDgtMzhiMi00NjZmLTg5NGItZDNiZjU5NTU4OTE0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg");
 
 		allStarWars = new ArrayList<>();
 		allStarWars.add(new Film("tt0076759", "Star Wars: Episode IV - A New Hope", "1977", "https://ia.media-imdb.com/images/M/MV5BNzVlY2MwMjktM2E4OS00Y2Y3LWE3ZjctYzhkZGM3YzA1ZWM2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg"));
-		allStarWars.add(new Film("tt0080684", "Star Wars: Episode V - The Empire Strikes Back", "1980", "https://images-na.ssl-images-amazon.com/images/M/MV5BYmU1NDRjNDgtMzhiMi00NjZmLTg5NGItZDNiZjU5NTU4OTE0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg"));
+		allStarWars.add(new Film("tt0080684", "Star Wars: Episode V - The Empire Strikes Back", "1980", "https://ia.media-imdb.com/images/M/MV5BYmU1NDRjNDgtMzhiMi00NjZmLTg5NGItZDNiZjU5NTU4OTE0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg"));
 		allStarWars.add(new Film("tt0086190", "Star Wars: Episode VI - Return of the Jedi", "1983", "https://images-na.ssl-images-amazon.com/images/M/MV5BOWZlMjFiYzgtMTUzNC00Y2IzLTk1NTMtZmNhMTczNTk0ODk1XkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_SX300.jpg"));
 		allStarWars.add(new Film("tt2488496", "Star Wars: The Force Awakens", "2015", "https://ia.media-imdb.com/images/M/MV5BOTAzODEzNDAzMl5BMl5BanBnXkFtZTgwMDU1MTgzNzE@._V1_SX300.jpg"));
 		allStarWars.add(new Film("tt0120915", "Star Wars: Episode I - The Phantom Menace", "1999", "https://ia.media-imdb.com/images/M/MV5BYTRhNjcwNWQtMGJmMi00NmQyLWE2YzItODVmMTdjNWI0ZDA2XkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_SX300.jpg"));
@@ -86,48 +86,57 @@ public class FilmServiceTest {
 	@Test
 	public void findById() throws Exception {
 		Response response = filmService.findById("tt0080684");
-		assertEquals(response.getStatus(), responseSW5.getStatus());
-		assertEquals(response.getHeaders(), responseSW5.getHeaders());
-		assertEquals(response.getEntity(), responseSW5.getEntity());
+		assertEquals(responseSW5.getStatus(), response.getStatus());
+		assertEquals(responseSW5.getHeaders(), response.getHeaders());
+		assertEquals(responseSW5.getEntity(), response.getEntity());
 	}
 
 	@Test
-	public void findFilms() throws Exception {
-		// Rechercher par titre
-		Response response = filmService.findList("star+wars", "");
-		assertEquals(response.getStatus(), responseAllSW.getStatus());
-		assertEquals(response.getHeaders(), responseAllSW.getHeaders());
-		assertEquals(response.getEntity(), responseAllSW.getEntity());
+	public void findByTitle() throws Exception {
+		Response response = filmService.findByTitle("star+wars");
+		assertEquals(responseAllSW.getStatus(), response.getStatus());
+		assertEquals(responseAllSW.getHeaders(), response.getHeaders());
+		assertEquals(responseAllSW.getEntity(), response.getEntity());
+	}
 
-		// Recherche par titre et année
-		response = filmService.findList("star+wars", "2005");
-		assertEquals(response.getStatus(), responseAllSWIn2005.getStatus());
-		assertEquals(response.getHeaders(), responseAllSWIn2005.getHeaders());
-		assertEquals(response.getEntity(), responseAllSWIn2005.getEntity());
+	@Test
+	public void findByTitleAndYear() throws Exception {
+		Response response = filmService.findByTitleAndYear("star+wars", "2005");
+		assertEquals(responseAllSWIn2005.getStatus(), response.getStatus());
+		assertEquals(responseAllSWIn2005.getHeaders(), response.getHeaders());
+		assertEquals(responseAllSWIn2005.getEntity(), response.getEntity());
 	}
 
 	@Test
 	public void findByIdWithBadId() throws Exception {
 		Response response = filmService.findById("tt008068");
-		assertEquals(response.getStatus(), badId.getStatus());
-		assertEquals(response.getHeaders(), badId.getHeaders());
-		assertEquals(response.getEntity(), badId.getEntity());
+		assertEquals(badId.getStatus(), response.getStatus());
+		assertEquals(badId.getHeaders(), response.getHeaders());
+		assertEquals(badId.getEntity(), response.getEntity());
 	}
 
 	@Test
-	public void findFilmsWithBadTitle() throws Exception {
-		Response response = filmService.findList("s", "");
-		assertEquals(response.getStatus(), badTitle.getStatus());
-		assertEquals(response.getHeaders(), badTitle.getHeaders());
-		assertEquals(response.getEntity(), badTitle.getEntity());
+	public void findByTitleWithBadTitle() throws Exception {
+		Response response = filmService.findByTitle("s");
+		assertEquals(badTitle.getStatus(), response.getStatus());
+		assertEquals(badTitle.getHeaders(), response.getHeaders());
+		assertEquals(badTitle.getEntity(), response.getEntity());
 	}
 
 	@Test
-	public void findFilmsWithBadYear() throws Exception {
-		Response response = filmService.findList("star+wars", "20x5");
-		assertEquals(response.getStatus(), badYear.getStatus());
-		assertEquals(response.getHeaders(), badYear.getHeaders());
-		assertEquals(response.getEntity(), badYear.getEntity());
+	public void findByTitleAndYearWithBadTitle() throws Exception {
+		Response response = filmService.findByTitleAndYear("st", "2005");
+		assertEquals(badTitle.getStatus(), response.getStatus());
+		assertEquals(badTitle.getHeaders(), response.getHeaders());
+		assertEquals(badTitle.getEntity(), response.getEntity());
+	}
+
+	@Test
+	public void findByTitleAndYearWithBadYear() throws Exception {
+		Response response = filmService.findByTitleAndYear("star+wars", "20x5");
+		assertEquals(badYear.getStatus(), response.getStatus());
+		assertEquals(badYear.getHeaders(), response.getHeaders());
+		assertEquals(badYear.getEntity(), response.getEntity());
 	}
 
 }

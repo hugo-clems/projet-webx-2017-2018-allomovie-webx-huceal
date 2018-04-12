@@ -2,9 +2,12 @@ package webx.huceal.services;
 
 import webx.huceal.ErrorMessage;
 import webx.huceal.dao.FilmDAO;
+import webx.huceal.domains.Film;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Le service de Film.
@@ -25,6 +28,11 @@ public class FilmService {
 	 * Note maximale.
 	 */
 	private final int noteMax = 5;
+
+	/**
+	 * Taille d'un titre.
+	 */
+	private final int tailleTitre = 4;
 
 	/**
 	 * Taille d'un String d'une année.
@@ -51,24 +59,48 @@ public class FilmService {
 	/**
 	 * Récupère la liste des films correspondant aux critères de recherche.
 	 * @param titre titre du film recherché
-	 * @param annee année du film recherché
 	 * @return Response Json
 	 */
-	public final Response findList(final String titre, final String annee) {
+	public final Response findByTitle(final String titre) {
 		Response.Status status = Response.Status.BAD_REQUEST;
 		Object body = null;
 
 		if (titleIsValid(titre)) {
-			if (!annee.equals("")) {
-				if (yearIsValid(annee)) {
-					body = dao.findByTitleAndYear(titre, annee);
-					status = Response.Status.OK;
+			List<Film> result = dao.findByTitle(titre);
+			if (result.equals(new ArrayList<Film>())) {
+				body = new ErrorMessage("Aucun film trouvé !");
+			} else {
+				body = result;
+				status = Response.Status.OK;
+			}
+		} else {
+			body = new ErrorMessage("Titre invalide !");
+		}
+
+		return Response.status(status).type(MediaType.APPLICATION_JSON).entity(body).build();
+	}
+
+	/**
+	 * Récupère la liste des films correspondant aux critères de recherche.
+	 * @param titre titre du film recherché
+	 * @param annee année du film recherché
+	 * @return Response Json
+	 */
+	public final Response findByTitleAndYear(final String titre, final String annee) {
+		Response.Status status = Response.Status.BAD_REQUEST;
+		Object body = null;
+
+		if (titleIsValid(titre)) {
+			if (yearIsValid(annee)) {
+				List<Film> result = dao.findByTitleAndYear(titre, annee);
+				if (result.equals(new ArrayList<Film>())) {
+					body = new ErrorMessage("Aucun film trouvé !");
 				} else {
-					body = new ErrorMessage("Année invalide !");
+					body = result;
+					status = Response.Status.OK;
 				}
 			} else {
-				body = dao.findByTitle(titre);
-				status = Response.Status.OK;
+				body = new ErrorMessage("Année invalide !");
 			}
 		} else {
 			body = new ErrorMessage("Titre invalide !");
@@ -104,8 +136,7 @@ public class FilmService {
 	 * @return boolean
 	 */
 	private boolean titleIsValid(final String titre) {
-		return titre.length() > 3;
-		// TODO gérer too many results mieux que ça
+		return titre.length() >= tailleTitre;
 	}
 
 	/**

@@ -359,4 +359,20 @@ public class Film {
 		return result;
 	}
 
+	@Override
+	public String toString() {
+		return "Film{" +
+				"filmId='" + filmId + '\'' +
+				", titre='" + titre + '\'' +
+				", anneeSortie='" + anneeSortie + '\'' +
+				", duree='" + duree + '\'' +
+				", genre='" + genre + '\'' +
+				", studio='" + studio + '\'' +
+				", producteur='" + producteur + '\'' +
+				", scenariste='" + scenariste + '\'' +
+				", acteurs='" + acteurs + '\'' +
+				", description='" + description + '\'' +
+				", image='" + image + '\'' +
+				'}';
+	}
 }

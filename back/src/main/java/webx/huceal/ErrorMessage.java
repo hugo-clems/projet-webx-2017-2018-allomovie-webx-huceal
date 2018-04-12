@@ -76,4 +76,11 @@ public class ErrorMessage {
         }
         return h;
     }
+
+    @Override
+    public String toString() {
+        return "ErrorMessage{" +
+                "message='" + message + '\'' +
+                '}';
+    }
 }
