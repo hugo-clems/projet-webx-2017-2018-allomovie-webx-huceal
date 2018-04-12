@@ -1,6 +1,6 @@
 package webx.huceal.services;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import webx.huceal.ErrorMessage;
 import webx.huceal.domains.Film;
@@ -11,24 +11,29 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 public class FilmServiceTest {
 
-	private FilmService filmService = new FilmService();
-	private Film starWarsV;
-	private List<Film> allStarWars;
-	private List<Film> allStarWarsIn2005;
-	private Response responseSW5;
-	private Response responseAllSW;
-	private Response responseAllSWIn2005;
-	private Response badId;
-	private Response badTitle;
-	private Response badYear;
-	private Response noMovie;
+	private static FilmService filmService;
+	private static Film starWarsV;
+	private static List<Film> allStarWars;
+	private static List<Film> allStarWarsIn2005;
+	private static Response responseSW5;
+	private static Response responseAllSW;
+	private static Response responseAllSWIn2005;
+	private static Response badId;
+	private static Response badTitle;
+	private static Response badYear;
+	private static Response noMovie;
 
-	@Before
-	public void setUp() throws Exception {
+	@BeforeClass
+	public static void setUp() throws Exception {
+		// Accès au service
+		filmService = new FilmService();
+
+		// Création jeux de tests
 		starWarsV = new Film("tt0080684", "Star Wars: Episode V - The Empire Strikes Back",
 				"1980", "124 min", "Action, Adventure, Fantasy", "Twentieth Century Fox", "Irvin Kershner",
 				"Leigh Brackett (screenplay by), Lawrence Kasdan (screenplay by), George Lucas (story by)",
@@ -91,66 +96,66 @@ public class FilmServiceTest {
 	@Test
 	public void findById() throws Exception {
 		Response response = filmService.findById("tt0080684");
-		assertEquals(responseSW5.getStatus(), response.getStatus());
-		assertEquals(responseSW5.getHeaders(), response.getHeaders());
-		assertEquals(responseSW5.getEntity(), response.getEntity());
+		assertThat(response.getStatus(), is(responseSW5.getStatus()));
+		assertThat(response.getHeaders(), is(responseSW5.getHeaders()));
+		assertThat(response.getEntity(), is(responseSW5.getEntity()));
 	}
 
 	@Test
 	public void findByTitle() throws Exception {
 		Response response = filmService.findByTitle("star+wars");
-		assertEquals(responseAllSW.getStatus(), response.getStatus());
-		assertEquals(responseAllSW.getHeaders(), response.getHeaders());
-		assertEquals(responseAllSW.getEntity(), response.getEntity());
+		assertThat(response.getStatus(), is(responseAllSW.getStatus()));
+		assertThat(response.getHeaders(), is(responseAllSW.getHeaders()));
+		assertThat(response.getEntity(), is(responseAllSW.getEntity()));
 	}
 
 	@Test
 	public void findByTitleAndYear() throws Exception {
 		Response response = filmService.findByTitleAndYear("star+wars", "2005");
-		assertEquals(responseAllSWIn2005.getStatus(), response.getStatus());
-		assertEquals(responseAllSWIn2005.getHeaders(), response.getHeaders());
-		assertEquals(responseAllSWIn2005.getEntity(), response.getEntity());
+		assertThat(response.getStatus(), is(responseAllSWIn2005.getStatus()));
+		assertThat(response.getHeaders(), is(responseAllSWIn2005.getHeaders()));
+		assertThat(response.getEntity(), is(responseAllSWIn2005.getEntity()));
 	}
 
 	@Test
 	public void findByIdWithBadId() throws Exception {
 		Response response = filmService.findById("tt008068");
-		assertEquals(badId.getStatus(), response.getStatus());
-		assertEquals(badId.getHeaders(), response.getHeaders());
-		assertEquals(badId.getEntity(), response.getEntity());
+		assertThat(response.getStatus(), is(badId.getStatus()));
+		assertThat(response.getHeaders(), is(badId.getHeaders()));
+		assertThat(response.getEntity(), is(badId.getEntity()));
 	}
 
 	@Test
 	public void findByTitleWithBadTitle() throws Exception {
 		Response response = filmService.findByTitle("s");
-		assertEquals(badTitle.getStatus(), response.getStatus());
-		assertEquals(badTitle.getHeaders(), response.getHeaders());
-		assertEquals(badTitle.getEntity(), response.getEntity());
+		assertThat(response.getStatus(), is(badTitle.getStatus()));
+		assertThat(response.getHeaders(), is(badTitle.getHeaders()));
+		assertThat(response.getEntity(), is(badTitle.getEntity()));
 	}
 
 	@Test
 	public void findByTitleAndYearWithBadTitle() throws Exception {
 		Response response = filmService.findByTitleAndYear("st", "2005");
-		assertEquals(badTitle.getStatus(), response.getStatus());
-		assertEquals(badTitle.getHeaders(), response.getHeaders());
-		assertEquals(badTitle.getEntity(), response.getEntity());
+		assertThat(response.getStatus(), is(badTitle.getStatus()));
+		assertThat(response.getHeaders(), is(badTitle.getHeaders()));
+		assertThat(response.getEntity(), is(badTitle.getEntity()));
 	}
 
 	@Test
 	public void findByTitleAndYearWithBadYear() throws Exception {
 		Response response = filmService.findByTitleAndYear("star+wars", "20x5");
-		assertEquals(badYear.getStatus(), response.getStatus());
-		assertEquals(badYear.getHeaders(), response.getHeaders());
-		assertEquals(badYear.getEntity(), response.getEntity());
+		assertThat(response.getStatus(), is(badYear.getStatus()));
+		assertThat(response.getHeaders(), is(badYear.getHeaders()));
+		assertThat(response.getEntity(), is(badYear.getEntity()));
 	}
 
 	@Test
 	public void findByTitleAndYearWithNoMovie() throws Exception {
 		Response response =
 				filmService.findByTitleAndYear("sqdlksjdqsdlsqjdlkqsdjqsldkqsd", "2005");
-		assertEquals(noMovie.getStatus(), response.getStatus());
-		assertEquals(noMovie.getHeaders(), response.getHeaders());
-		assertEquals(noMovie.getEntity(), response.getEntity());
+		assertThat(response.getStatus(), is(noMovie.getStatus()));
+		assertThat(response.getHeaders(), is(noMovie.getHeaders()));
+		assertThat(response.getEntity(), is(noMovie.getEntity()));
 	}
 
 }

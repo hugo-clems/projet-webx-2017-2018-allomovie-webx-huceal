@@ -1,10 +1,7 @@
 package webx.huceal.controllers;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import webx.huceal.ErrorMessage;
@@ -14,15 +11,14 @@ import webx.huceal.domains.Film;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class FilmControllerIntegrationTest {
@@ -30,9 +26,6 @@ public class FilmControllerIntegrationTest {
 	private static Client client;
 	private static WebTarget target;
 	private static HttpServer server;
-
-	private static Gson transformJson;
-	private static Type listFilmType;
 
 	private static int codeOk;
 	private static int codeBadRequest;
@@ -54,10 +47,6 @@ public class FilmControllerIntegrationTest {
 
 		// Lancement du serveur
 		server = Main.startServer();
-
-		// Intialisation des utilitaires
-		transformJson = new Gson();
-		listFilmType = new TypeToken<List<Film>>(){}.getType();
 
 		// Création des jeux de tests
 		codeOk = Response.Status.OK.getStatusCode();
@@ -112,8 +101,7 @@ public class FilmControllerIntegrationTest {
 
 		assertThat(response.getStatus(), is(codeOk));
 		assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
-		assertThat(transformJson.fromJson(response.readEntity(String.class), Film.class),
-				is(starWars5));
+		assertThat(response.readEntity(Film.class), is(starWars5));
 	}
 
 	@Test
@@ -123,8 +111,7 @@ public class FilmControllerIntegrationTest {
 
 		assertThat(response.getStatus(), is(codeOk));
 		assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
-		List<Film> result = transformJson.fromJson(response.readEntity(String.class), listFilmType);
-		assertThat(result, is(allStarWars));
+		assertThat(response.readEntity(new GenericType<List<Film>>() {}), is(allStarWars));
 	}
 
 	@Test
@@ -134,8 +121,7 @@ public class FilmControllerIntegrationTest {
 
 		assertThat(response.getStatus(), is(codeOk));
 		assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
-		List<Film> result = transformJson.fromJson(response.readEntity(String.class), listFilmType);
-		assertThat(result, is(allStarWarsIn2005));
+		assertThat(response.readEntity(new GenericType<List<Film>>() {}), is(allStarWarsIn2005));
 	}
 
 
@@ -146,7 +132,7 @@ public class FilmControllerIntegrationTest {
 
 		assertThat(response.getStatus(), is(codeBadRequest));
 		assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
-		assertThat(response.readEntity(String.class), is(transformJson.toJson(idInvalid)));
+		assertThat(response.readEntity(ErrorMessage.class), is(idInvalid));
 	}
 
 	@Test
@@ -156,7 +142,7 @@ public class FilmControllerIntegrationTest {
 
 		assertThat(response.getStatus(), is(codeBadRequest));
 		assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
-		assertThat(response.readEntity(String.class), is(transformJson.toJson(titleInvalid)));
+		assertThat(response.readEntity(ErrorMessage.class), is(titleInvalid));
 	}
 
 	@Test
@@ -166,7 +152,7 @@ public class FilmControllerIntegrationTest {
 
 		assertThat(response.getStatus(), is(codeBadRequest));
 		assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
-		assertThat(response.readEntity(String.class), is(transformJson.toJson(titleInvalid)));
+		assertThat(response.readEntity(ErrorMessage.class), is(titleInvalid));
 	}
 
 	@Test
@@ -176,7 +162,17 @@ public class FilmControllerIntegrationTest {
 
 		assertThat(response.getStatus(), is(codeBadRequest));
 		assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
-		assertThat(response.readEntity(String.class), is(transformJson.toJson(yearInvalid)));
+		assertThat(response.readEntity(ErrorMessage.class), is(yearInvalid));
+	}
+
+	@Test
+	public void findByTitleTestAndYearWithNoMovie() throws Exception {
+		Response response = target.path("film").path("liste").path("sdflkjdsjdsfsdfkldsdf").path("2005")
+				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
+
+		assertThat(response.getStatus(), is(codeBadRequest));
+		assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
+		assertThat(response.readEntity(ErrorMessage.class), is(noMovie));
 	}
 
 }

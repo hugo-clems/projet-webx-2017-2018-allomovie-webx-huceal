@@ -1,23 +1,30 @@
 package webx.huceal.dao;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import webx.huceal.domains.Film;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 public class FilmDAOTest {
 
-	private FilmDAO dao = new FilmDAO();
-	private Film starWarsV;
-	private List<Film> allStarWars;
-	private List<Film> allStarWarsIn2005;
+	private static FilmDAO dao;
+	private static Film starWarsV;
+	private static List<Film> allStarWars;
+	private static List<Film> allStarWarsIn2005;
+	private static List<Film> emptyList;
 
-	@Before
-	public void setUp() throws Exception {
+	@BeforeClass
+	public static void setUp() throws Exception {
+		// Accès dao
+		dao = new FilmDAO();
+
+		// Création jeux de tests
 		starWarsV = new Film("tt0080684", "Star Wars: Episode V - The Empire Strikes Back",
 				"1980", "124 min", "Action, Adventure, Fantasy", "Twentieth Century Fox", "Irvin Kershner",
 				"Leigh Brackett (screenplay by), Lawrence Kasdan (screenplay by), George Lucas (story by)",
@@ -47,54 +54,56 @@ public class FilmDAOTest {
 		allStarWarsIn2005.add(new Film("tt0469106", "How to Stand in Line for Star Wars", "2005", "http://ia.media-imdb.com/images/M/MV5BMTMyMTQwNjEzOV5BMl5BanBnXkFtZTcwODg4MDI1MQ@@._V1_SX300.jpg"));
 		allStarWarsIn2005.add(new Film("tt4273912", "Star Wars Episode III: Becoming Obi-Wan", "2005", "https://ia.media-imdb.com/images/M/MV5BNzExYzA4ODctMDA0Yy00M2RhLTgyNzQtM2MyMzlhNmEzZTYyXkEyXkFqcGdeQXVyMzYyMzU2OA@@._V1_SX300.jpg"));
 		allStarWarsIn2005.add(new Film("tt4528700", "Star Wars Epizod III - Imladris", "2005", "N/A"));
+
+		emptyList = new ArrayList<>();
 	}
 
 	@Test
 	public void findById() throws Exception {
 		Film result = dao.findById("tt0080684");
-		assertEquals(starWarsV, result);
+		assertThat(result, is(starWarsV));
 	}
 
 	@Test
 	public void findByTitle() throws Exception {
 		List<Film> result = dao.findByTitle("star+wars");
-		assertEquals(allStarWars, result);
+		assertThat(result, is(allStarWars));
 	}
 
 	@Test
 	public void findByTitleAndYear() throws Exception {
 		List<Film> result = dao.findByTitleAndYear("star+wars", "2005");
-		assertEquals(allStarWarsIn2005, result);
+		assertThat(result, is(allStarWarsIn2005));
 	}
 
 	@Test
 	public void findByIdWithBadID() throws Exception {
 		Film result = dao.findById("tt008068");
-		assertEquals(null, result);
+		assertThat(result, is(nullValue()));
 	}
 
 	@Test
 	public void findByTitleWithBadTitle() throws Exception {
 		List<Film> result = dao.findByTitle("s");
-		assertEquals(new ArrayList<>(), result);
+		assertThat(result, is(emptyList));
 	}
 
 	@Test
 	public void findByTitleAndYearWithBadTitle() throws Exception {
 		List<Film> result = dao.findByTitleAndYear("s", "2005");
-		assertEquals(new ArrayList<>(), result);
+		assertThat(result, is(emptyList));
 	}
 
 	@Test
 	public void findByTitleAndYearWithBadYear() throws Exception {
 		List<Film> result = dao.findByTitleAndYear("star+wars", "20x5");
-		assertEquals(allStarWars, result);
+		assertThat(result, is(allStarWars));
 	}
 
 	@Test
 	public void findByTitleAndYearWithBadTitleAndYear() throws Exception {
 		List<Film> result = dao.findByTitleAndYear("s", "20x5");
-		assertEquals(new ArrayList<>(), result);
+		assertThat(result, is(emptyList));
 	}
 
 }
