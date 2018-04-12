@@ -7,7 +7,6 @@ import webx.huceal.dao.FilmDAO;
 import webx.huceal.domains.Avis;
 
 import javax.json.Json;
-import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
@@ -134,8 +133,7 @@ public class AvisService {
                 status = Response.Status.NOT_FOUND;
                 erreur.setMessage("Aucun commentaire à supprimer n'a été trouvé.");
             } else {
-                JsonObjectBuilder json = Json.createObjectBuilder();
-                entity = json.add("affectedRows", affectedRows).build();
+                entity = Json.createObjectBuilder().add("affectedRows", affectedRows).build();
             }
         }
         return Response.status(status)

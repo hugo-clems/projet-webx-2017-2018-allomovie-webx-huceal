@@ -16,9 +16,9 @@ public final class DataSource {
     private static final String DB_DRIVER = "org.h2.Driver";
 
     /**
-     * La connection à la BD.
+     * La connexion à la BD.
      */
-    private static final String DB_CONNECTION = "jdbc:h2:~/allomovieDB";
+    private static String DB_CONNECTION = "jdbc:h2:~/allomovieDB";
 
     /**
      * La dataSource.
@@ -88,6 +88,10 @@ public final class DataSource {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void setDbConnection(String newDbConnection) {
+        DB_CONNECTION = newDbConnection;
     }
 
 }

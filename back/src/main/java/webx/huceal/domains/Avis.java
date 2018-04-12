@@ -6,6 +6,7 @@ package webx.huceal.domains;
 public class Avis {
 
     /**
+
      * ID de l'avis dans la base de données.
      */
     private long id;
@@ -118,6 +119,26 @@ public class Avis {
      */
     public final void setId(final long i) {
         this.id = i;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Avis avis = (Avis) o;
+        if (id != avis.id) return false;
+        if (note != avis.note) return false;
+        if (filmID != null ? !filmID.equals(avis.filmID) : avis.filmID != null) return false;
+        return commentaire != null ? commentaire.equals(avis.commentaire) : avis.commentaire == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (filmID != null ? filmID.hashCode() : 0);
+        result = 31 * result + note;
+        result = 31 * result + (commentaire != null ? commentaire.hashCode() : 0);
+        return result;
     }
 
 }
