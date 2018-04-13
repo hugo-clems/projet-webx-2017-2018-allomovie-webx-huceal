@@ -236,6 +236,7 @@ public class AvisServiceUnitTest {
 
     @Test
     public void addAvisWhenCommentaireIsTooLong() {
+        when(filmDAO.findById(anyString())).thenReturn(film);
         String comTooLong = "Le commentaire est trop long. Le commentaire est trop long. Le commentaire est trop long."
                 + " Le commentaire est trop long. Le commentaire est trop long. Le commentaire est trop long."
                 + " Le commentaire est trop long. Le commentaire est trop long. Le commentaire est trop long."
@@ -253,6 +254,7 @@ public class AvisServiceUnitTest {
 
     @Test
     public void addAvisWhenNoNoteAndNoCommentaire() {
+        when(filmDAO.findById(anyString())).thenReturn(film);
         response = avisService.addAvis(avis1.getFilmID(), -1, "", uriInfo);
         assertThat(response.getStatus(), is(Response.Status.BAD_REQUEST.getStatusCode()));
         assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
