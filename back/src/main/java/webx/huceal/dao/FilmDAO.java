@@ -28,7 +28,7 @@ public class FilmDAO {
 	 * @param id identifiant du film recherché
 	 * @return le film
 	 */
-	public final Film findById(final String id) {
+	public Film findById(final String id) {
 		JsonObject result = executeRequest("&i=" + id);
 		Film leFilm = null;
 

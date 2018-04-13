@@ -24,7 +24,7 @@ public class AvisDAO {
      * @param commentaire le commentaire donné, peut être vide si note existe
      * @return L'id de l'avis créé
      */
-    public final long addAvis(final String filmID, final int note, final String commentaire) {
+    public long addAvis(final String filmID, final int note, final String commentaire) {
         long id = -1;
         final int filmIDIndex = 1;
         final int noteIndex = 2;
@@ -59,7 +59,7 @@ public class AvisDAO {
      * @param filmID l'id du film (tt suivi de 7 chiffres)
      * @return La liste des avis du film s'il y en a, une liste vide sinon
      */
-    public final List<Avis> findAllAvisByFilmID(final String filmID) {
+    public List<Avis> findAllAvisByFilmID(final String filmID) {
         List<Avis> liste = new ArrayList<>();
         Connection con = null;
         Statement stmt = null;
@@ -90,7 +90,7 @@ public class AvisDAO {
      * @param avisID l'id d'un avis
      * @return L'avis s'il existe, null sinon
      */
-    public final Avis findAvisByID(final long avisID) {
+    public Avis findAvisByID(final long avisID) {
         Avis avis = null;
         Connection con = null;
         Statement stmt = null;
@@ -120,7 +120,7 @@ public class AvisDAO {
      * @param key le mot-clé à chercher parmi les commentaires.
      * @return Le nombre de commentaires supprimés
      */
-    public final int deleteAvisByKey(final String key) {
+    public int deleteAvisByKey(final String key) {
         int affectedRows = 0;
         Connection con = null;
         Statement stmt = null;

@@ -28,6 +28,15 @@ public class AvisService {
      */
     private FilmDAO filmDAO = new FilmDAO();
 
+    public AvisService() {
+        // empty
+    }
+
+    public AvisService(AvisDAO avisDAO, FilmDAO filmDAO) {
+        this.avisDAO = avisDAO;
+        this.filmDAO = filmDAO;
+    }
+
     /**
      * Appelle la DAO pour ajouter un avis valide.
      * @param filmID l'id du film pour quel est émis l'avis
@@ -64,6 +73,7 @@ public class AvisService {
             }
         }
         return Response.status(status)
+                .type(MediaType.APPLICATION_JSON)
                 .entity(erreur)
                 .build();
     }
@@ -147,7 +157,7 @@ public class AvisService {
      * @param note la note reçue
      * @return Boolean à true si la note est valide, false sinon
      */
-    private boolean verifyNote(final int note) {
+    public boolean verifyNote(final int note) {
         boolean ok = true;
         if (note < -1 || note > 5) {
             ok = false;
@@ -160,7 +170,7 @@ public class AvisService {
      * @param filmID l'id du film reçu
      * @return Boolean à true si l'id est valide, false sinon
      */
-    private boolean verifyFilmID(final String filmID) {
+    public final boolean verifyFilmID(final String filmID) {
         final int filmIDLength = 9;
         boolean ok = true;
         if (filmID == null) {

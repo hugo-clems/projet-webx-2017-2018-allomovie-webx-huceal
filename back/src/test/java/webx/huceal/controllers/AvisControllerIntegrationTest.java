@@ -231,7 +231,7 @@ public class AvisControllerIntegrationTest {
     }
 
     @Test
-    public void addAvisWhenNoNoteAndCommentaire() {
+    public void addAvisWhenNoNoteAndNoCommentaire() {
         Avis avisVide = new Avis(avis1.getFilmID(), -1, "");
         response = target.request()
                 .accept(MediaType.APPLICATION_JSON)
