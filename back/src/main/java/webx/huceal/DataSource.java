@@ -91,7 +91,8 @@ public final class DataSource {
      * @param con la connection à fermer
      * @param stmt le statement à fermer
      */
-    public static void closeConAndStmt(final Connection con, final Statement stmt) {
+    public static void closeConAndStmt(final Connection con,
+                                       final Statement stmt) {
         if (con != null && stmt != null) {
             try {
                 con.close();
