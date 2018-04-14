@@ -41,10 +41,12 @@ public final class DataSource {
         Statement stmt = null;
         String tableCreateQuery = "CREATE TABLE IF NOT EXISTS Avis"
                 + "(ID INTEGER AUTO_INCREMENT PRIMARY KEY,"
-                + "FilmID VARCHAR(10) CHECK (REGEXP_LIKE(FilmID, "
-                + "'tt[0-9][0-9][0-9][0-9][0-9][0-9][0-9]')),"
+                + "FilmID VARCHAR(10) CHECK(REGEXP_LIKE"
+                + "(FilmID, '^tt[0-9][0-9][0-9][0-9][0-9][0-9][0-9]$')),"
                 + "Note INTEGER(1) CHECK (Note >= -1) AND (Note <= 5),"
-                + "Commentaire VARCHAR(500))";
+                + "Commentaire VARCHAR(500),"
+                + "CONSTRAINT avis_not_empty CHECK"
+                + "(note != -1 OR Commentaire != ''))";
         try {
             con = getDBConnection();
             if (con != null) {

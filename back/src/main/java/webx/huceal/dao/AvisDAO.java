@@ -48,7 +48,7 @@ public class AvisDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+
         } finally {
             DataSource.closeConAndStmt(con, stmt);
         }
@@ -80,7 +80,7 @@ public class AvisDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+
         } finally {
             DataSource.closeResultSet(res);
             DataSource.closeConAndStmt(con, stmt);
@@ -112,7 +112,7 @@ public class AvisDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+
         } finally {
             DataSource.closeResultSet(res);
             DataSource.closeConAndStmt(con, stmt);
@@ -138,7 +138,7 @@ public class AvisDAO {
                 affectedRows = stmt.executeUpdate(query);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+
         } finally {
             DataSource.closeConAndStmt(con, stmt);
         }
@@ -148,22 +148,30 @@ public class AvisDAO {
     /**
      * Supprime l'avis correspondant à l'id donné.
      * @param avisID l'id d'un avis
+     * @return true si l'avis est supprimé, false sinon
      */
-    public final void deleteAvisByID(final long avisID) {
+    public boolean deleteAvisByID(final long avisID) {
+        boolean done = false;
+        int rows;
         Connection con = null;
         Statement stmt = null;
-        String query = "DELETE FROM Avis WHERE id = '" + avisID + "'";
+        String query = "DELETE FROM Avis WHERE id = '"
+                     + avisID + "'";
         try {
             con = DataSource.getDBConnection();
             if (con != null) {
                 stmt = con.createStatement();
-                stmt.executeUpdate(query);
+                rows = stmt.executeUpdate(query);
+                if (rows != 0) {
+                    done = true;
+                }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+
         } finally {
             DataSource.closeConAndStmt(con, stmt);
         }
+        return done;
     }
 
 }
