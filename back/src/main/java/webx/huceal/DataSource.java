@@ -1,25 +1,46 @@
 package webx.huceal;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class DataSource {
+/**
+ * Class DataSource.
+ */
+public final class DataSource {
 
+    /**
+     * Le driver de connection à la BD.
+     */
     private static final String DB_DRIVER = "org.h2.Driver";
-    private static final String DB_CONNECTION = "jdbc:h2:~/allomovieDB";
-    private static final String DB_USER = "";
-    private static final String DB_PASSWORD = "";
+
+    /**
+     * La connexion à la BD.
+     */
+    private static String DB_CONNECTION = "jdbc:h2:~/allomovieDB";
+
+    /**
+     * La dataSource.
+     */
     private static DataSource dataSource;
 
+    /**
+     * Constructeur par défaut.
+     */
     private DataSource() {
-
+        // Empty
     }
 
+    /**
+     * Initialise la table Avis dans la BD.
+     */
     private static void initTableAvis() {
         Connection con = null;
         Statement stmt = null;
-        String tableCreateQuery = "CREATE TABLE IF NOT EXISTS Avis (ID INTEGER AUTO_INCREMENT PRIMARY KEY, FilmID VARCHAR(10), Note INTEGER(1), Commentaire VARCHAR(500))";
+        String tableCreateQuery = "CREATE TABLE IF NOT EXISTS Avis "
+                + "(ID INTEGER AUTO_INCREMENT PRIMARY KEY, FilmID VARCHAR(10),"
+                + " Note INTEGER(1), Commentaire VARCHAR(500))";
         try {
             con = getDBConnection();
             stmt = con.createStatement();
@@ -27,34 +48,50 @@ public class DataSource {
         } catch (SQLException e) {
             System.out.println("Exception Message " + e.getLocalizedMessage());
         } finally {
-            if (con != null && stmt != null) {
-                try {
-                    con.close();
-                    stmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            closeConAndStmt(con, stmt);
         }
     }
 
+    /**
+     * Getter connection.
+     * @return la connection à la BD
+     */
     public static Connection getDBConnection() {
         if (dataSource == null) {
             dataSource = new DataSource();
             initTableAvis();
         }
-        Connection dbConnection = null;
         try {
             Class.forName(DB_DRIVER);
         } catch (ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
         try {
-            dbConnection = DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
-            return dbConnection;
+            return DriverManager.getConnection(DB_CONNECTION);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return dbConnection;
+        return null;
     }
+
+    /**
+     * Ferme la connection et le statement.
+     * @param con la connection à fermer
+     * @param stmt le statement à fermer
+     */
+    public static void closeConAndStmt(final Connection con, final Statement stmt) {
+        if (con != null && stmt != null) {
+            try {
+                con.close();
+                stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void setDbConnection(String newDbConnection) {
+        DB_CONNECTION = newDbConnection;
+    }
+
 }

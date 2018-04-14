@@ -1,28 +1,37 @@
-package webx.huceal.dao;
+package webx.huceal.services;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import webx.huceal.ErrorMessage;
 import webx.huceal.domains.Film;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class FilmDAOTest {
+public class FilmServiceTest {
 
-	private static FilmDAO dao;
+	private static FilmService filmService;
 	private static Film starWarsV;
 	private static List<Film> allStarWars;
 	private static List<Film> allStarWarsIn2005;
-	private static List<Film> emptyList;
+	private static Response responseSW5;
+	private static Response responseAllSW;
+	private static Response responseAllSWIn2005;
+	private static Response badId;
+	private static Response badTitle;
+	private static Response badYear;
+	private static Response noMovie;
 
 	@BeforeClass
 	public static void setUp() throws Exception {
-		// Accès dao
-		dao = new FilmDAO();
+		// Accès au service
+		filmService = new FilmService();
 
 		// Création jeux de tests
 		starWarsV = new Film("tt0080684", "Star Wars: Episode V - The Empire Strikes Back",
@@ -55,55 +64,98 @@ public class FilmDAOTest {
 		allStarWarsIn2005.add(new Film("tt4273912", "Star Wars Episode III: Becoming Obi-Wan", "2005", "https://ia.media-imdb.com/images/M/MV5BNzExYzA4ODctMDA0Yy00M2RhLTgyNzQtM2MyMzlhNmEzZTYyXkEyXkFqcGdeQXVyMzYyMzU2OA@@._V1_SX300.jpg"));
 		allStarWarsIn2005.add(new Film("tt4528700", "Star Wars Epizod III - Imladris", "2005", "N/A"));
 
-		emptyList = new ArrayList<>();
+		responseSW5 = Response.status(Response.Status.OK)
+				.type(MediaType.APPLICATION_JSON)
+				.entity(starWarsV).build();
+
+		responseAllSW = Response.status(Response.Status.OK)
+				.type(MediaType.APPLICATION_JSON)
+				.entity(allStarWars).build();
+
+		responseAllSWIn2005 = Response.status(Response.Status.OK)
+				.type(MediaType.APPLICATION_JSON)
+				.entity(allStarWarsIn2005).build();
+
+		badId = Response.status(Response.Status.BAD_REQUEST)
+				.type(MediaType.APPLICATION_JSON)
+				.entity(new ErrorMessage("Identifiant invalide !")).build();
+
+		badTitle = Response.status(Response.Status.BAD_REQUEST)
+				.type(MediaType.APPLICATION_JSON)
+				.entity(new ErrorMessage("Titre invalide !")).build();
+
+		badYear = Response.status(Response.Status.BAD_REQUEST)
+				.type(MediaType.APPLICATION_JSON)
+				.entity(new ErrorMessage("Année invalide !")).build();
+
+		noMovie = Response.status(Response.Status.BAD_REQUEST)
+				.type(MediaType.APPLICATION_JSON)
+				.entity(new ErrorMessage("Aucun film trouvé !")).build();
 	}
 
 	@Test
 	public void findById() throws Exception {
-		Film result = dao.findById("tt0080684");
-		assertThat(result, is(starWarsV));
+		Response response = filmService.findById("tt0080684");
+		assertThat(response.getStatus(), is(responseSW5.getStatus()));
+		assertThat(response.getHeaders(), is(responseSW5.getHeaders()));
+		assertThat(response.getEntity(), is(responseSW5.getEntity()));
 	}
 
 	@Test
 	public void findByTitle() throws Exception {
-		List<Film> result = dao.findByTitle("star+wars");
-		assertThat(result, is(allStarWars));
+		Response response = filmService.findByTitle("star+wars");
+		assertThat(response.getStatus(), is(responseAllSW.getStatus()));
+		assertThat(response.getHeaders(), is(responseAllSW.getHeaders()));
+		assertThat(response.getEntity(), is(responseAllSW.getEntity()));
 	}
 
 	@Test
 	public void findByTitleAndYear() throws Exception {
-		List<Film> result = dao.findByTitleAndYear("star+wars", "2005");
-		assertThat(result, is(allStarWarsIn2005));
+		Response response = filmService.findByTitleAndYear("star+wars", "2005");
+		assertThat(response.getStatus(), is(responseAllSWIn2005.getStatus()));
+		assertThat(response.getHeaders(), is(responseAllSWIn2005.getHeaders()));
+		assertThat(response.getEntity(), is(responseAllSWIn2005.getEntity()));
 	}
 
 	@Test
-	public void findByIdWithBadID() throws Exception {
-		Film result = dao.findById("tt008068");
-		assertThat(result, is(nullValue()));
+	public void findByIdWithBadId() throws Exception {
+		Response response = filmService.findById("tt008068");
+		assertThat(response.getStatus(), is(badId.getStatus()));
+		assertThat(response.getHeaders(), is(badId.getHeaders()));
+		assertThat(response.getEntity(), is(badId.getEntity()));
 	}
 
 	@Test
 	public void findByTitleWithBadTitle() throws Exception {
-		List<Film> result = dao.findByTitle("s");
-		assertThat(result, is(emptyList));
+		Response response = filmService.findByTitle("s");
+		assertThat(response.getStatus(), is(badTitle.getStatus()));
+		assertThat(response.getHeaders(), is(badTitle.getHeaders()));
+		assertThat(response.getEntity(), is(badTitle.getEntity()));
 	}
 
 	@Test
 	public void findByTitleAndYearWithBadTitle() throws Exception {
-		List<Film> result = dao.findByTitleAndYear("s", "2005");
-		assertThat(result, is(emptyList));
+		Response response = filmService.findByTitleAndYear("st", "2005");
+		assertThat(response.getStatus(), is(badTitle.getStatus()));
+		assertThat(response.getHeaders(), is(badTitle.getHeaders()));
+		assertThat(response.getEntity(), is(badTitle.getEntity()));
 	}
 
 	@Test
 	public void findByTitleAndYearWithBadYear() throws Exception {
-		List<Film> result = dao.findByTitleAndYear("star+wars", "20x5");
-		assertThat(result, is(allStarWars));
+		Response response = filmService.findByTitleAndYear("star+wars", "20x5");
+		assertThat(response.getStatus(), is(badYear.getStatus()));
+		assertThat(response.getHeaders(), is(badYear.getHeaders()));
+		assertThat(response.getEntity(), is(badYear.getEntity()));
 	}
 
 	@Test
-	public void findByTitleAndYearWithBadTitleAndYear() throws Exception {
-		List<Film> result = dao.findByTitleAndYear("s", "20x5");
-		assertThat(result, is(emptyList));
+	public void findByTitleAndYearWithNoMovie() throws Exception {
+		Response response =
+				filmService.findByTitleAndYear("sqdlksjdqsdlsqjdlkqsdjqsldkqsd", "2005");
+		assertThat(response.getStatus(), is(noMovie.getStatus()));
+		assertThat(response.getHeaders(), is(noMovie.getHeaders()));
+		assertThat(response.getEntity(), is(noMovie.getEntity()));
 	}
 
 }
