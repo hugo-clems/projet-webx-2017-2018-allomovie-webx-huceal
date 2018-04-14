@@ -92,7 +92,9 @@ public class FilmService {
 			body = new ErrorMessage("Titre invalide !");
 		}
 
-		return Response.status(status).type(MediaType.APPLICATION_JSON).entity(body).build();
+		return Response.status(status)
+				.header("Access-Control-Allow-Origin", "*")
+				.type(MediaType.APPLICATION_JSON).entity(body).build();
 	}
 
 	/**
