@@ -6,19 +6,21 @@ package webx.huceal.domains;
 public class Avis {
 
     /**
-
      * ID de l'avis dans la base de données.
      */
     private long id;
+
     /**
      * ID du film auquel l'avis est lié.
      */
     private String filmID;
+
     /**
      * Note de 0 à 5.
      * Note = -1 si aucune note n'a été entrée
      */
     private int note;
+
     /**
      * Commentaire (longueur max 500 caractères).
      */
@@ -121,23 +123,41 @@ public class Avis {
         this.id = i;
     }
 
+    /**
+     * Vérifie si 2 instances d'un Avis sont égales.
+     * @param o instance à comparer
+     * @return true si les 2 instances sont égales, false sinon
+     */
     @Override
-    public boolean equals(Object o) {
+    public final boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Avis avis = (Avis) o;
-        if (id != avis.id) return false;
-        if (note != avis.note) return false;
-        if (filmID != null ? !filmID.equals(avis.filmID) : avis.filmID != null) return false;
+        if (id != avis.id) {
+            return false;
+        }
+        if (note != avis.note) {
+            return false;
+        }
+        if (filmID != null ? !filmID.equals(avis.filmID) : avis.filmID != null) {
+            return false;
+        }
         return commentaire != null ? commentaire.equals(avis.commentaire) : avis.commentaire == null;
     }
 
+    /**
+     * Fonction de hachage.
+     * @return Integer
+     */
     @Override
-    public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (filmID != null ? filmID.hashCode() : 0);
-        result = 31 * result + note;
-        result = 31 * result + (commentaire != null ? commentaire.hashCode() : 0);
+    public final int hashCode() {
+        final int trenteEtUn = 31;
+        final int trenteDeux = 32;
+
+        int result = (int) (id ^ (id >>> trenteDeux));
+        result = trenteEtUn * result + (filmID != null ? filmID.hashCode() : 0);
+        result = trenteEtUn * result + note;
+        result = trenteEtUn * result + (commentaire != null ? commentaire.hashCode() : 0);
         return result;
     }
 

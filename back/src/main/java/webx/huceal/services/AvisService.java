@@ -23,18 +23,47 @@ public class AvisService {
      * La DAO d'Avis.
      */
     private AvisDAO avisDAO = new AvisDAO();
+
     /**
      * La DAO de Film.
      */
     private FilmDAO filmDAO = new FilmDAO();
 
+    /**
+     * Taille maximale d'un commentaire.
+     */
+    private static final int COMMENTAIRE_MAX_LENGTH = 500;
+
+    /**
+     * Taille d'un filmId.
+     */
+    private static final int FILMID_LENGTH = 9;
+
+    /**
+     * Note minimale.
+     */
+    private static final int NOTE_MIN = -1;
+
+    /**
+     * Note maximale.
+     */
+    private static final int NOTE_MAX = 5;
+
+    /**
+     * Constructeur par défaut.
+     */
     public AvisService() {
         // empty
     }
 
-    public AvisService(AvisDAO avisDAO, FilmDAO filmDAO) {
-        this.avisDAO = avisDAO;
-        this.filmDAO = filmDAO;
+    /**
+     * Création d'un nouveau service.
+     * @param newAvisDAO nouveau avisDAO
+     * @param newFilmDAO nouveau filmDAO
+     */
+    public AvisService(final AvisDAO newAvisDAO, final FilmDAO newFilmDAO) {
+        this.avisDAO = newAvisDAO;
+        this.filmDAO = newFilmDAO;
     }
 
     /**
@@ -42,10 +71,11 @@ public class AvisService {
      * @param filmID l'id du film pour quel est émis l'avis
      * @param note la note donnée, -1 si elle n'est pas renseignée
      * @param commentaire le commentaire donné, peut être vide si note existe
+     * @param uriInfo uriInfo
      * @return Response Json avec la localisation de la ressource
      */
-    public final Response addAvis(final String filmID, final int note, final String commentaire, UriInfo uriInfo) {
-        final int COMMENTAIRE_MAX_LENGTH = 500;
+    public final Response addAvis(final String filmID, final int note,
+                                  final String commentaire, final UriInfo uriInfo) {
         Response.Status status = Response.Status.BAD_REQUEST;
         ErrorMessage erreur = new ErrorMessage();
         if (!verifyFilmID(filmID)) {
@@ -157,9 +187,9 @@ public class AvisService {
      * @param note la note reçue
      * @return Boolean à true si la note est valide, false sinon
      */
-    public boolean verifyNote(final int note) {
+    public final boolean verifyNote(final int note) {
         boolean ok = true;
-        if (note < -1 || note > 5) {
+        if (note < NOTE_MIN || note > NOTE_MAX) {
             ok = false;
         }
         return ok;
@@ -171,11 +201,10 @@ public class AvisService {
      * @return Boolean à true si l'id est valide, false sinon
      */
     public final boolean verifyFilmID(final String filmID) {
-        final int filmIDLength = 9;
         boolean ok = true;
         if (filmID == null) {
             ok = false;
-        } else if (filmID.length() != filmIDLength || filmDAO.findById(filmID) == null) {
+        } else if (filmID.length() != FILMID_LENGTH || filmDAO.findById(filmID) == null) {
             ok = false;
         }
         return ok;
