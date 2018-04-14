@@ -69,7 +69,10 @@ public class AvisController {
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     public final Response addAvis(final Avis avis) {
-        return service.addAvis(avis.getFilmID(), avis.getNote(), avis.getCommentaire(), uriInfo);
+        return service.addAvis(avis.getFilmID(),
+                avis.getNote(),
+                avis.getCommentaire(),
+                uriInfo);
     }
 
     /**

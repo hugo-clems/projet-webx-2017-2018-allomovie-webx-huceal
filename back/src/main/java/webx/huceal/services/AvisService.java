@@ -50,6 +50,62 @@ public class AvisService {
     private static final int NOTE_MAX = 5;
 
     /**
+     * Message d'erreur.
+     */
+    private static final String MSG_NOTE_NOT_VALID
+            = "La note donnée n'est pas valide.";
+
+    /**
+     * Message d'erreur.
+     */
+    private static final String MSG_COMMENT_TO_LONG
+            = "Le commentaire est trop long.";
+
+    /**
+     * Message d'erreur.
+     */
+    private static final String MSG_REQUIRED
+            = "Il faut au moins une note "
+            + "ou un commentaire pour déposer un avis.";
+
+    /**
+     * Message d'erreur.
+     */
+    private static final String MSG_ERROR_DB
+            = "Problème de connexion avec la base de données.";
+
+    /**
+     * Message d'erreur.
+     */
+    private static final String MSG_FILMID_NOT_VALID
+            = "L'id du film n'est pas valide.";
+
+    /**
+     * Message d'erreur.
+     */
+    private static final String MSG_NO_AVIS_FOUND
+            = "Il n'y a pas d'avis pour ce film.";
+
+    /**
+     * Message d'erreur.
+     */
+    private static final String MSG_AVISID_NOT_EXIST
+            = "L'id de l'avis demandé n'existe pas.";
+
+    /**
+     * Message d'erreur.
+     */
+    private static final String MSG_KEY_MUST_NO_EMPTY =
+            "Le mot-clé ne doit pas être vide ou contenir d'espace.";
+
+    /**
+     * Message d'erreur.
+     */
+    private static final String MSG_NO_COMMENT_TO_DELETE =
+            "Aucun commentaire à supprimer n'a été trouvé.";
+
+
+    /**
      * Constructeur par défaut.
      */
     public AvisService() {
@@ -74,23 +130,25 @@ public class AvisService {
      * @param uriInfo uriInfo
      * @return Response Json avec la localisation de la ressource
      */
-    public final Response addAvis(final String filmID, final int note,
-                                  final String commentaire, final UriInfo uriInfo) {
+    public final Response addAvis(final String filmID,
+                                  final int note,
+                                  final String commentaire,
+                                  final UriInfo uriInfo) {
         Response.Status status = Response.Status.BAD_REQUEST;
         ErrorMessage erreur = new ErrorMessage();
         if (!verifyFilmID(filmID)) {
-            erreur.setMessage("L'id du film n'est pas valide.");
+            erreur.setMessage(MSG_FILMID_NOT_VALID);
         } else if (!verifyNote(note)) {
-            erreur.setMessage("La note donnée n'est pas valide.");
+            erreur.setMessage(MSG_NOTE_NOT_VALID);
         } else if (commentaire.length() > COMMENTAIRE_MAX_LENGTH) {
-            erreur.setMessage("Le commentaire est trop long.");
+            erreur.setMessage(MSG_COMMENT_TO_LONG);
         } else if (note == -1 && commentaire.isEmpty()) {
-            erreur.setMessage("Il faut au moins une note ou un commentaire pour déposer un avis.");
+            erreur.setMessage(MSG_REQUIRED);
         } else {
             long id = avisDAO.addAvis(filmID, note, commentaire);
             if (id == -1) {
                 status = Response.Status.INTERNAL_SERVER_ERROR;
-                erreur.setMessage("Problème de connexion avec la base de données.");
+                erreur.setMessage(MSG_ERROR_DB);
             } else {
                 UriBuilder ub = uriInfo.getBaseUriBuilder();
                 URI uri = ub.path(AvisController.class)
@@ -120,12 +178,12 @@ public class AvisService {
         Object entity = erreur;
         if (!verifyFilmID(filmID)) {
             status = Response.Status.BAD_REQUEST;
-            erreur.setMessage("L'id du film n'est pas valide.");
+            erreur.setMessage(MSG_FILMID_NOT_VALID);
         } else {
             liste = avisDAO.findAllAvisByFilmID(filmID);
             if (liste.isEmpty()) {
                 status = Response.Status.NOT_FOUND;
-                erreur.setMessage("Il n'y a pas d'avis pour ce film.");
+                erreur.setMessage(MSG_NO_AVIS_FOUND);
             } else {
                 entity = liste;
             }
@@ -146,7 +204,7 @@ public class AvisService {
         Object entity = avisDAO.findAvisByID(avisID);
         if (entity == null) {
             status = Response.Status.NOT_FOUND;
-            entity = new ErrorMessage("L'id de l'avis demandé n'existe pas.");
+            entity = new ErrorMessage(MSG_AVISID_NOT_EXIST);
         }
         return Response.status(status)
                 .type(MediaType.APPLICATION_JSON)
@@ -155,7 +213,8 @@ public class AvisService {
     }
 
     /**
-     * Appelle la DAO pour supprimer tous les avis contenant le mot-clé donné dans leur commentaire.
+     * Appelle la DAO pour supprimer tous les avis
+     * contenant le mot-clé donné dans leur commentaire.
      * @param key le mot-clé
      * @return Response Json avec le nombre de commentaires supprimés
      */
@@ -166,14 +225,15 @@ public class AvisService {
         int affectedRows;
         if (key == null || key.isEmpty() || key.contains(" ")) {
             status = Response.Status.BAD_REQUEST;
-            erreur.setMessage("Le mot-clé ne doit pas être vide ou contenir d'espace.");
+            erreur.setMessage(MSG_KEY_MUST_NO_EMPTY);
         } else {
             affectedRows = avisDAO.deleteAvisByKey(key);
             if (affectedRows == 0) {
                 status = Response.Status.NOT_FOUND;
-                erreur.setMessage("Aucun commentaire à supprimer n'a été trouvé.");
+                erreur.setMessage(MSG_NO_COMMENT_TO_DELETE);
             } else {
-                entity = Json.createObjectBuilder().add("affectedRows", affectedRows).build();
+                entity = Json.createObjectBuilder()
+                        .add("affectedRows", affectedRows).build();
             }
         }
         return Response.status(status)
@@ -204,7 +264,8 @@ public class AvisService {
         boolean ok = true;
         if (filmID == null) {
             ok = false;
-        } else if (filmID.length() != FILMID_LENGTH || filmDAO.findById(filmID) == null) {
+        } else if (filmID.length() != FILMID_LENGTH
+                || filmDAO.findById(filmID) == null) {
             ok = false;
         }
         return ok;
