@@ -1,6 +1,10 @@
 package webx.huceal;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
 
 /**
  * Class DataSource.
@@ -37,7 +41,8 @@ public final class DataSource {
         Statement stmt = null;
         String tableCreateQuery = "CREATE TABLE IF NOT EXISTS Avis"
                 + "(ID INTEGER AUTO_INCREMENT PRIMARY KEY,"
-                + "FilmID VARCHAR(10) CHECK (REGEXP_LIKE(FilmID, 'tt[0-9][0-9][0-9][0-9][0-9][0-9][0-9]')),"
+                + "FilmID VARCHAR(10) CHECK (REGEXP_LIKE(FilmID, "
+                + "'tt[0-9][0-9][0-9][0-9][0-9][0-9][0-9]')),"
                 + "Note INTEGER(1) CHECK (Note >= -1) AND (Note <= 5),"
                 + "Commentaire VARCHAR(500))";
         try {
@@ -98,6 +103,10 @@ public final class DataSource {
         }
     }
 
+    /**
+     * Ferme le resultSet.
+     * @param res le resultSet à fermer
+     */
     public static void closeResultSet(final ResultSet res) {
         if (res != null) {
             try {
