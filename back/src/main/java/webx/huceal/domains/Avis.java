@@ -48,7 +48,8 @@ public class Avis {
     }
 
     /**
-     * Constructeur d'un avis pour les tests (pas encore dans la base de données).
+     * Constructeur d'un avis pour les tests
+     * (pas encore dans la base de données).
      * @param f l'id du film auquel l'avis est lié (String)
      * @param n la note donnée (int)
      * @param c le commentaire donné (String)
@@ -130,8 +131,12 @@ public class Avis {
      */
     @Override
     public final boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Avis avis = (Avis) o;
         if (id != avis.id) {
             return false;

@@ -96,10 +96,12 @@ public class Film {
      * @param newDescription la description du nouveau film
      * @param newImage l'image du nouveau film
      */
-    public Film(final String newFilmId, final String newTitre, final String newAnneeSortie,
-                final String newDuree, final String newGenre, final String newStudio,
+    public Film(final String newFilmId, final String newTitre,
+                final String newAnneeSortie, final String newDuree,
+                final String newGenre, final String newStudio,
                 final String newProducteur, final String newScenariste,
-                final String newActeurs, final String newDescription, final String newImage) {
+                final String newActeurs, final String newDescription,
+                final String newImage) {
         this.filmId = newFilmId;
         this.titre = newTitre;
         this.anneeSortie = newAnneeSortie;
