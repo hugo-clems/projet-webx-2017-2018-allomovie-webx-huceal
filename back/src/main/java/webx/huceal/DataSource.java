@@ -1,9 +1,6 @@
 package webx.huceal;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * Class DataSource.
@@ -85,10 +82,26 @@ public final class DataSource {
      */
     public static void closeConAndStmt(final Connection con,
                                        final Statement stmt) {
-        if (con != null && stmt != null) {
+        if (stmt != null) {
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if (con != null) {
             try {
                 con.close();
-                stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void closeResultSet(final ResultSet res) {
+        if (res != null) {
+            try {
+                res.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

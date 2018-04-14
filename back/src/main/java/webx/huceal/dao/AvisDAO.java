@@ -61,15 +61,16 @@ public class AvisDAO {
      */
     public List<Avis> findAllAvisByFilmID(final String filmID) {
         List<Avis> liste = new ArrayList<>();
+        ResultSet res = null;
         Connection con = null;
-        Statement stmt = null;
-        String query = "SELECT * FROM Avis WHERE FilmID = '"
-                     + filmID + "'";
+        PreparedStatement stmt = null;
+        String query = "SELECT * FROM Avis WHERE FilmID = ?";
         try {
             con = DataSource.getDBConnection();
             if (con != null) {
-                stmt = con.createStatement();
-                ResultSet res = stmt.executeQuery(query);
+                stmt = con.prepareStatement(query);
+                stmt.setString(1, filmID);
+                res = stmt.executeQuery();
                 while (res.next()) {
                     liste.add(new Avis(res.getLong("id"),
                          res.getString("FilmID"),
@@ -80,6 +81,7 @@ public class AvisDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            DataSource.closeResultSet(res);
             DataSource.closeConAndStmt(con, stmt);
         }
         return liste;
@@ -92,6 +94,7 @@ public class AvisDAO {
      */
     public Avis findAvisByID(final long avisID) {
         Avis avis = null;
+        ResultSet res = null;
         Connection con = null;
         Statement stmt = null;
         String query = "SELECT * FROM Avis WHERE id = '" + avisID + "'";
@@ -99,7 +102,7 @@ public class AvisDAO {
             con = DataSource.getDBConnection();
             if (con != null) {
                 stmt = con.createStatement();
-                ResultSet res = stmt.executeQuery(query);
+                res = stmt.executeQuery(query);
                 if (res.next()) {
                     avis = new Avis(res.getLong("id"),
                          res.getString("FilmID"),
@@ -110,6 +113,7 @@ public class AvisDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            DataSource.closeResultSet(res);
             DataSource.closeConAndStmt(con, stmt);
         }
         return avis;

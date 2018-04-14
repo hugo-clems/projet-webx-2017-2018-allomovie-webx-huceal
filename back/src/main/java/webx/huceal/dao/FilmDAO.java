@@ -80,6 +80,7 @@ public class FilmDAO {
     public List<Film> findByAvis(final String note, final String commentaire) {
         List<Film> listFilm = new ArrayList<>();
         List<String> listId = new ArrayList<>();
+        ResultSet res = null;
         Connection con = null;
         Statement stmt = null;
         String query = "SELECT FilmID FROM Avis WHERE Note >= " + note
@@ -89,14 +90,17 @@ public class FilmDAO {
         // Récupère la liste des ID des films avec une note supérieur à @param
         try {
             con = DataSource.getDBConnection();
-            stmt = con.createStatement();
-            ResultSet res = stmt.executeQuery(query);
-            while (res.next()) {
-                listId.add(res.getString("FilmID"));
+            if (con != null) {
+                stmt = con.createStatement();
+                res = stmt.executeQuery(query);
+                while (res.next()) {
+                    listId.add(res.getString("FilmID"));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            DataSource.closeResultSet(res);
             DataSource.closeConAndStmt(con, stmt);
         }
 
