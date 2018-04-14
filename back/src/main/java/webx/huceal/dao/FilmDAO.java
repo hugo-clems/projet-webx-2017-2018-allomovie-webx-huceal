@@ -54,7 +54,7 @@ public class FilmDAO {
 	 * @param titre titre du film recherché
 	 * @return liste des films
 	 */
-	public final List<Film> findByTitle(final String titre) {
+	public List<Film> findByTitle(final String titre) {
 		return createListFilms(executeRequest("&s=" + titre));
 	}
 
@@ -64,7 +64,7 @@ public class FilmDAO {
 	 * @param annee année du film recherché
 	 * @return liste des films
 	 */
-	public final List<Film> findByTitleAndYear(final String titre, final String annee) {
+	public List<Film> findByTitleAndYear(final String titre, final String annee) {
 		return createListFilms(executeRequest("&s=" + titre + "&y=" + annee));
 	}
 
@@ -74,7 +74,7 @@ public class FilmDAO {
 	 * @param commentaire mot contenu dans les commentaires des films recherchés
 	 * @return liste des films
 	 */
-	public final List<Film> findByAvis(final String note, final String commentaire) {
+	public List<Film> findByAvis(final String note, final String commentaire) {
 		List<Film> listFilm = new ArrayList<>();
 		List<String> listId = new ArrayList<>();
 		Connection con = null;
