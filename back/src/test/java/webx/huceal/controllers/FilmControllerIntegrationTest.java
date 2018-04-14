@@ -29,6 +29,7 @@ public class FilmControllerIntegrationTest {
 
 	private static int codeOk;
 	private static int codeBadRequest;
+	private static int codeNotFound;
 
 	private static ErrorMessage idInvalid;
 	private static ErrorMessage titleInvalid;
@@ -51,6 +52,7 @@ public class FilmControllerIntegrationTest {
 		// Création des jeux de tests
 		codeOk = Response.Status.OK.getStatusCode();
 		codeBadRequest = Response.Status.BAD_REQUEST.getStatusCode();
+		codeNotFound = Response.Status.NOT_FOUND.getStatusCode();
 
 		idInvalid = new ErrorMessage("Identifiant invalide !");
 		titleInvalid = new ErrorMessage("Titre invalide !");
@@ -170,7 +172,7 @@ public class FilmControllerIntegrationTest {
 		Response response = target.path("film").path("liste").path("sdflkjdsjdsfsdfkldsdf").path("2005")
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 
-		assertThat(response.getStatus(), is(codeBadRequest));
+		assertThat(response.getStatus(), is(codeNotFound));
 		assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
 		assertThat(response.readEntity(ErrorMessage.class), is(noMovie));
 	}

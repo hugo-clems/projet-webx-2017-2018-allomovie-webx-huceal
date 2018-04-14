@@ -84,6 +84,7 @@ public class FilmService {
 			List<Film> result = dao.findByTitle(titre);
 			if (result.equals(new ArrayList<Film>())) {
 				body = new ErrorMessage("Aucun film trouvé !");
+				status = Response.Status.NOT_FOUND;
 			} else {
 				body = result;
 				status = Response.Status.OK;
@@ -110,6 +111,7 @@ public class FilmService {
 				List<Film> result = dao.findByTitleAndYear(titre, annee);
 				if (result.equals(new ArrayList<Film>())) {
 					body = new ErrorMessage("Aucun film trouvé !");
+					status = Response.Status.NOT_FOUND;
 				} else {
 					body = result;
 					status = Response.Status.OK;
