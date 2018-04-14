@@ -48,10 +48,10 @@ public class FilmService {
 
 	/**
 	 * Création d'un nouveau service.
-	 * @param dao le dao
+	 * @param newDao le dao
 	 */
-	public FilmService(FilmDAO dao) {
-		this.dao = dao;
+	public FilmService(final FilmDAO newDao) {
+		this.dao = newDao;
 	}
 
 	/**
