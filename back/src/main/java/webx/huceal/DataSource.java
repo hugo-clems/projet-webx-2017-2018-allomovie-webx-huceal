@@ -38,9 +38,21 @@ public final class DataSource {
     private static void initTableAvis() {
         Connection con = null;
         Statement stmt = null;
-        String tableCreateQuery = "CREATE TABLE IF NOT EXISTS Avis "
-                + "(ID INTEGER AUTO_INCREMENT PRIMARY KEY, FilmID VARCHAR(10),"
-                + " Note INTEGER(1), Commentaire VARCHAR(500))";
+        String tableCreateQuery = "DROP TABLE Avis";
+        try {
+            con = getDBConnection();
+            stmt = con.createStatement();
+            stmt.execute(tableCreateQuery);
+        } catch (SQLException e) {
+            System.out.println("Exception Message " + e.getLocalizedMessage());
+        } finally {
+            closeConAndStmt(con, stmt);
+        }
+        tableCreateQuery = "CREATE TABLE IF NOT EXISTS Avis"
+                + "(ID INTEGER AUTO_INCREMENT PRIMARY KEY,"
+                + "FilmID VARCHAR(10) CHECK (FilmID LIKE 'tt[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),"
+                + "Note INTEGER(1) CHECK (Note >= -1) AND (Note <= 5),"
+                + "Commentaire VARCHAR(500))";
         try {
             con = getDBConnection();
             stmt = con.createStatement();
