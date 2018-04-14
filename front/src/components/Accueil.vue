@@ -17,11 +17,11 @@
     </div>
     <div class="container">
       <div  v-if="filmList.length > 0" v-for="film of filmList" class="card flex-md-row box-mb-4 box-shadow" style="width: 18rem;">
-        <img class="card-img-top " :src="img(film.Poster)" alt="Card image cap">
+        <img class="card-img-top " :src="img(film.image)" alt="Card image cap">
         <div class="card-body">
-          <h5 class="card-title">{{film.Title}}</h5>
-          <p class="card-text">{{film.Year}}</p>
-          <router-link :to="{path: '/film/'+film.imdbID}" class="btn btn-primary">Voir Film</router-link>
+          <h5 class="card-title">{{film.titre}}</h5>
+          <p class="card-text">{{film.anneSortie}}</p>
+          <router-link :to="{path: '/film/'+film.filmId}" class="btn btn-primary">Voir Film</router-link>
         </div>
       </div>
       <div v-if="filmList == undefined">Aucun film trouvé</div>
@@ -51,7 +51,7 @@ export default {
       console.log(api + request)
       axios.get(api + request)
         .then(response => {
-          console.log(response)
+          this.filmList = response.data;
         })
         .catch(e => {
           this.errors.push(e)
