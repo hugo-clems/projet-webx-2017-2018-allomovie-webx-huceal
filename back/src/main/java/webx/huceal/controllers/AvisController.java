@@ -28,6 +28,9 @@ import javax.ws.rs.core.UriInfo;
 @Produces({ MediaType.APPLICATION_JSON })
 public class AvisController {
 
+    /**
+     * UriInfo.
+     */
     @Context
     private UriInfo uriInfo;
 

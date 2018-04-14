@@ -38,25 +38,17 @@ public final class DataSource {
     private static void initTableAvis() {
         Connection con = null;
         Statement stmt = null;
-        String tableCreateQuery = "DROP TABLE Avis";
-        try {
-            con = getDBConnection();
-            stmt = con.createStatement();
-            stmt.execute(tableCreateQuery);
-        } catch (SQLException e) {
-            System.out.println("Exception Message " + e.getLocalizedMessage());
-        } finally {
-            closeConAndStmt(con, stmt);
-        }
-        tableCreateQuery = "CREATE TABLE IF NOT EXISTS Avis"
+        String tableCreateQuery = "CREATE TABLE IF NOT EXISTS Avis"
                 + "(ID INTEGER AUTO_INCREMENT PRIMARY KEY,"
-                + "FilmID VARCHAR(10),"
+                + "FilmID VARCHAR(10) CHECK (REGEXP_LIKE(FilmID, 'tt[0-9][0-9][0-9][0-9][0-9][0-9][0-9]')),"
                 + "Note INTEGER(1) CHECK (Note >= -1) AND (Note <= 5),"
                 + "Commentaire VARCHAR(500))";
         try {
             con = getDBConnection();
-            stmt = con.createStatement();
-            stmt.execute(tableCreateQuery);
+            if (con != null) {
+                stmt = con.createStatement();
+                stmt.execute(tableCreateQuery);
+            }
         } catch (SQLException e) {
             System.out.println("Exception Message " + e.getLocalizedMessage());
         } finally {
@@ -91,7 +83,8 @@ public final class DataSource {
      * @param con la connection à fermer
      * @param stmt le statement à fermer
      */
-    public static void closeConAndStmt(final Connection con, final Statement stmt) {
+    public static void closeConAndStmt(final Connection con,
+                                       final Statement stmt) {
         if (con != null && stmt != null) {
             try {
                 con.close();
