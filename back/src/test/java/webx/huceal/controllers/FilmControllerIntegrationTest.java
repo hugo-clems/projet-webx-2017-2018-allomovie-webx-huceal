@@ -43,7 +43,7 @@ public class FilmControllerIntegrationTest {
 	public static void startServer() {
 		// Initialisation du client
 		client = ClientBuilder.newClient();
-		target = client.target("http://localhost:8080/allomovie");
+		target = client.target(Main.BASE_URI);
 
 		// Lancement du serveur
 		server = Main.startServer();
