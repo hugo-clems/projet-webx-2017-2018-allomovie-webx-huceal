@@ -43,13 +43,15 @@ export default {
     getFilmList: function (title = 'star wars', year = null) {
       console.log(title, year)
 
-      var api = 'http://www.omdbapi.com/?apikey=5a0f558e&'
-      var request = 's=' + title.replace(' ', '+')
+      // var api = 'http://www.omdbapi.com/?apikey=5a0f558e&'
+      // var request = 's=' + title.replace(' ', '+')
+      var api = 'http://localhost:8081/allomovie/film/liste/'
+      var request = title.replace(' ', '+')
       if (year != null) { request += '&annee=' + year }
       console.log(api + request)
       axios.get(api + request)
         .then(response => {
-          this.filmList = response.data.Search
+          console.log(response)
         })
         .catch(e => {
           this.errors.push(e)
@@ -61,7 +63,7 @@ export default {
       } else {
         return url
       }
-    },
+    }
   },
   data () {
     return {

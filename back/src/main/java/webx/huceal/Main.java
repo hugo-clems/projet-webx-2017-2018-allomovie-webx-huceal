@@ -15,7 +15,7 @@ public final class Main {
     /**
      * URI de base de l'application.
      */
-    public static final String BASE_URI = "http://localhost:8080/allomovie";
+    public static final String BASE_URI = "http://localhost:8081/allomovie";
 
     /**
      * Constructeur privé.
