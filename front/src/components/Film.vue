@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div v-if="film" class="row">
-      <img :src="img(film.Poster)"/>
-      <h1>{{film.Title}}</h1>
+      <img :src="img(film.image)"/>
+      <h1>{{film.titre}}</h1>
     </div>
     <div class="row">
       <ul>
@@ -52,12 +52,16 @@ export default {
       }
     },
     envoyerAvis () {
-      var note = this.formAvis.note
-      var commentaire = this.formAvis.commentaire
+      let note = this.formAvis.note
+      if (/[0-5]{1/g.test(note) === false) {
+        note = -1
+      }
+      let commentaire = this.formAvis.commentaire
       axios({
         method: 'post',
-        url: this.api + '/truc',
+        url: this.api + 'avis/',
         data: {
+          filmID: this.idFilm,
           note: note,
           commentaire: commentaire
         }
@@ -66,12 +70,33 @@ export default {
       }).catch(e => {
         this.errors.push(e)
       })
+      this.getAvis(this.idFilm);
+    },
+    getAvis (idFilm) {
+      const requete = 'avis/film/' + idFilm
+      axios.get(this.api + requete)
+        .then(response => {
+          this.avisList = response.data
+        }).catch(e => {
+          this.errors.push(e.response.data.message)
+        })
+    },
+    getFilm (idFilm) {
+      const requete = 'film/' + idFilm
+      axios.get(this.api + requete)
+        .then(response => {
+          this.film = response.data
+        })
+        .catch(e => {
+          this.errors.push(e)
+        })
     }
   },
   data () {
     return {
       film: null,
-      api: 'http://www.omdbapi.com/?apikey=5a0f558e&',
+      api: 'http://localhost:8081/allomovie/',
+      idFilm: null,
       errors: [],
       formAvis: [],
       avisList: [{
@@ -84,15 +109,10 @@ export default {
     }
   },
   created () {
-    var idFilm = this.$route.params.id
-    var requete = 'i=' + idFilm
-    axios.get(this.api + requete)
-      .then(response => {
-        this.film = response.data
-      })
-      .catch(e => {
-        this.errors.push(e)
-      })
+    this.idFilm = this.$route.params.id;
+    console.log(this.idFilm);
+    this.getFilm(this.idFilm)
+    this.getAvis(this.idFilm)
   }
 
 }
