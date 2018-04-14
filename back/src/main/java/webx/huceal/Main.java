@@ -30,8 +30,8 @@ public final class Main {
      */
     public static HttpServer startServer() {
         final ResourceConfig rc = new ResourceConfig().packages("webx.huceal");
-        return GrizzlyHttpServerFactory
-                .createHttpServer(URI.create(BASE_URI), rc);
+        rc.register(new CORSFilter());
+        return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
 
     /**
@@ -41,11 +41,10 @@ public final class Main {
      */
     public static void main(final String[] args) throws IOException {
         final HttpServer server = startServer();
-        System.out.println(String.format("Jersey app started with "
-                + "WADL available at "
+        System.out.println(String.format("Jersey app started with WADL available at"
                 + "%sapplication.wadl%nHit enter to stop it...", BASE_URI));
         System.in.read();
-        server.stop();
+        server.shutdownNow();
     }
 
 }

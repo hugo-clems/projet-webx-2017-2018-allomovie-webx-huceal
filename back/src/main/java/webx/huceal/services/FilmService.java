@@ -40,6 +40,21 @@ public class FilmService {
 	private static final int TAILLE_ANNEE = 4;
 
 	/**
+	 * Constructeur par défaut.
+	 */
+	public FilmService() {
+		// Empty
+	}
+
+	/**
+	 * Création d'un nouveau service.
+	 * @param dao le dao
+	 */
+	public FilmService(FilmDAO dao) {
+		this.dao = dao;
+	}
+
+	/**
 	 * Récupère le film correspondant à l'identifiant.
 	 * @param id identifiant du film recherché
 	 * @return Response Json

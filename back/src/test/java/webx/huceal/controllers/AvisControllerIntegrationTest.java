@@ -31,7 +31,7 @@ public class AvisControllerIntegrationTest {
     private Response response;
     private ErrorMessage erreur = new ErrorMessage();
     private Client client = ClientBuilder.newClient();
-    private WebTarget target = client.target("http://localhost:8080/allomovie/avis");
+    private WebTarget target = client.target(Main.BASE_URI+"/avis");
     private AvisDAO avisDAO = new AvisDAO();
     private Avis avis1 = new Avis("tt0080684", 5, "Très bon film.");
     private Avis avis2 = new Avis("tt0080684", -1, "J'adore ce film !");
@@ -178,7 +178,7 @@ public class AvisControllerIntegrationTest {
                 .post(Entity.entity(avis3, MediaType.APPLICATION_JSON));
         assertThat(response.getStatus(), is(Response.Status.CREATED.getStatusCode()));
         assertThat(response.hasEntity(), is(false));
-        UriBuilder uri = UriBuilder.fromUri("http://localhost:8080/allomovie/avis")
+        UriBuilder uri = UriBuilder.fromUri(Main.BASE_URI+"/avis")
                 .path(String.valueOf(avis3.getId() + 1));
         assertThat(response.getLocation().toString(), is(uri.toString()));
         avisDAO.deleteAvisByID(avis3.getId() + 1);
