@@ -33,8 +33,6 @@
 import axios from 'axios'
 
 export default {
-  dada: {
-  },
   methods: {
     search: function () {
       console.log(this.form.search_title, this.form.search_year)
@@ -63,7 +61,7 @@ export default {
       } else {
         return url
       }
-    }
+    },
   },
   data () {
     return {
