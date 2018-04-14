@@ -59,6 +59,7 @@ export default {
       let commentaire = this.formAvis.commentaire
       axios({
         method: 'post',
+        headers: { 'content-type': 'application/json' },
         url: this.api + 'avis/',
         data: {
           filmID: this.idFilm,
