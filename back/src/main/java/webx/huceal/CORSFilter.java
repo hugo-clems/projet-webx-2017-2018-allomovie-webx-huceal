@@ -6,11 +6,21 @@ import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 
+/**
+ * Gestion des filtres CORS.
+ */
 @Provider
 public class CORSFilter implements ContainerResponseFilter {
 
+    /**
+     * Filtre les entrées dans l'API.
+     * @param request la requête
+     * @param response la réponse
+     * @throws IOException IOException
+     */
     @Override
-    public void filter(ContainerRequestContext request, ContainerResponseContext response) throws IOException {
+    public final void filter(ContainerRequestContext request, ContainerResponseContext response)
+            throws IOException {
         response.getHeaders().add("Access-Control-Allow-Origin", "*");
         response.getHeaders().add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
         response.getHeaders().add("Access-Control-Allow-Credentials", "true");

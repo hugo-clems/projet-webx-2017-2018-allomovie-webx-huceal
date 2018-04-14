@@ -18,7 +18,7 @@ public final class DataSource {
     /**
      * La connexion à la BD.
      */
-    private static String DB_CONNECTION = "jdbc:h2:~/allomovieDB";
+    private static String dbConnection = "jdbc:h2:~/allomovieDB";
 
     /**
      * La dataSource.
@@ -79,7 +79,7 @@ public final class DataSource {
             System.out.println(e.getMessage());
         }
         try {
-            return DriverManager.getConnection(DB_CONNECTION);
+            return DriverManager.getConnection(dbConnection);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -102,8 +102,12 @@ public final class DataSource {
         }
     }
 
-    public static void setDbConnection(String newDbConnection) {
-        DB_CONNECTION = newDbConnection;
+    /**
+     * Setter dbConnection.
+     * @param newDbConnection le nouveau dbConnection
+     */
+    public static void setDbConnection(final String newDbConnection) {
+        dbConnection = newDbConnection;
     }
 
 }
