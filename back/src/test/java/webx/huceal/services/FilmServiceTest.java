@@ -94,7 +94,7 @@ public class FilmServiceTest {
 				.type(MediaType.APPLICATION_JSON)
 				.entity(new ErrorMessage("Année invalide !")).build();
 
-		noMovie = Response.status(Response.Status.BAD_REQUEST)
+		noMovie = Response.status(Response.Status.NOT_FOUND)
 				.type(MediaType.APPLICATION_JSON)
 				.entity(new ErrorMessage("Aucun film trouvé !")).build();
 
