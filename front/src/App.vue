@@ -33,4 +33,9 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+.theme-couleur-1{
+  background-color: #42b983;
+  border-color: #42b983;
+}
+
 </style>

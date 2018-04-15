@@ -34,6 +34,9 @@
     <div class="container next-container">
       <div class="row ">
         <div class="col-lg-6  offset-lg-4">
+          <div class="alert alert-danger" v-for="error of errors " :key="error.id" role="alert">
+            {{error}}
+          </div>
           <h2>Laisser un avis</h2>
           <div v-if="success.length > 0" v-for="suc in success" :key="suc.id" class="alert alert-success" role="alert">
             {{suc}}
@@ -42,7 +45,7 @@
             <div class="form-group row">
               <label for="note" class="col-sm-3 col-form-label">Note</label>
               <div class="col-sm-9">
-                <input type="number" min="0" max="5" v-model="formAvis.note" class="form-control" id="note" placeholder="Note entre 0 et 5">
+                <star-rating v-model="formAvis.note" :star-size="20" :show-rating="false" active-color="#42b983"></star-rating>
               </div>
              </div>
             <div class="form-group row">
@@ -51,7 +54,7 @@
                 <textarea v-model="formAvis.commentaire" class="form-control" rows="3" id="commentaire"></textarea>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary" v-on:click="envoyerAvis">Submit</button>
+            <button type="submit" class="btn btn-primary theme-couleur-1" id="submit" v-on:click="envoyerAvis">Envoyer</button>
           </form>
         </div>
       </div>
@@ -61,6 +64,7 @@
 
 <script>
 import axios from 'axios'
+
 export default {
   methods: {
     img (url) {
@@ -71,12 +75,16 @@ export default {
       }
     },
     envoyerAvis () {
+      this.errors = [];
       this.success = []
       let note = this.formAvis.note
       if (/[0-5]{1}/g.test(note) === false) {
         note = -1
       }
       let commentaire = this.formAvis.commentaire
+      if(commentaire === undefined){
+        commentaire = "";
+      }
       axios({
         method: 'post',
         headers: { 'content-type': 'application/json' },
@@ -87,9 +95,9 @@ export default {
           commentaire: commentaire
         }
       }).then(response => {
-        this.success.push('Avis envoyé'); this.getAvis(this.idFilm)
+        this.success.push('Avis envoyé'); this.getAvis(this.idFilm); this.formAvis = []
       }).catch(e => {
-        this.errors.push(e)
+        this.errors.push(e.response.data.message);console.log(e);
       })
       this.getAvis(this.idFilm)
     },
@@ -123,7 +131,7 @@ export default {
           response += '<i class="fas fa-star-half"></i>'
           note -= 0.5
         } else if (note === -1) {
-          response += '<i class="far fa-star"></i>'
+          response += '<i class="far fa-star test"></i>'
         } else {
 
         }
@@ -139,13 +147,7 @@ export default {
       errors: [],
       success: [],
       formAvis: [],
-      avisList: [{
-        commentaire: 'Bien bien bien.',
-        filmID: 'tt0076759',
-        id: 1,
-        note: 3
-      }
-      ]
+      avisList: []
     }
   },
   created () {
@@ -159,10 +161,10 @@ export default {
 </script>
 
 <style scoped>
-.info{
-  text-align: left;
-  list-style: none;
-}
+  .info{
+    text-align: left;
+    list-style: none;
+  }
   .commentaireList{
     margin-left: 2.5rem;
   }
@@ -171,5 +173,16 @@ export default {
   }
   .next-container{
     margin-top: 1rem;
+  }
+  #submit{
+    margin-bottom: 1rem;
+  }
+</style>
+<style>
+  .fas {
+    color: #42b983;
+  }
+  .far{
+    color: #21252999;
   }
 </style>

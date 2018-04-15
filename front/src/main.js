@@ -4,9 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
-Vue.config.productionTip = false
-
 /* eslint-disable no-new */
+var StarRating = require('vue-star-rating');
+Vue.component('star-rating', StarRating.default)
 new Vue({
   el: '#app',
   router,

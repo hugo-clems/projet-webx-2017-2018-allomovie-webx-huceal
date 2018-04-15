@@ -3,7 +3,7 @@
 
     <div class="container">
       <div class="row">
-        <h1>Liste film</h1>
+        <h1>Liste Films</h1>
       </div>
       <div class="row">
         <div class="alert alert-danger" v-for="error of errors " :key="error.id" role="alert">
@@ -20,7 +20,7 @@
             <label for="annee" class="sr-only">Année</label>
             <input type="text" v-model="form.search_year" class="form-control" id="annee" placeholder="Année" >
           </div>
-          <button type="submit" class="btn btn-primary mb-2" v-on:click="search">Rechercher</button>
+          <button type="submit" class="btn btn-primary mb-2 theme-couleur-1" v-on:click="search">Rechercher</button>
         </form>
       </div>
       <div class="row">
