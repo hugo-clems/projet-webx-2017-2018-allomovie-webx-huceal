@@ -35,6 +35,7 @@ public final class DataSource {
 
     /**
      * Initialise la table Avis dans la BD.
+     * + première ligne avis des films affichés (front)
      */
     private static void initTableAvis() {
         Connection con = null;
@@ -47,11 +48,25 @@ public final class DataSource {
                 + "Commentaire VARCHAR(500),"
                 + "CONSTRAINT avis_not_empty CHECK"
                 + "(note != -1 OR Commentaire != ''))";
+        String avisCreateQuery = "MERGE INTO Avis VALUES "
+                + "(1, 'tt0076759', 5, 'Meilleur Star Wars !'),"
+                + "(2, 'tt0076759', -1, 'Souvenir vraiment cool.'),"
+                + "(3, 'tt0076759', 3, ''),"
+                + "(4, 'tt0080684', 3, 'Bof bof...'),"
+                + "(5, 'tt0080684', 4, 'Bon film familial.'),"
+                + "(6, 'tt0086190', 5, 'Je retournerai le voir !'),"
+                + "(7, 'tt2488496', 1, 'Une véritable perte de temps"
+                + "... Remboursez-moi.'),"
+                + "(8, 'tt2488496', 2, 'Je ne pense pas avoir tout"
+                + " compris, bizarre et long.'),"
+                + "(9, 'tt0120915', 5, 'LE film que je souhaitais"
+                + " voir depuis des années.')";
         try {
             con = getDBConnection();
             if (con != null) {
                 stmt = con.createStatement();
                 stmt.execute(tableCreateQuery);
+                stmt.execute(avisCreateQuery);
             }
         } catch (SQLException e) {
             System.out.println("Exception Message " + e.getLocalizedMessage());

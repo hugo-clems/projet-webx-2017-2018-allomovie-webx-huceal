@@ -33,8 +33,8 @@ public class AvisControllerIntegrationTest {
     private Client client = ClientBuilder.newClient();
     private WebTarget target = client.target(Main.BASE_URI+"/avis");
     private AvisDAO avisDAO = new AvisDAO();
-    private Avis avis1 = new Avis("tt0080684", 5, "Très bon film.");
-    private Avis avis2 = new Avis("tt0080684", -1, "J'adore ce film !");
+    private Avis avis1 = new Avis("tt2527336", 5, "Très bon film. Xrs.");
+    private Avis avis2 = new Avis("tt2527336", -1, "J'adore ce film ! Xrs.");
     private Avis avis3 = new Avis("tt0080685", 3, "");
 
     @BeforeClass
@@ -70,7 +70,7 @@ public class AvisControllerIntegrationTest {
 
     @Test
     public void deleteAvisByKeyWhenKeyIsValidAndExistsInCommentaires() {
-        response = target.path("film")
+        response = target.path("Xrs")
                 .request()
                 .accept(MediaType.APPLICATION_JSON)
                 .delete();

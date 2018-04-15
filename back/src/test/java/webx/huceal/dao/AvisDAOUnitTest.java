@@ -17,8 +17,8 @@ public class AvisDAOUnitTest {
 
     private static HttpServer server;
     private AvisDAO avisDAO = new AvisDAO();
-    private Avis avis1 = new Avis("tt0080684", 5, "Très bon film.");
-    private Avis avis2 = new Avis("tt0080684", -1, "J'adore ce film !");
+    private Avis avis1 = new Avis("tt0120916", 5, "Très bon film. Xrs.");
+    private Avis avis2 = new Avis("tt0120916", -1, "J'adore ce film ! Xrs.");
     private Avis avis3 = new Avis("tt0080685", 3, "");
 
     @BeforeClass
@@ -66,7 +66,7 @@ public class AvisDAOUnitTest {
 
     @Test
     public void deleteAvisByKeyWhenKeyExistsInCommentaires() {
-        String existingKey = "film";
+        String existingKey = "Xrs";
         assertThat(avisDAO.deleteAvisByKey(existingKey), is(2));
     }
 
