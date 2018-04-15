@@ -51,19 +51,6 @@ public class AvisServiceUnitTest {
         avisService = new AvisService(avisDAO, filmDAO);
     }
 
-    @After
-    public void tearDown() throws Exception {
-        if (avisDAO.findAvisByID(avis1.getId()) != null) {
-            avisDAO.deleteAvisByID(avis1.getId());
-        }
-        if (avisDAO.findAvisByID(avis2.getId()) != null) {
-            avisDAO.deleteAvisByID(avis2.getId());
-        }
-        if (avisDAO.findAvisByID(avis3.getId()) != null) {
-            avisDAO.deleteAvisByID(avis3.getId());
-        }
-    }
-
     @Test
     public void verifyFilmIdWhenIdIsValid() {
         when(filmDAO.findById(film.getFilmId())).thenReturn(film);

@@ -190,7 +190,7 @@ public class FilmControllerIntegrationTest {
 
     @Test
     public void findByAvisTestByNote() throws Exception {
-        Response response = target.path("film").path("avis").queryParam("note", "3")//.queryParam("commentaire", "bien")
+        Response response = target.path("film").path("avis").queryParam("note", "3")
                 .request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
 
         assertThat(response.getStatus(), is(codeOk));
