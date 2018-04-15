@@ -1,13 +1,33 @@
 <template>
   <div class="container">
     <div v-if="film" class="row">
-      <img :src="img(film.image)"/>
-      <h1>{{film.titre}}</h1>
+      <div class="col-lg-3">
+        <img :src="img(film.image)"/>
+      </div>
+      <div class="col-lg-9">
+        <h1>{{film.titre}}</h1>
+        <ul class="info">
+          <li><b>Année de sortie :</b> {{film.anneeSortie}}</li>
+          <li><b>Durée :</b> {{film.duree}}</li>
+          <li><b>Genre :</b> {{film.genre}}</li>
+          <li><b>Producteur :</b> {{film.producteur}}</li>
+          <li><b>Scénariste :</b> {{film.scenariste}}</li>
+          <li><b>Studio :</b> {{film.studio}}
+          <li><b>Description :</b></li>
+          <li>{{film.description}}</li>
+        </ul>
+
+          <div class="card" v-for="avis in avisList" :key="avis.id">
+            <div class="card-body">
+              <span class="note">{{afficherNote(avis.note)}}</span>
+              <p>{{avis.note}}</p>
+              <p>{{avis.commentaire}}</p>
+            </div>
+          </div>
+      </div>
     </div>
+
     <div class="row">
-      <ul>
-        <li v-for="error in errors" >{{error}}</li>
-      </ul>
       <form>
         <div class="form-group">
           <label for="note">Note</label>
@@ -21,22 +41,11 @@
       </form>
     </div>
     <div class="row">
-      <div class="card">
-        <div class="card-header">
-          Avis
-        </div>
-        <div class="card-body" >
-          <ul class="list-unstyled" >
-            <li class="media" v-for="avis in avisList">
-              <div class="media-body">
-                {{avis.note}}
-                {{avis.commentaire}}
-              </div>
-            </li>
-          </ul>
-        </div>
+      <div class="alert alert-danger" v-for="error in errors " :key="error.id" role="alert">
+        {{error}}
       </div>
     </div>
+
   </div>
 </template>
 
@@ -45,7 +54,7 @@ import axios from 'axios'
 export default {
   methods: {
     img (url) {
-      if (url == 'N/A') {
+      if (url === 'N/A') {
         return 'http://via.placeholder.com/300x400'
       } else {
         return url
@@ -53,7 +62,7 @@ export default {
     },
     envoyerAvis () {
       let note = this.formAvis.note
-      if (/[0-5]{1/g.test(note) === false) {
+      if (/[0-5]{1}/g.test(note) === false) {
         note = -1
       }
       let commentaire = this.formAvis.commentaire
@@ -71,7 +80,7 @@ export default {
       }).catch(e => {
         this.errors.push(e)
       })
-      this.getAvis(this.idFilm);
+      this.getAvis(this.idFilm)
     },
     getAvis (idFilm) {
       const requete = 'avis/film/' + idFilm
@@ -91,6 +100,25 @@ export default {
         .catch(e => {
           this.errors.push(e)
         })
+    },
+    afficherNote(note){
+      let response = "";
+      console.log(note);
+      for(let i = 0; i < 5; i++ ){
+        if(note > 1){
+          response += "<i class=\"fas fa-star\"></i>";
+          note -= 1;
+        }else if(note > 0.5){
+          response += "<i class=\"fas fa-star-half\"></i>";
+          note -=0.5;
+        }else if (note === -1){
+          response += "<i class=\"far fa-star\"></i>";
+        }else{
+
+        }
+      }
+      console.log(response);
+      return "<span>"+response+"</span>";
     }
   },
   data () {
@@ -110,8 +138,8 @@ export default {
     }
   },
   created () {
-    this.idFilm = this.$route.params.id;
-    console.log(this.idFilm);
+    this.idFilm = this.$route.params.id
+    console.log(this.idFilm)
     this.getFilm(this.idFilm)
     this.getAvis(this.idFilm)
   }
@@ -120,5 +148,8 @@ export default {
 </script>
 
 <style scoped>
-
+.info{
+  text-align: left;
+  list-style: none;
+}
 </style>

@@ -1,30 +1,43 @@
 <template>
   <div id="elem1">
-    <h1>Liste film</h1>
-    {{errors}}
+
     <div class="container">
-      <form class="form-inline">
-        <div class="form-group mb-2">
-          <label for="title" class="sr-only">Titre</label>
-          <input type="text" v-model="form.search_title" class="form-control" id="title" placeholder="Titre">
-        </div>
-        <div class="form-group mx-sm-3 mb-2">
-          <label for="annee" class="sr-only">Année</label>
-          <input type="text" v-model="form.search_year" class="form-control" id="annee" placeholder="Année" >
-        </div>
-        <button type="submit" class="btn btn-primary mb-2" v-on:click="search">Rechercher</button>
-      </form>
-    </div>
-    <div class="container">
-      <div  v-if="filmList.length > 0" v-for="film of filmList" class="card flex-md-row box-mb-4 box-shadow" style="width: 18rem;">
-        <img class="card-img-top " :src="img(film.image)" alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title">{{film.titre}}</h5>
-          <p class="card-text">{{film.anneSortie}}</p>
-          <router-link :to="{path: '/film/'+film.filmId}" class="btn btn-primary">Voir Film</router-link>
+      <div class="row">
+        <h1>Liste film</h1>
+      </div>
+      <div class="row">
+        <div class="alert alert-danger" v-for="error of errors " :key="error.id" role="alert">
+          {{error}}
         </div>
       </div>
-      <div v-if="filmList == undefined">Aucun film trouvé</div>
+      <div class="row">
+        <form class="form-inline">
+          <div class="form-group mb-2">
+            <label for="title" class="sr-only">Titre</label>
+            <input type="text" v-model="form.search_title" class="form-control" id="title" placeholder="Titre">
+          </div>
+          <div class="form-group mx-sm-3 mb-2">
+            <label for="annee" class="sr-only">Année</label>
+            <input type="text" v-model="form.search_year" class="form-control" id="annee" placeholder="Année" >
+          </div>
+          <button type="submit" class="btn btn-primary mb-2" v-on:click="search">Rechercher</button>
+        </form>
+      </div>
+      <div class="row">
+        <div  v-if="filmList.length > 0" v-for="film of filmList" :key="film.id" class="card flex-md-row box-mb-4 box-shadow" >
+          <img class="card-img-top " :src="img(film.image)" width="198px" height="305pxx"  alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">{{film.titre}}</h5>
+            <p class="card-text">{{film.anneeSortie}}</p>
+            <router-link :to="{path: '/film/'+film.filmId}" class="card-link">
+              <div class="bottom">
+                Voir Film
+              </div>
+            </router-link>
+          </div>
+        </div>
+        <div v-if="filmList == undefined">Aucun film trouvé</div>
+      </div>
     </div>
   </div>
 </template>
@@ -33,38 +46,7 @@
 import axios from 'axios'
 
 export default {
-  methods: {
-    search: function () {
-      console.log(this.form.search_title, this.form.search_year)
-      var title = this.form.search_title
-      var year = this.form.search_year
-      this.getFilmList(title, year)
-    },
-    getFilmList: function (title = 'star wars', year = null) {
-      console.log(title, year)
 
-      // var api = 'http://www.omdbapi.com/?apikey=5a0f558e&'
-      // var request = 's=' + title.replace(' ', '+')
-      var api = 'http://localhost:8081/allomovie/film/liste/'
-      var request = title.replace(' ', '+')
-      if (year != null) { request += '&annee=' + year }
-      console.log(api + request)
-      axios.get(api + request)
-        .then(response => {
-          this.filmList = response.data;
-        })
-        .catch(e => {
-          this.errors.push(e)
-        })
-    },
-    img (url) {
-      if (url == 'N/A') {
-        return 'http://via.placeholder.com/300x400'
-      } else {
-        return url
-      }
-    }
-  },
   data () {
     return {
       filmList: [],
@@ -74,8 +56,37 @@ export default {
   },
   created () {
     this.getFilmList()
-  }
+  },
+  methods: {
+    search: function () {
+      var title = this.form.search_title
+      var year = this.form.search_year
+      this.getFilmList(title, year)
+    },
+    getFilmList: function (title = 'star wars', year = null) {
+      this.errors = []
+      // var api = 'http://www.omdbapi.com/?apikey=5a0f558e&'
+      // var request = 's=' + title.replace(' ', '+')
+      var api = 'http://localhost:8081/allomovie/film/liste/'
+      var request = title.replace(' ', '+')
+      if (year != null) { request += '/' + year }
+      axios.get(api + request)
+        .then(response => {
+          this.filmList = response.data
+        })
+        .catch(e => {
+          this.errors.push(e.response.data.message)
+        })
+    },
+    img (url) {
+      if (url === 'N/A') {
+        return 'http://via.placeholder.com/300x400'
+      } else {
+        return url
+      }
+    }
 
+  }
 }
 </script>
 
@@ -95,9 +106,26 @@ li {
 a {
   color: #42b983;
 }
-.liste-film{
+.card{
   display: block;
-  float: left;
-
+  width: 200px;
+  margin-left: 3px;
+  margin-right: 3px;
+  margin-bottom: 10px;
+}
+.card-link{
+  float: bottom;
+}
+.bottom{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+.bottom:hover{
+  background-color: #42b983;
+  color: #fff;
+  transition: color;
+  transition-duration: 0.5s;
 }
 </style>
