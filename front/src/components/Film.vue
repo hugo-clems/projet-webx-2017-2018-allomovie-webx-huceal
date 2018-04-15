@@ -9,11 +9,12 @@
           <h1>{{film.titre}}</h1>
           <ul class="info">
             <li><b>Année de sortie :</b> {{film.anneeSortie}}</li>
+            <li><b>Moyenne :</b><span v-html="afficherNote(film.moyenne)"></span>{{film.moyenne}}</li>
             <li><b>Durée :</b> {{film.duree}}</li>
             <li><b>Genre :</b> {{film.genre}}</li>
             <li><b>Producteur :</b> {{film.producteur}}</li>
             <li><b>Scénariste :</b> {{film.scenariste}}</li>
-            <li><b>Studio :</b> {{film.studio}}
+            <li><b>Studio :</b> {{film.studio}}</li>
             <li><b>Description :</b></li>
             <li>{{film.description}}</li>
           </ul>
@@ -122,6 +123,7 @@ export default {
         })
     },
     afficherNote (note) {
+      if(note === undefined)note = -1;
       let response = ''
       for (let i = 0; i < 5; i++) {
         if (note >= 1) {
