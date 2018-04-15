@@ -142,33 +142,8 @@ public class FilmService {
         Object body = null;
 
         if (noteIsValid(note)) {
-            List<Film> result = new ArrayList<>();
-
-            // On récupère les films avec moyenne >= note
-            AvisService service = new AvisService();
-            List<String> filmWithNote =
-                    service.findAllFilmsWithAtLeastOneNoteByFilmID();
-
-            for (int i = 0; i < filmWithNote.size(); i++) {
-                String filmId = filmWithNote.get(i);
-                float moy = service.findSeuilNoteByFilmID(filmId);
-                if (moy >= Integer.parseInt(note)) {
-                    result.add(dao.findById(filmId));
-                }
-            }
-
-            // Recupèe si mot dans commentaire
-            List<Film> result2 = dao.findByAvis(commentaire);
-            List<Film> result3 = new ArrayList<>();
-
-            for (int i = 0; i < result2.size(); i++) {
-                Film f = result2.get(i);
-                if (result.contains(f)) {
-                    result3.add(f);
-                }
-            }
-
-            body = result3;
+            body = fusionList(getFilmWithMinNote(note),
+                    dao.findByAvis(commentaire));
             status = Response.Status.OK;
         } else {
             body = new ErrorMessage("Note invalide !");
@@ -176,6 +151,56 @@ public class FilmService {
 
         return Response.status(status)
                 .type(MediaType.APPLICATION_JSON).entity(body).build();
+    }
+
+    /**
+     * Récupère la liste des films
+     * ayant une moyenne supérieur à une note donéne.
+     * @param note moyenne minimale
+     * @return liste des films
+     */
+    private List<Film> getFilmWithMinNote(String note) {
+        List<Film> result = new ArrayList<>();
+        AvisService service = new AvisService();
+        List<String> filmWithNote;
+
+        // On récupère tous les films qui ont des avis
+        filmWithNote = service.findAllFilmsWithAtLeastOneNoteByFilmID();
+
+        // Pour chaque film avec un avis
+        // Si sa moyenne est supérieur à la note
+        // Alors on l'ajoute à la liste
+        for (int i = 0; i < filmWithNote.size(); i++) {
+            String filmId = filmWithNote.get(i);
+            float moy = service.findSeuilNoteByFilmID(filmId);
+            if (moy >= Integer.parseInt(note)) {
+                result.add(dao.findById(filmId));
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Fusione 2 listes.
+     * @param l1 liste à fusioner
+     * @param l2 liste à fusioner
+     * @return listes fusionées
+     */
+    private List<Film> fusionList(List<Film> l1, List<Film> l2) {
+        List<Film> result = new ArrayList<>();
+
+        // Pour chaque film de l2
+        // S'il est présent dans l1
+        // On l'ajoute à résult
+        for (int i = 0; i < l2.size(); i++) {
+            Film f = l2.get(i);
+            if (l1.contains(f)) {
+                result.add(f);
+            }
+        }
+
+        return result;
     }
 
     /**
