@@ -1,53 +1,61 @@
 <template>
-  <div class="container">
-    <div v-if="film" class="row">
-      <div class="col-lg-3">
-        <img :src="img(film.image)"/>
-      </div>
-      <div class="col-lg-9">
-        <h1>{{film.titre}}</h1>
-        <ul class="info">
-          <li><b>Année de sortie :</b> {{film.anneeSortie}}</li>
-          <li><b>Durée :</b> {{film.duree}}</li>
-          <li><b>Genre :</b> {{film.genre}}</li>
-          <li><b>Producteur :</b> {{film.producteur}}</li>
-          <li><b>Scénariste :</b> {{film.scenariste}}</li>
-          <li><b>Studio :</b> {{film.studio}}
-          <li><b>Description :</b></li>
-          <li>{{film.description}}</li>
-        </ul>
-        <div class="commentaireList">
-          <ul class="list-group">
-            <li class="list-group-item list-group-item-dark"><b>Avis</b></li>
-          <li class="list-group-item" v-for="avis in avisList" :key="avis.id">
-              <span class="note float-left" v-html="afficherNote(avis.note)"></span>
-              <span class="clearfix"></span>
-              <p class="commentaire float-left">{{avis.commentaire}}</p>
-            </li>
+  <div>
+    <div class="container">
+      <div v-if="film" class="row">
+        <div class="col-lg-3">
+          <img :src="img(film.image)" width="275px"/>
+        </div>
+        <div class="col-lg-9">
+          <h1>{{film.titre}}</h1>
+          <ul class="info">
+            <li><b>Année de sortie :</b> {{film.anneeSortie}}</li>
+            <li><b>Durée :</b> {{film.duree}}</li>
+            <li><b>Genre :</b> {{film.genre}}</li>
+            <li><b>Producteur :</b> {{film.producteur}}</li>
+            <li><b>Scénariste :</b> {{film.scenariste}}</li>
+            <li><b>Studio :</b> {{film.studio}}
+            <li><b>Description :</b></li>
+            <li>{{film.description}}</li>
           </ul>
+          <div class="commentaireList">
+            <ul class="list-group">
+              <li class="list-group-item list-group-item-dark"><b>Avis</b></li>
+              <li class="list-group-item" v-if="avisList.length > 0" v-for="avis in avisList" :key="avis.id">
+                <span class="note float-left" v-html="afficherNote(avis.note)"></span>
+                <span class="clearfix"></span>
+                <p class="commentaire float-left">{{avis.commentaire}}</p>
+              </li>
+              <li class="list-group-item" v-if="avisList.length < 1">Aucun commentaire</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="row">
-      <form>
-        <div class="form-group">
-          <label for="note">Note</label>
-          <input type="number" min="0" max="5" v-model="formAvis.note" class="form-control" id="note" placeholder="Note entre 0 et 5">
-         </div>
-        <div class="form-group">
-          <label for="exampleInput">Password</label>
-          <textarea v-model="formAvis.commentaire" class="form-control" rows="3" id="exampleInput"></textarea>
+    <div class="container next-container">
+      <div class="row ">
+        <div class="col-lg-6  offset-lg-4">
+          <h2>Laisser un avis</h2>
+          <div v-if="success.length > 0" v-for="suc in success" :key="suc.id" class="alert alert-success" role="alert">
+            {{suc}}
+          </div>
+          <form>
+            <div class="form-group row">
+              <label for="note" class="col-sm-3 col-form-label">Note</label>
+              <div class="col-sm-9">
+                <input type="number" min="0" max="5" v-model="formAvis.note" class="form-control" id="note" placeholder="Note entre 0 et 5">
+              </div>
+             </div>
+            <div class="form-group row">
+              <label for="commentaire" class="col-sm-3 col-form-label">Commentaire</label>
+              <div class="col-sm-9">
+                <textarea v-model="formAvis.commentaire" class="form-control" rows="3" id="commentaire"></textarea>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" v-on:click="envoyerAvis">Submit</button>
+          </form>
         </div>
-        <button type="submit" class="btn btn-primary" v-on:click="envoyerAvis">Submit</button>
-      </form>
-    </div>
-    <div class="row">
-      <div class="alert alert-danger" v-for="error in errors " :key="error.id" role="alert">
-        {{error}}
       </div>
     </div>
-
   </div>
 </template>
 
@@ -63,6 +71,7 @@ export default {
       }
     },
     envoyerAvis () {
+      this.success = []
       let note = this.formAvis.note
       if (/[0-5]{1}/g.test(note) === false) {
         note = -1
@@ -78,7 +87,7 @@ export default {
           commentaire: commentaire
         }
       }).then(response => {
-        console.log('Avis envoyé')
+        this.success.push('Avis envoyé'); this.getAvis(this.idFilm)
       }).catch(e => {
         this.errors.push(e)
       })
@@ -90,10 +99,11 @@ export default {
         .then(response => {
           this.avisList = response.data
         }).catch(e => {
-          this.errors.push(e.response.data.message)
+          this.errors.push(e.response.data.message); this.avisList = []
         })
     },
     getFilm (idFilm) {
+      this.errors = []
       const requete = 'film/' + idFilm
       axios.get(this.api + requete)
         .then(response => {
@@ -103,24 +113,22 @@ export default {
           this.errors.push(e)
         })
     },
-    afficherNote(note){
-      let response = "";
-      console.log(note);
-      for(let i = 0; i < 5; i++ ){
-        if(note > 1){
-          response += "<i class=\"fas fa-star\"></i>";
-          note -= 1;
-        }else if(note > 0.5){
-          response += "<i class=\"fas fa-star-half\"></i>";
-          note -=0.5;
-        }else if (note === -1){
-          response += "<i class=\"far fa-star\"></i>";
-        }else{
+    afficherNote (note) {
+      let response = ''
+      for (let i = 0; i < 5; i++) {
+        if (note >= 1) {
+          response += '<i class="fas fa-star"></i>'
+          note -= 1
+        } else if (note >= 0.5) {
+          response += '<i class="fas fa-star-half"></i>'
+          note -= 0.5
+        } else if (note === -1) {
+          response += '<i class="far fa-star"></i>'
+        } else {
 
         }
       }
-      console.log(response);
-      return "<span>"+response+"</span>";
+      return '<span>' + response + '</span>'
     }
   },
   data () {
@@ -129,6 +137,7 @@ export default {
       api: 'http://localhost:8081/allomovie/',
       idFilm: null,
       errors: [],
+      success: [],
       formAvis: [],
       avisList: [{
         commentaire: 'Bien bien bien.',
@@ -156,5 +165,11 @@ export default {
 }
   .commentaireList{
     margin-left: 2.5rem;
+  }
+  h1{
+    margin-left: 2rem;
+  }
+  .next-container{
+    margin-top: 1rem;
   }
 </style>
