@@ -16,14 +16,16 @@
           <li><b>Description :</b></li>
           <li>{{film.description}}</li>
         </ul>
-
-          <div class="card" v-for="avis in avisList" :key="avis.id">
-            <div class="card-body">
-              <span class="note">{{afficherNote(avis.note)}}</span>
-              <p>{{avis.note}}</p>
-              <p>{{avis.commentaire}}</p>
-            </div>
-          </div>
+        <div class="commentaireList">
+          <ul class="list-group">
+            <li class="list-group-item list-group-item-dark"><b>Avis</b></li>
+          <li class="list-group-item" v-for="avis in avisList" :key="avis.id">
+              <span class="note float-left" v-html="afficherNote(avis.note)"></span>
+              <span class="clearfix"></span>
+              <p class="commentaire float-left">{{avis.commentaire}}</p>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
 
@@ -152,4 +154,7 @@ export default {
   text-align: left;
   list-style: none;
 }
+  .commentaireList{
+    margin-left: 2.5rem;
+  }
 </style>
