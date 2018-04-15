@@ -43,10 +43,16 @@
             {{suc}}
           </div>
           <form>
-            <div class="form-group row">
+            <div class="from-group row">
+              <div class="form-check">
+                <input type="checkbox"  class="form-check-input" id="check" v-model="formAvis.haveNote">
+                <label class="form-check-label" for="check">Voulez-vous laisser une note?</label>
+              </div>
+            </div>
+            <div class="form-group row" v-if="formAvis.haveNote === true">
               <label for="note" class="col-sm-3 col-form-label">Note</label>
               <div class="col-sm-9">
-                <star-rating v-model="formAvis.note" :star-size="20" :show-rating="false" active-color="#42b983"></star-rating>
+                <star-rating v-model="formAvis.note" id="note" :star-size="20" :show-rating="false" active-color="#42b983"></star-rating>
               </div>
              </div>
             <div class="form-group row">
@@ -79,8 +85,10 @@ export default {
       this.errors = []
       this.success = []
       let note = this.formAvis.note
-      if (/[0-5]{1}/g.test(note) === false) {
+      if (this.formAvis.haveNote === false) {
         note = -1
+      } else if (note === undefined) {
+        note = 0
       }
       let commentaire = this.formAvis.commentaire
       if (commentaire === undefined) {
@@ -123,7 +131,7 @@ export default {
         })
     },
     afficherNote (note) {
-      if(note === undefined)note = -1;
+      if (note === undefined) note = -1
       let response = ''
       for (let i = 0; i < 5; i++) {
         if (note >= 1) {
@@ -132,8 +140,8 @@ export default {
         } else if (note >= 0.5) {
           response += '<i class="fas fa-star-half"></i>'
           note -= 0.5
-        } else if (note === -1) {
-          response += '<i class="far fa-star test"></i>'
+        } else if (note === 0) {
+          response += '<i class="far fa-star"></i>'
         } else {
 
         }
@@ -148,7 +156,11 @@ export default {
       idFilm: null,
       errors: [],
       success: [],
-      formAvis: [],
+      formAvis: {
+        commentaire: '',
+        note: 0,
+        haveNote: false
+      },
       avisList: []
     }
   },
@@ -181,10 +193,10 @@ export default {
   }
 </style>
 <style>
-  .fas {
+  .fas{
     color: #42b983;
   }
   .far{
-    color: #21252999;
+    color: #42b983;
   }
 </style>
