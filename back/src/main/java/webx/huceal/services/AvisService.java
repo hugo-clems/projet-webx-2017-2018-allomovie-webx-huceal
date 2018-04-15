@@ -243,6 +243,30 @@ public class AvisService {
     }
 
     /**
+     * Recherche la moyenne des avis d'un film.
+     * @param filmID l'id du film
+     * @return la moyenne des avis du film en float, -1 s'il n'y en a pas
+     */
+    public final float findSeuilNoteByFilmID(final String filmID) {
+        float moyenne = -1, div = 0, nb = 0;
+        int note = 0;
+        List<Avis> liste = avisDAO.findAllAvisByFilmID(filmID);
+        if (!liste.isEmpty()) {
+            for (Avis avis : liste) {
+                note = avis.getNote();
+                if (note != -1) {
+                    nb += note;
+                    div++;
+                }
+            }
+            if (nb != 0 && div != 0) {
+                moyenne = nb / div;
+            }
+        }
+        return moyenne;
+    }
+
+    /**
      * Vérifie que la note donnée est valide.
      * @param note la note reçue
      * @return Boolean à true si la note est valide, false sinon
