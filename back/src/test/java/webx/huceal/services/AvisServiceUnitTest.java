@@ -290,4 +290,20 @@ public class AvisServiceUnitTest {
         assertThat(avisService.findSeuilNoteByFilmID(avis1.getFilmID()), is((float) -1));
     }
 
+    @Test
+    public void findAllFilmsWithAtLeastOneNoteByFilmIDWhenExist() {
+        List<String> liste = new ArrayList<>();
+        liste.add(avis1.getFilmID());
+        liste.add(avis3.getFilmID());
+        when(avisDAO.findAllFilmsWithAtLeastOneNoteByFilmID()).thenReturn(liste);
+        assertThat(avisService.findAllFilmsWithAtLeastOneNoteByFilmID(), is(liste));
+    }
+
+    @Test
+    public void findAllFilmsWithAtLeastOneNoteByFilmIDWhenNoFilm() {
+        List<String> liste = new ArrayList<>();
+        when(avisDAO.findAllFilmsWithAtLeastOneNoteByFilmID()).thenReturn(liste);
+        assertThat(avisService.findAllFilmsWithAtLeastOneNoteByFilmID(), is(liste));
+    }
+
 }

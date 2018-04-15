@@ -175,7 +175,7 @@ public class AvisDAO {
     }
 
     /**
-     * Renvoie la liste des films ayant au moins une note (!= -1)
+     * Renvoie la liste des films ayant au moins une note (!= -1).
      * @return la liste filmID ayant au moins une note
      */
     public List<String> findAllFilmsWithAtLeastOneNoteByFilmID() {

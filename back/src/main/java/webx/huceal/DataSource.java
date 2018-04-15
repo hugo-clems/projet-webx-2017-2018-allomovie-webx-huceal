@@ -66,7 +66,9 @@ public final class DataSource {
             if (con != null) {
                 stmt = con.createStatement();
                 stmt.execute(tableCreateQuery);
-                stmt.execute(avisCreateQuery);
+                if (!dbConnection.contains("Test")) {
+                    stmt.execute(avisCreateQuery);
+                }
             }
         } catch (SQLException e) {
             System.out.println("Exception Message " + e.getLocalizedMessage());

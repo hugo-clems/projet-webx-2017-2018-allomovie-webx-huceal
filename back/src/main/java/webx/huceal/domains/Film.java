@@ -515,9 +515,9 @@ public class Film {
         }
 
         if (moyenne != +0.0f) {
-            result = 31 * result + Float.floatToIntBits(moyenne);
+            result = trenteEtUn * result + Float.floatToIntBits(moyenne);
         } else {
-            result = 31 * result;
+            result = trenteEtUn * result;
         }
 
         return result;
