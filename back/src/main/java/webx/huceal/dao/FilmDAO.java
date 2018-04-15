@@ -2,6 +2,7 @@ package webx.huceal.dao;
 
 import webx.huceal.DataSource;
 import webx.huceal.domains.Film;
+import webx.huceal.services.AvisService;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -34,7 +35,10 @@ public class FilmDAO {
         Film leFilm = null;
 
         if (checkRequest(result)) {
-            leFilm = new Film(result.getString("imdbID"),
+            String idFilm = result.getString("imdbID");
+            AvisService service = new AvisService();
+            float moyenne = service.findSeuilNoteByFilmID(idFilm);
+            leFilm = new Film(idFilm,
                     result.getString("Title"),
                     result.getString("Year"),
                     result.getString("Runtime"),
@@ -44,7 +48,7 @@ public class FilmDAO {
                     result.getString("Writer"),
                     result.getString("Actors"),
                     result.getString("Plot"),
-                    result.getString("Poster"));
+                    result.getString("Poster"), moyenne);
         }
 
         return leFilm;

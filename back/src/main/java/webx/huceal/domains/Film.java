@@ -61,6 +61,11 @@ public class Film {
     private String image;
 
     /**
+     * Moyenne du film.
+     */
+    private float moyenne;
+
+    /**
      * Constructeur par défaut.
      */
     public Film() {
@@ -95,13 +100,14 @@ public class Film {
      * @param newActeurs les acteurs du nouveau film
      * @param newDescription la description du nouveau film
      * @param newImage l'image du nouveau film
+     * @param newMoyenne la moyenne du film
      */
     public Film(final String newFilmId, final String newTitre,
                 final String newAnneeSortie, final String newDuree,
                 final String newGenre, final String newStudio,
                 final String newProducteur, final String newScenariste,
                 final String newActeurs, final String newDescription,
-                final String newImage) {
+                final String newImage, final float newMoyenne) {
         this.filmId = newFilmId;
         this.titre = newTitre;
         this.anneeSortie = newAnneeSortie;
@@ -113,6 +119,7 @@ public class Film {
         this.acteurs = newActeurs;
         this.description = newDescription;
         this.image = newImage;
+        this.moyenne = newMoyenne;
     }
 
     /**
@@ -292,6 +299,22 @@ public class Film {
     }
 
     /**
+     * Getter moyenne.
+     * @return moyenne du film
+     */
+    public final float getMoyenne() {
+        return moyenne;
+    }
+
+    /**
+     * Setter moyenne.
+     * @param newMoyenne moyenne du film
+     */
+    public final void setMoyenne(final float newMoyenne) {
+        this.moyenne = newMoyenne;
+    }
+
+    /**
      * Vérifie si 2 instances d'un Film sont égales.
      * @param o instance à comparer
      * @return true si les 2 instances sont égales, false sinon
@@ -407,6 +430,10 @@ public class Film {
             }
         }
 
+        if (moyenne != film.moyenne) {
+            return false;
+        }
+
         if (image != null) {
             return image.equals(film.image);
         } else {
@@ -487,6 +514,12 @@ public class Film {
             result = trenteEtUn * result;
         }
 
+        if (moyenne != +0.0f) {
+            result = 31 * result + Float.floatToIntBits(moyenne);
+        } else {
+            result = 31 * result;
+        }
+
         return result;
     }
 
@@ -508,6 +541,7 @@ public class Film {
                 + ", acteurs='" + acteurs + '\''
                 + ", description='" + description + '\''
                 + ", image='" + image + '\''
+                + ", moyenne='" + moyenne + '\''
                 + '}';
     }
 }
