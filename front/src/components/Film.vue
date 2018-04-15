@@ -75,15 +75,15 @@ export default {
       }
     },
     envoyerAvis () {
-      this.errors = [];
+      this.errors = []
       this.success = []
       let note = this.formAvis.note
       if (/[0-5]{1}/g.test(note) === false) {
         note = -1
       }
       let commentaire = this.formAvis.commentaire
-      if(commentaire === undefined){
-        commentaire = "";
+      if (commentaire === undefined) {
+        commentaire = ''
       }
       axios({
         method: 'post',
@@ -97,7 +97,7 @@ export default {
       }).then(response => {
         this.success.push('Avis envoyé'); this.getAvis(this.idFilm); this.formAvis = []
       }).catch(e => {
-        this.errors.push(e.response.data.message);console.log(e);
+        this.errors.push(e.response.data.message)
       })
       this.getAvis(this.idFilm)
     },
@@ -107,7 +107,7 @@ export default {
         .then(response => {
           this.avisList = response.data
         }).catch(e => {
-          this.errors.push(e.response.data.message); this.avisList = []
+          this.avisList = []
         })
     },
     getFilm (idFilm) {

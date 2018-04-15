@@ -5,7 +5,7 @@ import App from './App'
 import router from './router'
 
 /* eslint-disable no-new */
-var StarRating = require('vue-star-rating');
+var StarRating = require('vue-star-rating')
 Vue.component('star-rating', StarRating.default)
 new Vue({
   el: '#app',
