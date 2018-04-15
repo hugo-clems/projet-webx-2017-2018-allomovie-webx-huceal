@@ -267,6 +267,14 @@ public class AvisService {
     }
 
     /**
+     * Recherche les films avec au moins une note.
+     * @return la liste des films ayant au moins une note (!= -1)
+     */
+    public final List<String> findAllFilmsWithAtLeastOneNoteByFilmID() {
+        return avisDAO.findAllFilmsWithAtLeastOneNoteByFilmID();
+    }
+
+    /**
      * Vérifie que la note donnée est valide.
      * @param note la note reçue
      * @return Boolean à true si la note est valide, false sinon

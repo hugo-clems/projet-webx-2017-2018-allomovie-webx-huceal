@@ -39,7 +39,7 @@ public class AvisServiceUnitTest {
             "Leigh Brackett (screenplay by), Lawrence Kasdan (screenplay by), George Lucas (story by)",
             "Mark Hamill, Harrison Ford, Carrie Fisher, Billy Dee Williams",
             "After the rebels are brutally overpowered by the Empire on the ice planet Hoth, Luke Skywalker begins Jedi training with Yoda, while his friends are pursued by Darth Vader.",
-            "https://ia.media-imdb.com/images/M/MV5BYmU1NDRjNDgtMzhiMi00NjZmLTg5NGItZDNiZjU5NTU4OTE0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg", (new AvisService()).findSeuilNoteByFilmID("tt0080684"));
+            "https://ia.media-imdb.com/images/M/MV5BYmU1NDRjNDgtMzhiMi00NjZmLTg5NGItZDNiZjU5NTU4OTE0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg", new AvisService().findSeuilNoteByFilmID("tt0080684"));
     private Avis avis1 = new Avis("tt0080684", 5, "Très bon film.");
     private Avis avis2 = new Avis("tt0080684", -1, "J'adore ce film !");
     private Avis avis3 = new Avis("tt0080685", 3, "");
@@ -260,6 +260,34 @@ public class AvisServiceUnitTest {
         assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
         erreur.setMessage("Il faut au moins une note ou un commentaire pour déposer un avis.");
         assertThat((ErrorMessage) response.getEntity(), is(erreur));
+    }
+
+    @Test
+    public void findSeuilNoteByFilmIDWhenIdIsValidAndNotesExist() {
+        String validFilmID = avis1.getFilmID();
+        List<Avis> liste = new ArrayList<>();
+        liste.add(avis1); // note 5
+        liste.add(avis2); // note -1 -> aucune note
+        liste.add(new Avis(validFilmID, 3, "Bof bof...")); // note 3
+        when(avisDAO.findAllAvisByFilmID(validFilmID)).thenReturn(liste);
+        float moyenne = (liste.get(0).getNote() + liste.get(2).getNote()) / 2;
+        assertThat(avisService.findSeuilNoteByFilmID(avis1.getFilmID()), is(moyenne));
+    }
+
+    @Test
+    public void findSeuilNoteByFilmIDWhenIdIsValidAndNotesDontExist() {
+        String validFilmID = "tt0080686";
+        List<Avis> liste = new ArrayList<>();
+        when(avisDAO.findAllAvisByFilmID(validFilmID)).thenReturn(liste);
+        assertThat(avisService.findSeuilNoteByFilmID(avis1.getFilmID()), is((float) -1));
+    }
+
+    @Test
+    public void findSeuilNoteByFilmIDWhenIdIsInvalid() {
+        String invalidFilmID = "120080686";
+        List<Avis> liste = new ArrayList<>();
+        when(avisDAO.findAllAvisByFilmID(invalidFilmID)).thenReturn(liste);
+        assertThat(avisService.findSeuilNoteByFilmID(avis1.getFilmID()), is((float) -1));
     }
 
 }

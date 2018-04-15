@@ -174,4 +174,33 @@ public class AvisDAO {
         return done;
     }
 
+    /**
+     * Renvoie la liste des films ayant au moins une note (!= -1)
+     * @return la liste filmID ayant au moins une note
+     */
+    public List<String> findAllFilmsWithAtLeastOneNoteByFilmID() {
+        List<String> liste = new ArrayList<>();
+        ResultSet res = null;
+        Connection con = null;
+        Statement stmt = null;
+        String query = "SELECT DISTINCT FilmID FROM Avis "
+                     + "WHERE note != -1";
+        try {
+            con = DataSource.getDBConnection();
+            if (con != null) {
+                stmt = con.createStatement();
+                res = stmt.executeQuery(query);
+                while (res.next()) {
+                    liste.add(res.getString("FilmID"));
+                }
+            }
+        } catch (SQLException e) {
+
+        } finally {
+            DataSource.closeResultSet(res);
+            DataSource.closeConAndStmt(con, stmt);
+        }
+        return liste;
+    }
+
 }
