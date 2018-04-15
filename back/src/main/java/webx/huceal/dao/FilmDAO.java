@@ -77,18 +77,17 @@ public class FilmDAO {
     /**
      * Récupère la liste des films correpondant à la note
      * et/ou un mot dans le commentaire.
-     * @param note note minimal des films recherchés
      * @param commentaire mot contenu dans les commentaires des films recherchés
      * @return liste des films
      */
-    public List<Film> findByAvis(final String note, final String commentaire) {
+    public List<Film> findByAvis(final String commentaire) {
         List<Film> listFilm = new ArrayList<>();
         List<String> listId = new ArrayList<>();
         ResultSet res = null;
         Connection con = null;
         Statement stmt = null;
-        String query = "SELECT FilmID FROM Avis WHERE Note >= " + note
-                + "AND LOWER(Commentaire) LIKE '%"
+        String query = "SELECT DISTINCT FilmID FROM Avis WHERE "
+                + "LOWER(Commentaire) LIKE '%"
                 + commentaire.toLowerCase() + "%'";
 
         // Récupère la liste des ID des films avec une note supérieur à @param

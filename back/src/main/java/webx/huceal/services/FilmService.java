@@ -142,7 +142,33 @@ public class FilmService {
         Object body = null;
 
         if (noteIsValid(note)) {
-            body = dao.findByAvis(note, commentaire);
+            List<Film> result = new ArrayList<>();
+
+            // On récupère les films avec moyenne >= note
+            AvisService service = new AvisService();
+            List<String> filmWithNote =
+                    service.findAllFilmsWithAtLeastOneNoteByFilmID();
+
+            for (int i = 0; i < filmWithNote.size(); i++) {
+                String filmId = filmWithNote.get(i);
+                float moy = service.findSeuilNoteByFilmID(filmId);
+                if (moy >= Integer.parseInt(note)) {
+                    result.add(dao.findById(filmId));
+                }
+            }
+
+            // Recupèe si mot dans commentaire
+            List<Film> result2 = dao.findByAvis(commentaire);
+            List<Film> result3 = new ArrayList<>();
+
+            for (int i = 0; i < result2.size(); i++) {
+                Film f = result2.get(i);
+                if (result.contains(f)) {
+                    result3.add(f);
+                }
+            }
+
+            body = result3;
             status = Response.Status.OK;
         } else {
             body = new ErrorMessage("Note invalide !");

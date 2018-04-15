@@ -1,5 +1,6 @@
 package webx.huceal.services;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -48,6 +49,19 @@ public class AvisServiceUnitTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         avisService = new AvisService(avisDAO, filmDAO);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        if (avisDAO.findAvisByID(avis1.getId()) != null) {
+            avisDAO.deleteAvisByID(avis1.getId());
+        }
+        if (avisDAO.findAvisByID(avis2.getId()) != null) {
+            avisDAO.deleteAvisByID(avis2.getId());
+        }
+        if (avisDAO.findAvisByID(avis3.getId()) != null) {
+            avisDAO.deleteAvisByID(avis3.getId());
+        }
     }
 
     @Test

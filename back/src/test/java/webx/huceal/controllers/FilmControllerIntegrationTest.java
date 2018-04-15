@@ -1,11 +1,13 @@
 package webx.huceal.controllers;
 
 import org.glassfish.grizzly.http.server.HttpServer;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+import webx.huceal.DataSource;
 import webx.huceal.ErrorMessage;
 import webx.huceal.Main;
+import webx.huceal.dao.AvisDAO;
+import webx.huceal.dao.FilmDAO;
+import webx.huceal.domains.Avis;
 import webx.huceal.domains.Film;
 import webx.huceal.services.AvisService;
 
@@ -28,6 +30,9 @@ public class FilmControllerIntegrationTest {
 	private static WebTarget target;
 	private static HttpServer server;
 
+	private static FilmDAO filmDAO;
+	private static AvisDAO avisDAO;
+
 	private static int codeOk;
 	private static int codeBadRequest;
 	private static int codeNotFound;
@@ -36,10 +41,20 @@ public class FilmControllerIntegrationTest {
 	private static ErrorMessage titleInvalid;
 	private static ErrorMessage yearInvalid;
 	private static ErrorMessage noMovie;
+    private static ErrorMessage noteInvalid;
 
 	private static Film starWars5;
 	private static List<Film> allStarWars;
 	private static List<Film> allStarWarsIn2005;
+	private static List<Film> moyenneSup3;
+	private static List<Film> moyenneSup3AndComment;
+
+	private static Avis avis1;
+	private static Avis avis2;
+	private static Avis avis3;
+	private static Avis avis4;
+	private static Avis avis5;
+	private static Avis avis6;
 
 	@BeforeClass
 	public static void startServer() {
@@ -47,7 +62,11 @@ public class FilmControllerIntegrationTest {
 		client = ClientBuilder.newClient();
 		target = client.target(Main.BASE_URI);
 
+        avisDAO = new AvisDAO();
+        filmDAO = new FilmDAO();
+
 		// Lancement du serveur
+		DataSource.setDbConnection("jdbc:h2:~/allomovieDBTests");
 		server = Main.startServer();
 
 		// Création des jeux de tests
@@ -59,6 +78,22 @@ public class FilmControllerIntegrationTest {
 		titleInvalid = new ErrorMessage("Titre invalide !");
 		yearInvalid = new ErrorMessage("Année invalide !");
 		noMovie = new ErrorMessage("Aucun film trouvé !");
+		noteInvalid = new ErrorMessage("Note invalide !");
+
+        avis1 = new Avis("tt0121766", 5, "Très bon film. Xrs.");
+        avis2 = new Avis("tt0121766", 4, "Très bon film !");
+        avis3 = new Avis("tt0121766", 4, "Cool !");
+        avis4 = new Avis("tt0080684", 3, "Bien");
+        avis5 = new Avis("tt0080684", 3, "Oui c'est un bon film.");
+        avis6 = new Avis("tt0121765", 2, "Bof bof");
+        avis6 = new Avis("tt0121765", 2, "Bien mais long");
+
+        avis1.setId(avisDAO.addAvis(avis1.getFilmID(), avis1.getNote(), avis1.getCommentaire()));
+        avis2.setId(avisDAO.addAvis(avis2.getFilmID(), avis2.getNote(), avis2.getCommentaire()));
+        avis3.setId(avisDAO.addAvis(avis3.getFilmID(), avis3.getNote(), avis3.getCommentaire()));
+        avis4.setId(avisDAO.addAvis(avis4.getFilmID(), avis4.getNote(), avis4.getCommentaire()));
+        avis5.setId(avisDAO.addAvis(avis5.getFilmID(), avis5.getNote(), avis5.getCommentaire()));
+        avis6.setId(avisDAO.addAvis(avis6.getFilmID(), avis6.getNote(), avis6.getCommentaire()));
 
 		starWars5 = new Film("tt0080684", "Star Wars: Episode V - The Empire Strikes Back",
 				"1980", "124 min", "Action, Adventure, Fantasy", "Twentieth Century Fox", "Irvin Kershner",
@@ -89,15 +124,41 @@ public class FilmControllerIntegrationTest {
 		allStarWarsIn2005.add(new Film("tt0469106", "How to Stand in Line for Star Wars", "2005", "http://ia.media-imdb.com/images/M/MV5BMTMyMTQwNjEzOV5BMl5BanBnXkFtZTcwODg4MDI1MQ@@._V1_SX300.jpg"));
 		allStarWarsIn2005.add(new Film("tt4273912", "Star Wars Episode III: Becoming Obi-Wan", "2005", "https://ia.media-imdb.com/images/M/MV5BNzExYzA4ODctMDA0Yy00M2RhLTgyNzQtM2MyMzlhNmEzZTYyXkEyXkFqcGdeQXVyMzYyMzU2OA@@._V1_SX300.jpg"));
 		allStarWarsIn2005.add(new Film("tt4528700", "Star Wars Epizod III - Imladris", "2005", "N/A"));
+
+        moyenneSup3 = new ArrayList<>();
+        moyenneSup3.add(filmDAO.findById("tt0080684"));
+        moyenneSup3.add(filmDAO.findById("tt0121766"));
+
+        moyenneSup3AndComment = new ArrayList<>();
+        moyenneSup3AndComment.add(filmDAO.findById("tt0080684"));
 	}
 
 	@AfterClass
 	public static void stopServer() {
+        if (avisDAO.findAvisByID(avis1.getId()) != null) {
+            avisDAO.deleteAvisByID(avis1.getId());
+        }
+        if (avisDAO.findAvisByID(avis2.getId()) != null) {
+            avisDAO.deleteAvisByID(avis2.getId());
+        }
+        if (avisDAO.findAvisByID(avis3.getId()) != null) {
+            avisDAO.deleteAvisByID(avis3.getId());
+        }
+        if (avisDAO.findAvisByID(avis4.getId()) != null) {
+            avisDAO.deleteAvisByID(avis4.getId());
+        }
+        if (avisDAO.findAvisByID(avis5.getId()) != null) {
+            avisDAO.deleteAvisByID(avis5.getId());
+        }
+        if (avisDAO.findAvisByID(avis6.getId()) != null) {
+            avisDAO.deleteAvisByID(avis6.getId());
+        }
+
 		server.shutdownNow();
 	}
 
 
-	@Test
+    @Test
 	public void findByIdTest() throws Exception {
 		Response response = target.path("film").path("tt0080684")
 				.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
@@ -126,6 +187,27 @@ public class FilmControllerIntegrationTest {
 		assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
 		assertThat(response.readEntity(new GenericType<List<Film>>() {}), is(allStarWarsIn2005));
 	}
+
+    @Test
+    public void findByAvisTestByNote() throws Exception {
+        Response response = target.path("film").path("avis").queryParam("note", "3")//.queryParam("commentaire", "bien")
+                .request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
+
+        assertThat(response.getStatus(), is(codeOk));
+        assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
+        assertThat(response.readEntity(new GenericType<List<Film>>() {}), is(moyenneSup3));
+    }
+
+    @Test
+    public void findByAvisTestByNoteAndComment() throws Exception {
+        Response response = target.path("film").path("avis").queryParam("note", "3")
+                .queryParam("commentaire", "bien")
+                .request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
+
+        assertThat(response.getStatus(), is(codeOk));
+        assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
+        assertThat(response.readEntity(new GenericType<List<Film>>() {}), is(moyenneSup3AndComment));
+    }
 
 
 	@Test
@@ -177,5 +259,15 @@ public class FilmControllerIntegrationTest {
 		assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
 		assertThat(response.readEntity(ErrorMessage.class), is(noMovie));
 	}
+
+    @Test
+    public void findByAvisTestWithBadNote() throws Exception {
+        Response response = target.path("film").path("avis").queryParam("note", "6")
+                .request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
+
+        assertThat(response.getStatus(), is(codeBadRequest));
+        assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
+        assertThat(response.readEntity(ErrorMessage.class), is(noteInvalid));
+    }
 
 }
