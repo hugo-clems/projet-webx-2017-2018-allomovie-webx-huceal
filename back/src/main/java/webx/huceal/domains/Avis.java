@@ -144,10 +144,20 @@ public class Avis {
         if (note != avis.note) {
             return false;
         }
-        if (filmID != null ? !filmID.equals(avis.filmID) : avis.filmID != null) {
-            return false;
+        if (filmID != null) {
+            if (!filmID.equals(avis.filmID)) {
+                return false;
+            }
+        } else {
+            if (avis.filmID != null) {
+                return false;
+            }
         }
-        return commentaire != null ? commentaire.equals(avis.commentaire) : avis.commentaire == null;
+        if (commentaire != null) {
+            return commentaire.equals(avis.commentaire);
+        } else {
+            return avis.commentaire == null;
+        }
     }
 
     /**
@@ -160,10 +170,35 @@ public class Avis {
         final int trenteDeux = 32;
 
         int result = (int) (id ^ (id >>> trenteDeux));
-        result = trenteEtUn * result + (filmID != null ? filmID.hashCode() : 0);
+
+        if (filmID != null) {
+            result = trenteEtUn * result + filmID.hashCode();
+        } else {
+            result = trenteEtUn * result;
+        }
+
         result = trenteEtUn * result + note;
-        result = trenteEtUn * result + (commentaire != null ? commentaire.hashCode() : 0);
+
+        if (commentaire != null) {
+            result = trenteEtUn * result + commentaire.hashCode();
+        } else {
+            result = trenteEtUn * result;
+        }
+
         return result;
     }
 
+    /**
+     * Affiche un Avis.
+     * @return l'avis en chaîne de caractères
+     */
+    @Override
+    public final String toString() {
+        return "Avis{"
+                + "id=" + id
+                + ", filmID='" + filmID + '\''
+                + ", note=" + note
+                + ", commentaire='" + commentaire + '\''
+                + '}';
+    }
 }

@@ -307,37 +307,111 @@ public class Film {
 
         Film film = (Film) o;
 
-        if (filmId != null ? !filmId.equals(film.filmId) : film.filmId != null) {
-            return false;
+        if (filmId != null) {
+            if (!filmId.equals(film.filmId)) {
+                return false;
+            }
+        } else {
+            if (film.filmId != null) {
+                return false;
+            }
         }
-        if (titre != null ? !titre.equals(film.titre) : film.titre != null) {
-            return false;
+
+        if (titre != null) {
+            if (!titre.equals(film.titre)) {
+                return false;
+            }
+        } else {
+            if (film.titre != null) {
+                return false;
+            }
         }
-        if (anneeSortie != null ? !anneeSortie.equals(film.anneeSortie) : film.anneeSortie != null) {
-            return false;
+
+        if (anneeSortie != null) {
+            if (!anneeSortie.equals(film.anneeSortie)) {
+                return false;
+            }
+        } else {
+            if (film.anneeSortie != null) {
+                return false;
+            }
         }
-        if (duree != null ? !duree.equals(film.duree) : film.duree != null) {
-            return false;
+
+        if (duree != null) {
+            if (!duree.equals(film.duree)) {
+                return false;
+            }
+        } else {
+            if (film.duree != null) {
+                return false;
+            }
         }
-        if (genre != null ? !genre.equals(film.genre) : film.genre != null) {
-            return false;
+
+        if (genre != null) {
+            if (!genre.equals(film.genre)) {
+                return false;
+            }
+        } else {
+            if (film.genre != null) {
+                return false;
+            }
         }
-        if (studio != null ? !studio.equals(film.studio) : film.studio != null) {
-            return false;
+
+        if (studio != null) {
+            if (!studio.equals(film.studio)) {
+                return false;
+            }
+        } else {
+            if (film.studio != null) {
+                return false;
+            }
         }
-        if (producteur != null ? !producteur.equals(film.producteur) : film.producteur != null) {
-            return false;
+
+        if (producteur != null) {
+            if (!producteur.equals(film.producteur)) {
+                return false;
+            }
+        } else {
+            if (film.producteur != null) {
+                return false;
+            }
         }
-        if (scenariste != null ? !scenariste.equals(film.scenariste) : film.scenariste != null) {
-            return false;
+
+        if (scenariste != null) {
+            if (!scenariste.equals(film.scenariste)) {
+                return false;
+            }
+        } else {
+            if (film.scenariste != null) {
+                return false;
+            }
         }
-        if (acteurs != null ? !acteurs.equals(film.acteurs) : film.acteurs != null) {
-            return false;
+
+        if (acteurs != null) {
+            if (!acteurs.equals(film.acteurs)) {
+                return false;
+            }
+        } else {
+            if (film.acteurs != null) {
+                return false;
+            }
         }
-        if (description != null ? !description.equals(film.description) : film.description != null) {
-            return false;
+
+        if (description != null) {
+            if (!description.equals(film.description)) {
+                return false;
+            }
+        } else {
+            if (film.description != null) {
+                return false;
+            }
         }
-        return image != null ? image.equals(film.image) : film.image == null;
+
+        if (image != null) {
+            return image.equals(film.image);
+        } else {
+            return film.image == null;
+        }
     }
 
     /**
@@ -347,20 +421,79 @@ public class Film {
     @Override
     public final int hashCode() {
         final int trenteEtUn = 31;
-        int result = getFilmId() != null ? getFilmId().hashCode() : 0;
-        result = trenteEtUn * result + (getTitre() != null ? getTitre().hashCode() : 0);
-        result = trenteEtUn * result + (getAnneeSortie() != null ? getAnneeSortie().hashCode() : 0);
-        result = trenteEtUn * result + (getDuree() != null ? getDuree().hashCode() : 0);
-        result = trenteEtUn * result + (getGenre() != null ? getGenre().hashCode() : 0);
-        result = trenteEtUn * result + (getStudio() != null ? getStudio().hashCode() : 0);
-        result = trenteEtUn * result + (getProducteur() != null ? getProducteur().hashCode() : 0);
-        result = trenteEtUn * result + (getScenariste() != null ? getScenariste().hashCode() : 0);
-        result = trenteEtUn * result + (getActeurs() != null ? getActeurs().hashCode() : 0);
-        result = trenteEtUn * result + (getDescription() != null ? getDescription().hashCode() : 0);
-        result = trenteEtUn * result + (getImage() != null ? getImage().hashCode() : 0);
+
+        int result = 0;
+        if (getFilmId() != null) {
+            result = getFilmId().hashCode();
+        }
+
+        if (getTitre() != null) {
+            result = trenteEtUn * result + getTitre().hashCode();
+        } else {
+            result = trenteEtUn * result;
+        }
+
+        if (getAnneeSortie() != null) {
+            result = trenteEtUn * result + getAnneeSortie().hashCode();
+        } else {
+            result = trenteEtUn * result;
+        }
+
+        if (getDuree() != null) {
+            result = trenteEtUn * result + getDuree().hashCode();
+        } else {
+            result = trenteEtUn * result;
+        }
+
+        if (getGenre() != null) {
+            result = trenteEtUn * result + getGenre().hashCode();
+        } else {
+            result = trenteEtUn * result;
+        }
+
+        if (getStudio() != null) {
+            result = trenteEtUn * result + getStudio().hashCode();
+        } else {
+            result = trenteEtUn * result;
+        }
+
+        if (getProducteur() != null) {
+            result = trenteEtUn * result + getProducteur().hashCode();
+        } else {
+            result = trenteEtUn * result;
+        }
+
+        if (getScenariste() != null) {
+            result = trenteEtUn * result + getScenariste().hashCode();
+        } else {
+            result = trenteEtUn * result;
+        }
+
+        if (getActeurs() != null) {
+            result = trenteEtUn * result + getActeurs().hashCode();
+        } else {
+            result = trenteEtUn * result;
+        }
+
+        if (getDescription() != null) {
+            result = trenteEtUn * result + getDescription().hashCode();
+        } else {
+            result = trenteEtUn * result;
+        }
+
+        if (getImage() != null) {
+            result = trenteEtUn * result + getImage().hashCode();
+        } else {
+            result = trenteEtUn * result;
+        }
+
         return result;
     }
 
+    /**
+     * Affiche un Film.
+     * @return le film en chaîne de caractères
+     */
     @Override
     public final String toString() {
         return "Film{"
