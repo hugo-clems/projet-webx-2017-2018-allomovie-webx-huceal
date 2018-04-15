@@ -189,7 +189,6 @@ public class AvisDAOUnitTest {
     @Test
     public void findAllFilmsWithAtLeastOneNoteByFilmIDWhenNoFilm() {
         avisDAO.deleteAvisByID(avis1.getId());
-        avisDAO.deleteAvisByID(avis2.getId());
         avisDAO.deleteAvisByID(avis3.getId());
         List<String> liste = new ArrayList<>();
         assertThat(avisDAO.findAllFilmsWithAtLeastOneNoteByFilmID(), is(liste));
