@@ -195,4 +195,22 @@ public class AvisDAOUnitTest {
         assertThat(avisDAO.findAllFilmsWithAtLeastOneNoteByFilmID(), is(liste));
     }
 
+    @Test
+    public void findAllAvisWhenExist() {
+        List<Avis> liste = new ArrayList<>();
+        liste.add(avis1);
+        liste.add(avis2);
+        liste.add(avis3);
+        assertThat(avisDAO.findAllAvis(), is(liste));
+    }
+
+    @Test
+    public void findAllAvisWhenNoAvis() {
+        avisDAO.deleteAvisByID(avis1.getId());
+        avisDAO.deleteAvisByID(avis2.getId());
+        avisDAO.deleteAvisByID(avis3.getId());
+        List<Avis> liste = new ArrayList<>();
+        assertThat(avisDAO.findAllAvis(), is(liste));
+    }
+
 }

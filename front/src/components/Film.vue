@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div><br/>
     <div class="container">
       <div v-if="film" class="row">
         <div class="col-lg-3">
@@ -9,7 +9,7 @@
           <h1>{{film.titre}}</h1>
           <ul class="info">
             <li><b>Année de sortie :</b> {{film.anneeSortie}}</li>
-            <li><b>Moyenne :</b><span v-html="afficherNote(film.moyenne)"></span>{{film.moyenne}}</li>
+            <li><b>Moyenne :</b><span v-html="afficherNote(film.moyenne)"></span> {{film.moyenne}}</li>
             <li><b>Durée :</b> {{film.duree}}</li>
             <li><b>Genre :</b> {{film.genre}}</li>
             <li><b>Producteur :</b> {{film.producteur}}</li>
@@ -46,14 +46,12 @@
             <div class="from-group row">
               <div class="form-check">
                 <input type="checkbox"  class="form-check-input" id="check" v-model="formAvis.haveNote">
-                <label class="form-check-label" for="check">Voulez-vous laisser une note?</label>
+                <label class="form-check-label" for="check">Voulez-vous laisser une note ?</label>
               </div>
             </div>
             <div class="form-group row" v-if="formAvis.haveNote === true">
               <label for="note" class="col-sm-3 col-form-label">Note</label>
-              <div class="col-sm-9">
                 <star-rating v-model="formAvis.note" id="note" :star-size="20" :show-rating="false" active-color="#42b983"></star-rating>
-              </div>
              </div>
             <div class="form-group row">
               <label for="commentaire" class="col-sm-3 col-form-label">Commentaire</label>

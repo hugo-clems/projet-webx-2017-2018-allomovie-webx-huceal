@@ -18,6 +18,7 @@ import javax.ws.rs.core.UriInfo;
 /**
  * Contrôle l'accès aux Avis.
  *
+ * GET / - Récupère tous les avis
  * GET /{id} - Récupère un avis via son identifiant
  * GET /film/{id} - Récupère tous les avis d'un film via son identifiant
  * POST - Ajoute un commentaire à la base de données (note, commentaire)
@@ -59,6 +60,15 @@ public class AvisController {
     @Path("/{id}")
     public final Response findAvisByID(@PathParam("id") final long id) {
         return service.findAvisByID(id);
+    }
+
+    /**
+     * Récupère tous les avis existants.
+     * @return Response Json
+     */
+    @GET
+    public final Response findAllAvis() {
+        return service.findAllAvis();
     }
 
     /**

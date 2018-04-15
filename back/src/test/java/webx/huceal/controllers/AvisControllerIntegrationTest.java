@@ -243,4 +243,32 @@ public class AvisControllerIntegrationTest {
         assertThat(response.readEntity(ErrorMessage.class), is(erreur));
     }
 
+    @Test
+    public void findAllAvisWhenExist() {
+        List<Avis> liste = new ArrayList<>();
+        liste.add(avis1);
+        liste.add(avis2);
+        liste.add(avis3);
+        response = target.request()
+                .accept(MediaType.APPLICATION_JSON)
+                .get();
+        assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
+        assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
+        assertThat(response.readEntity(new GenericType<List<Avis>>() {}), is(liste));
+    }
+
+    @Test
+    public void findAllAvisWhenNoAvis() {
+        avisDAO.deleteAvisByID(avis1.getId());
+        avisDAO.deleteAvisByID(avis2.getId());
+        avisDAO.deleteAvisByID(avis3.getId());
+        response = target.request()
+                .accept(MediaType.APPLICATION_JSON)
+                .get();
+        assertThat(response.getStatus(), is(Response.Status.NOT_FOUND.getStatusCode()));
+        assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
+        erreur.setMessage("Aucun avis trouvé.");
+        assertThat(response.readEntity(ErrorMessage.class), is(erreur));
+    }
+
 }

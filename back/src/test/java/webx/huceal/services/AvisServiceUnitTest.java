@@ -185,28 +185,27 @@ public class AvisServiceUnitTest {
 
     @Test
     public void addAvisWhenAvisIsValid() {
-        UriBuilder uriBuilder = UriBuilder.fromUri("http://localhost:8080/allomovie/avis");
+        UriBuilder uriBuilder = UriBuilder.fromUri("http://localhost:8080/allomovie/avis/" + avis3.getId());
         when(filmDAO.findById(anyString())).thenReturn(film);
         when(uriInfo.getBaseUriBuilder()).thenReturn(uriBuilder);
         // note is between 0 and 5 (entered) and commentaire is not empty
         when(avisDAO.addAvis(avis1.getFilmID(), avis1.getNote(), avis1.getCommentaire())).thenReturn(avis3.getId());
-        response = avisService.addAvis(avis3.getFilmID(), avis3.getNote(), avis3.getCommentaire(), uriInfo);
+        response = avisService.addAvis(avis1.getFilmID(), avis1.getNote(), avis1.getCommentaire(), uriInfo);
         assertThat(response.getStatus(), is(Response.Status.CREATED.getStatusCode()));
         assertThat(response.hasEntity(), is(false));
         assertThat(response.getLocation().toString(), is(uriBuilder.toString()));
         // note is not entered (= -1, optionnal parameter) and commentaire is not empty
         when(avisDAO.addAvis(avis1.getFilmID(), -1, avis1.getCommentaire())).thenReturn(avis3.getId());
-        response = avisService.addAvis(avis3.getFilmID(), avis3.getNote(), avis3.getCommentaire(), uriInfo);
+        response = avisService.addAvis(avis1.getFilmID(), -1, avis1.getCommentaire(), uriInfo);
         assertThat(response.getStatus(), is(Response.Status.CREATED.getStatusCode()));
         assertThat(response.hasEntity(), is(false));
         assertThat(response.getLocation().toString(), is(uriBuilder.toString()));
         // note is between 0 and 5 (entered) and commentaire empty (optionnal parameter)
         when(avisDAO.addAvis(avis1.getFilmID(), avis1.getNote(), "")).thenReturn(avis3.getId());
-        response = avisService.addAvis(avis3.getFilmID(), avis3.getNote(), avis3.getCommentaire(), uriInfo);
+        response = avisService.addAvis(avis1.getFilmID(), avis1.getNote(), "", uriInfo);
         assertThat(response.getStatus(), is(Response.Status.CREATED.getStatusCode()));
         assertThat(response.hasEntity(), is(false));
         assertThat(response.getLocation().toString(), is(uriBuilder.toString()));
-
     }
 
     @Test
@@ -305,6 +304,30 @@ public class AvisServiceUnitTest {
         List<String> liste = new ArrayList<>();
         when(avisDAO.findAllFilmsWithAtLeastOneNoteByFilmID()).thenReturn(liste);
         assertThat(avisService.findAllFilmsWithAtLeastOneNoteByFilmID(), is(liste));
+    }
+
+    @Test
+    public void findAllAvisWhenExist() {
+        List<Avis> liste = new ArrayList<>();
+        liste.add(avis1);
+        liste.add(avis2);
+        liste.add(avis3);
+        when(avisDAO.findAllAvis()).thenReturn(liste);
+        response = avisService.findAllAvis();
+        assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
+        assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
+        assertThat((List<Avis>) response.getEntity(), is(liste));
+    }
+
+    @Test
+    public void findAllAvisWhenNoAvis() {
+        List<Avis> liste = new ArrayList<>();
+        when(avisDAO.findAllAvis()).thenReturn(liste);
+        response = avisService.findAllAvis();
+        assertThat(response.getStatus(), is(Response.Status.NOT_FOUND.getStatusCode()));
+        assertThat(response.getMediaType(), is(MediaType.APPLICATION_JSON_TYPE));
+        erreur.setMessage("Aucun avis trouvé.");
+        assertThat((ErrorMessage) response.getEntity(), is(erreur));
     }
 
 }

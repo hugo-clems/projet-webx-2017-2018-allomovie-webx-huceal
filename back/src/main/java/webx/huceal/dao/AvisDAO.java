@@ -203,4 +203,35 @@ public class AvisDAO {
         return liste;
     }
 
+    /**
+     * Renvoie tous les avis de la base de données..
+     * @return la liste des avis
+     */
+    public List<Avis> findAllAvis() {
+        List<Avis> liste = new ArrayList<>();
+        ResultSet res = null;
+        Connection con = null;
+        Statement stmt = null;
+        String query = "SELECT * FROM Avis";
+        try {
+            con = DataSource.getDBConnection();
+            if (con != null) {
+                stmt = con.createStatement();
+                res = stmt.executeQuery(query);
+                while (res.next()) {
+                    liste.add(new Avis(res.getLong("id"),
+                        res.getString("FilmID"),
+                        res.getInt("Note"),
+                        res.getString("Commentaire")));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DataSource.closeResultSet(res);
+            DataSource.closeConAndStmt(con, stmt);
+        }
+        return liste;
+    }
+
 }

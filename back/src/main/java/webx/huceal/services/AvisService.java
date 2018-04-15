@@ -275,6 +275,28 @@ public class AvisService {
     }
 
     /**
+     * Renvoie tous les avis de la base de données.
+     * @return la liste de tous les avis trouvés ou un message si aucun
+     */
+    public final Response findAllAvis() {
+        Response.Status status = Response.Status.OK;
+        List<Avis> liste = avisDAO.findAllAvis();
+        ErrorMessage erreur = new ErrorMessage();
+        if (liste.isEmpty()) {
+            status = Response.Status.NOT_FOUND;
+            erreur.setMessage("Aucun avis trouvé.");
+            return Response.status(status)
+                    .type(MediaType.APPLICATION_JSON)
+                    .entity(erreur)
+                    .build();
+        }
+        return Response.status(status)
+                .type(MediaType.APPLICATION_JSON)
+                .entity(liste)
+                .build();
+    }
+
+    /**
      * Vérifie que la note donnée est valide.
      * @param note la note reçue
      * @return Boolean à true si la note est valide, false sinon
