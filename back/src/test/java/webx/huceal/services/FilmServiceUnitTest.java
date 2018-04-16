@@ -46,6 +46,7 @@ public class FilmServiceUnitTest {
 	private static Response badTitle;
 	private static Response badYear;
 	private static Response noMovie;
+	private static Response noteInvalide;
 	private static List<Film> emptyList;
 	private static Avis avis1;
 	private static Avis avis2;
@@ -184,6 +185,10 @@ public class FilmServiceUnitTest {
 				.type(MediaType.APPLICATION_JSON)
 				.entity(new ErrorMessage("Aucun film trouvé !")).build();
 
+		noteInvalide = Response.status(Response.Status.BAD_REQUEST)
+				.type(MediaType.APPLICATION_JSON)
+				.entity(new ErrorMessage("Note invalide !")).build();
+
 		emptyList = new ArrayList<>();
 	}
 
@@ -292,6 +297,26 @@ public class FilmServiceUnitTest {
 	}
 
 	@Test
+	public void findByTitleAndYearWithOldYear() throws Exception {
+		when(filmDAO.findByTitleAndYear("star+wars", "205")).thenReturn(emptyList);
+		Response response = filmService.findByTitleAndYear("star+wars", "205");
+		assertThat(response.getStatus(), is(badYear.getStatus()));
+		assertThat(response.getHeaders(), is(badYear.getHeaders()));
+		assertThat(response.getEntity(), is(badYear.getEntity()));
+	}
+
+	@Test
+	public void findByTitleWithNoMovie() throws Exception {
+		when(filmDAO.findByTitle("sqdlksjdqsdlsqjdlkqsdjqsldkqsd"))
+				.thenReturn(emptyList);
+		Response response =
+				filmService.findByTitle("sqdlksjdqsdlsqjdlkqsdjqsldkqsd");
+		assertThat(response.getStatus(), is(noMovie.getStatus()));
+		assertThat(response.getHeaders(), is(noMovie.getHeaders()));
+		assertThat(response.getEntity(), is(noMovie.getEntity()));
+	}
+
+	@Test
 	public void findByTitleAndYearWithNoMovie() throws Exception {
 		when(filmDAO.findByTitleAndYear("sqdlksjdqsdlsqjdlkqsdjqsldkqsd", "2005"))
 				.thenReturn(emptyList);
@@ -300,6 +325,30 @@ public class FilmServiceUnitTest {
 		assertThat(response.getStatus(), is(noMovie.getStatus()));
 		assertThat(response.getHeaders(), is(noMovie.getHeaders()));
 		assertThat(response.getEntity(), is(noMovie.getEntity()));
+	}
+
+	@Test
+	public void findByAvisWithLowNote() throws Exception {
+		Response response = filmService.findByAvis("-1", "");
+		assertThat(response.getStatus(), is(noteInvalide.getStatus()));
+		assertThat(response.getHeaders(), is(noteInvalide.getHeaders()));
+		assertThat(response.getEntity(), is(noteInvalide.getEntity()));
+	}
+
+	@Test
+	public void findByAvisWithHighNote() throws Exception {
+		Response response = filmService.findByAvis("6", "");
+		assertThat(response.getStatus(), is(noteInvalide.getStatus()));
+		assertThat(response.getHeaders(), is(noteInvalide.getHeaders()));
+		assertThat(response.getEntity(), is(noteInvalide.getEntity()));
+	}
+
+	@Test
+	public void findByAvisWithInvalidNote() throws Exception {
+		Response response = filmService.findByAvis("trois", "");
+		assertThat(response.getStatus(), is(noteInvalide.getStatus()));
+		assertThat(response.getHeaders(), is(noteInvalide.getHeaders()));
+		assertThat(response.getEntity(), is(noteInvalide.getEntity()));
 	}
 
 }

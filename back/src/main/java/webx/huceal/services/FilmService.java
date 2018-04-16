@@ -167,7 +167,7 @@ public class FilmService {
      * @param note moyenne minimale
      * @return liste des films
      */
-    private List<Film> getFilmWithMinNote(String note) {
+    private List<Film> getFilmWithMinNote(final String note) {
         List<Film> result = new ArrayList<>();
         List<String> filmWithNote;
 
@@ -194,7 +194,7 @@ public class FilmService {
      * @param l2 liste à fusioner
      * @return listes fusionées
      */
-    private List<Film> fusionList(List<Film> l1, List<Film> l2) {
+    private List<Film> fusionList(final List<Film> l1, final List<Film> l2) {
         List<Film> result = new ArrayList<>();
 
         // Pour chaque film de l2
