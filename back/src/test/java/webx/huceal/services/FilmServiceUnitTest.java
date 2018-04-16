@@ -6,7 +6,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import webx.huceal.ErrorMessage;
+import webx.huceal.dao.AvisDAO;
 import webx.huceal.dao.FilmDAO;
+import webx.huceal.domains.Avis;
 import webx.huceal.domains.Film;
 
 import javax.ws.rs.core.MediaType;
@@ -24,18 +26,42 @@ public class FilmServiceUnitTest {
 	@Mock
 	private FilmDAO filmDAO;
 
+	@Mock
+	private AvisDAO avisDAO;
+
 	private static FilmService filmService;
+	private static AvisService avisService;
+
 	private static Film starWarsV;
+	private static Film starWarsIII;
+	private static Film starWarsII;
 	private static List<Film> allStarWars;
 	private static List<Film> allStarWarsIn2005;
 	private static Response responseSW5;
 	private static Response responseAllSW;
 	private static Response responseAllSWIn2005;
+	private static Response responseNoteSup3;
+	private static Response responseCommentBien;
 	private static Response badId;
 	private static Response badTitle;
 	private static Response badYear;
 	private static Response noMovie;
 	private static List<Film> emptyList;
+	private static Avis avis1;
+	private static Avis avis2;
+	private static Avis avis3;
+	private static Avis avis4;
+	private static Avis avis5;
+	private static Avis avis6;
+	private static Avis avis7;
+	private static List<Avis> avisSWV;
+	private static List<Avis> avisSWIII;
+	private static List<Avis> avisSWII;
+	private static List<String> allFilmWithAtLeastOneNoteByFilmID;
+	private static List<Film> allFilmWithAtLeastOneNote;
+	private static List<Film> allFilmBien;
+	private static List<Film> filmWithNoteSup3;
+	private static List<Film> filmWithCommentBienAndNoteSup3;
 
 	@BeforeClass
 	public static void setUpAll() throws Exception {
@@ -45,6 +71,58 @@ public class FilmServiceUnitTest {
 				"Leigh Brackett (screenplay by), Lawrence Kasdan (screenplay by), George Lucas (story by)",
 				"Mark Hamill, Harrison Ford, Carrie Fisher, Billy Dee Williams", "After the rebels are brutally overpowered by the Empire on the ice planet Hoth, Luke Skywalker begins Jedi training with Yoda, while his friends are pursued by Darth Vader.",
 				"https://ia.media-imdb.com/images/M/MV5BYmU1NDRjNDgtMzhiMi00NjZmLTg5NGItZDNiZjU5NTU4OTE0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg", (new AvisService()).findSeuilNoteByFilmID("tt0080684"));
+
+		starWarsIII = new Film("tt0121766", "Star Wars: Episode III - Revenge of the Sith",
+				"2005", "140 min", "Action, Adventure, Fantasy", "20th Century Fox", "George Lucas",
+				"George Lucas",
+				"Ewan McGregor, Natalie Portman, Hayden Christensen, Ian McDiarmid", "Three years into the Clone Wars, the Jedi rescue Palpatine from Count Dooku. As Obi-Wan pursues a new threat, Anakin acts as a double agent between the Jedi Council and Palpatine and is lured into a sinister plan to rule the galaxy.",
+				"https://images-na.ssl-images-amazon.com/images/M/MV5BNTc4MTc3NTQ5OF5BMl5BanBnXkFtZTcwOTg0NjI4NA@@._V1_SX300.jpg", (new AvisService()).findSeuilNoteByFilmID("tt0121766"));
+
+		starWarsII = new Film("tt0121765", "Star Wars: Episode II - Attack of the Clones",
+				"2002", "142 min", "Action, Adventure, Fantasy", "20th Century Fox", "George Lucas",
+				"George Lucas (screenplay by), Jonathan Hales (screenplay by), George Lucas (story by)",
+				"Ewan McGregor, Natalie Portman, Hayden Christensen, Christopher Lee", "Ten years after initially meeting, Anakin Skywalker shares a forbidden romance with Padmé Amidala, while Obi-Wan investigates an assassination attempt on the senator and discovers a secret clone army crafted for the Jedi.",
+				"https://ia.media-imdb.com/images/M/MV5BOWNkZmVjODAtNTFlYy00NTQwLWJhY2UtMmFmZTkyOWJmZjZiL2ltYWdlL2ltYWdlXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_SX300.jpg", (new AvisService()).findSeuilNoteByFilmID("tt0121766"));
+
+		avis1 = new Avis("tt0121766", 5, "Très bon film. Xrs.");
+		avis2 = new Avis("tt0121766", 4, "Très bon film !");
+		avis3 = new Avis("tt0121766", 4, "Cool !");
+		avis4 = new Avis("tt0080684", 3, "Bien");
+		avis5 = new Avis("tt0080684", 3, "Oui c'est un bon film.");
+		avis6 = new Avis("tt0121765", 2, "Bof bof");
+		avis7 = new Avis("tt0121765", 2, "Bien mais long");
+
+		avisSWIII = new ArrayList<>();
+		avisSWIII.add(avis1);
+		avisSWIII.add(avis2);
+		avisSWIII.add(avis3);
+		avisSWV = new ArrayList<>();
+		avisSWV.add(avis4);
+		avisSWV.add(avis5);
+		avisSWII = new ArrayList<>();
+		avisSWII.add(avis6);
+		avisSWII.add(avis7);
+
+		allFilmWithAtLeastOneNoteByFilmID = new ArrayList<>();
+		allFilmWithAtLeastOneNoteByFilmID.add("tt0121766");
+		allFilmWithAtLeastOneNoteByFilmID.add("tt0080684");
+		allFilmWithAtLeastOneNoteByFilmID.add("tt0121765");
+
+		allFilmWithAtLeastOneNote = new ArrayList<>();
+		allFilmWithAtLeastOneNote.add(starWarsV);
+		allFilmWithAtLeastOneNote.add(starWarsIII);
+		allFilmWithAtLeastOneNote.add(starWarsII);
+
+		allFilmBien = new ArrayList<>();
+		allFilmBien.add(starWarsV);
+		allFilmBien.add(starWarsII);
+
+		filmWithNoteSup3 = new ArrayList<>();
+		filmWithNoteSup3.add(starWarsV);
+		filmWithNoteSup3.add(starWarsIII);
+
+		filmWithCommentBienAndNoteSup3 = new ArrayList<>();
+		filmWithCommentBienAndNoteSup3.add(starWarsV);
 
 		allStarWars = new ArrayList<>();
 		allStarWars.add(new Film("tt0076759", "Star Wars: Episode IV - A New Hope", "1977", "https://ia.media-imdb.com/images/M/MV5BNzVlY2MwMjktM2E4OS00Y2Y3LWE3ZjctYzhkZGM3YzA1ZWM2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg"));
@@ -82,6 +160,14 @@ public class FilmServiceUnitTest {
 				.type(MediaType.APPLICATION_JSON)
 				.entity(allStarWarsIn2005).build();
 
+		responseNoteSup3 = Response.status(Response.Status.OK)
+				.type(MediaType.APPLICATION_JSON)
+				.entity(filmWithNoteSup3).build();
+
+		responseCommentBien = Response.status(Response.Status.OK)
+				.type(MediaType.APPLICATION_JSON)
+				.entity(filmWithCommentBienAndNoteSup3).build();
+
 		badId = Response.status(Response.Status.BAD_REQUEST)
 				.type(MediaType.APPLICATION_JSON)
 				.entity(new ErrorMessage("Identifiant invalide !")).build();
@@ -104,7 +190,8 @@ public class FilmServiceUnitTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		filmService = new FilmService(filmDAO);
+		filmService = new FilmService(filmDAO, avisDAO);
+		avisService = new AvisService(avisDAO, filmDAO);
 	}
 
 	@Test
@@ -132,6 +219,40 @@ public class FilmServiceUnitTest {
 		assertThat(response.getStatus(), is(responseAllSWIn2005.getStatus()));
 		assertThat(response.getHeaders(), is(responseAllSWIn2005.getHeaders()));
 		assertThat(response.getEntity(), is(responseAllSWIn2005.getEntity()));
+	}
+
+	@Test
+	public void findByAvisByNote() throws Exception {
+		when(filmDAO.findById("tt0121766")).thenReturn(starWarsIII);
+		when(filmDAO.findById("tt0080684")).thenReturn(starWarsV);
+		when(filmDAO.findById("tt0121765")).thenReturn(starWarsII);
+		when(avisDAO.findAllFilmsWithAtLeastOneNoteByFilmID()).thenReturn(allFilmWithAtLeastOneNoteByFilmID);
+		when(avisDAO.findAllAvisByFilmID("tt0121766")).thenReturn(avisSWIII);
+		when(avisDAO.findAllAvisByFilmID("tt0080684")).thenReturn(avisSWV);
+		when(avisDAO.findAllAvisByFilmID("tt0121765")).thenReturn(avisSWII);
+		when(filmDAO.findByAvis("")).thenReturn(allFilmWithAtLeastOneNote);
+
+		Response response = filmService.findByAvis("3", "");
+		assertThat(response.getStatus(), is(responseNoteSup3.getStatus()));
+		assertThat(response.getHeaders(), is(responseNoteSup3.getHeaders()));
+		assertThat(response.getEntity(), is(responseNoteSup3.getEntity()));
+	}
+
+	@Test
+	public void findByAvisByNoteAndComment() throws Exception {
+		when(filmDAO.findById("tt0121766")).thenReturn(starWarsIII);
+		when(filmDAO.findById("tt0080684")).thenReturn(starWarsV);
+		when(filmDAO.findById("tt0121765")).thenReturn(starWarsII);
+		when(avisDAO.findAllFilmsWithAtLeastOneNoteByFilmID()).thenReturn(allFilmWithAtLeastOneNoteByFilmID);
+		when(avisDAO.findAllAvisByFilmID("tt0121766")).thenReturn(avisSWIII);
+		when(avisDAO.findAllAvisByFilmID("tt0080684")).thenReturn(avisSWV);
+		when(avisDAO.findAllAvisByFilmID("tt0121765")).thenReturn(avisSWII);
+		when(filmDAO.findByAvis("bien")).thenReturn(allFilmBien);
+
+		Response response = filmService.findByAvis("3", "bien");
+		assertThat(response.getStatus(), is(responseCommentBien.getStatus()));
+		assertThat(response.getHeaders(), is(responseCommentBien.getHeaders()));
+		assertThat(response.getEntity(), is(responseCommentBien.getEntity()));
 	}
 
 	@Test

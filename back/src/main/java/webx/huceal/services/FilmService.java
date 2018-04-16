@@ -1,6 +1,7 @@
 package webx.huceal.services;
 
 import webx.huceal.ErrorMessage;
+import webx.huceal.dao.AvisDAO;
 import webx.huceal.dao.FilmDAO;
 import webx.huceal.domains.Film;
 
@@ -18,6 +19,11 @@ public class FilmService {
      * Le DAO de Film.
      */
     private FilmDAO dao = new FilmDAO();
+
+    /**
+     * Service Avis.
+     */
+    private AvisService avisService;
 
     /**
      * Note minimale.
@@ -43,15 +49,17 @@ public class FilmService {
      * Constructeur par défaut.
      */
     public FilmService() {
-        // Empty
+        avisService = new AvisService();
     }
 
     /**
      * Création d'un nouveau service.
-     * @param newDao le dao
+     * @param filmDAO la dao des films
+     * @param avisDAO la dao des avis
      */
-    public FilmService(final FilmDAO newDao) {
-        this.dao = newDao;
+    public FilmService(final FilmDAO filmDAO, final AvisDAO avisDAO) {
+        this.dao = filmDAO;
+        this.avisService = new AvisService(avisDAO, filmDAO);
     }
 
     /**
@@ -161,18 +169,17 @@ public class FilmService {
      */
     private List<Film> getFilmWithMinNote(String note) {
         List<Film> result = new ArrayList<>();
-        AvisService service = new AvisService();
         List<String> filmWithNote;
 
         // On récupère tous les films qui ont des avis
-        filmWithNote = service.findAllFilmsWithAtLeastOneNoteByFilmID();
+        filmWithNote = avisService.findAllFilmsWithAtLeastOneNoteByFilmID();
 
         // Pour chaque film avec un avis
         // Si sa moyenne est supérieur à la note
         // Alors on l'ajoute à la liste
         for (int i = 0; i < filmWithNote.size(); i++) {
             String filmId = filmWithNote.get(i);
-            float moy = service.findSeuilNoteByFilmID(filmId);
+            float moy = avisService.findSeuilNoteByFilmID(filmId);
             if (moy >= Integer.parseInt(note)) {
                 result.add(dao.findById(filmId));
             }
