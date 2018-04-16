@@ -9,7 +9,7 @@
           <h1>{{film.titre}}</h1>
           <ul class="info">
             <li><b>Année de sortie :</b> {{film.anneeSortie}}</li>
-            <li><b>Moyenne :</b><span v-html="afficherNote(film.moyenne)"></span> {{film.moyenne}}</li>
+            <li><b>Moyenne :</b><div v-if="film.moyenne !== -1"><span v-html="afficherNote(film.moyenne)"></span>{{film.moyenne}}</div><span v-if="film.moyenne === -1"> N/A</span></li>
             <li><b>Durée :</b> {{film.duree}}</li>
             <li><b>Genre :</b> {{film.genre}}</li>
             <li><b>Producteur :</b> {{film.producteur}}</li>
@@ -32,7 +32,14 @@
         </div>
       </div>
     </div>
-    <div class="container next-container">
+    <div class="next-container next-container">
+      <div class="col-lg-6 offset-lg-4">
+        <div class="alert alert-danger" v-for="error of errors " :key="error.id" role="alert">
+          {{error}}
+        </div>
+      </div>
+    </div>
+    <div v-if="film !== null" class="container next-container">
       <div class="row ">
         <div class="col-lg-6  offset-lg-4">
           <div class="alert alert-danger" v-for="error of errors " :key="error.id" role="alert">
@@ -125,7 +132,7 @@ export default {
           this.film = response.data
         })
         .catch(e => {
-          this.errors.push(e)
+          this.errors.push(e.response.data.message)
         })
     },
     afficherNote (note) {
