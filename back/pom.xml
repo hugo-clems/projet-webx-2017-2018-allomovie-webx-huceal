@@ -153,6 +153,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludes>webx/huceal/domains/**/*</excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
