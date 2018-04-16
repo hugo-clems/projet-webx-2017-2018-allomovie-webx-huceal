@@ -351,4 +351,21 @@ public class FilmServiceUnitTest {
 		assertThat(response.getEntity(), is(noteInvalide.getEntity()));
 	}
 
+	@Test
+	public void findByAvisWithNoMovie() throws Exception {
+		when(filmDAO.findById("tt0121766")).thenReturn(starWarsIII);
+		when(filmDAO.findById("tt0080684")).thenReturn(starWarsV);
+		when(filmDAO.findById("tt0121765")).thenReturn(starWarsII);
+		when(avisDAO.findAllFilmsWithAtLeastOneNoteByFilmID()).thenReturn(allFilmWithAtLeastOneNoteByFilmID);
+		when(avisDAO.findAllAvisByFilmID("tt0121766")).thenReturn(avisSWIII);
+		when(avisDAO.findAllAvisByFilmID("tt0080684")).thenReturn(avisSWV);
+		when(avisDAO.findAllAvisByFilmID("tt0121765")).thenReturn(avisSWII);
+		when(filmDAO.findByAvis("lol")).thenReturn(emptyList);
+
+		Response response = filmService.findByAvis("3", "lol");
+		assertThat(response.getStatus(), is(noMovie.getStatus()));
+		assertThat(response.getHeaders(), is(noMovie.getHeaders()));
+		assertThat(response.getEntity(), is(noMovie.getEntity()));
+	}
+
 }

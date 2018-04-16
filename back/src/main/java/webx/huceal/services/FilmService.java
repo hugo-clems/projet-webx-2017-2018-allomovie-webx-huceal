@@ -148,11 +148,18 @@ public class FilmService {
                                      final String commentaire) {
         Response.Status status = Response.Status.BAD_REQUEST;
         Object body = null;
+        List<Film> result;
 
         if (noteIsValid(note)) {
-            body = fusionList(getFilmWithMinNote(note),
+            result = fusionList(getFilmWithMinNote(note),
                     dao.findByAvis(commentaire));
-            status = Response.Status.OK;
+            if (result.equals(new ArrayList<Film>())) {
+                body = new ErrorMessage("Aucun film trouvé !");
+                status = Response.Status.NOT_FOUND;
+            } else {
+                body = result;
+                status = Response.Status.OK;
+            }
         } else {
             body = new ErrorMessage("Note invalide !");
         }
