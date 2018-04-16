@@ -48,6 +48,7 @@ export default {
 
   data () {
     return {
+      api: 'http://localhost:8081/allomovie/',
       filmList: [],
       errors: [],
       form: []
@@ -66,7 +67,7 @@ export default {
       this.errors = []
       // var api = 'http://www.omdbapi.com/?apikey=5a0f558e&'
       // var request = 's=' + title.replace(' ', '+')
-      var api = 'http://localhost:8081/allomovie/film/liste/'
+      var api = this.api + 'film/liste/'
       var request = title.replace(' ', '+')
       if (year != null) { request += '/' + year }
       axios.get(api + request)
